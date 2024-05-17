@@ -5,16 +5,29 @@ STUDENT={'name': 'YOUR NAME',
          'ID': 'YOUR ID NUMBER'}
 
 def classifier_output(x, params):
+    """
+    Compute the output of the classifier.
 
-    W,b,U,b_tag = params
+    x: input data, a single vector of shape (input_dim)
+    params: a list of the form [W1, b1, W2, b2, ...]
 
-    layer_1 = np.dot(x, W) + b
-    tanh_out = np.tanh(layer_1)
-    probs = ll.classifier_output(tanh_out, [U, b_tag])
+    returns:
+        probs: a vector of shape (output_dim)
+    """
+    activation = x
+    num_tanh_layers = len(params) // 2 - 1
+    for i in range(num_tanh_layers):
+        W, b = params[2*i], params[2*i+1]
+        activation = np.tanh(np.dot(activation, W) + b)
+    probs = ll.classifier_output(activation, params[-2:])
     return probs
 
 def predict(x, params):
     return np.argmax(classifier_output(x, params))
+
+
+def tanh_derivative(x):
+    return 1 - np.tanh(x)**2
 
 def loss_and_gradients(x, y, params):
     """
@@ -33,8 +46,43 @@ def loss_and_gradients(x, y, params):
     (of course, if we request a linear classifier (ie, params is of length 2),
     you should not have gW2 and gb2.)
     """
-    # YOU CODE HERE
-    return ...
+    # Forward pass
+    activations = [x]
+    pre_activations = []
+    num_tanh_layers = len(params) // 2 - 1
+
+    for i in range(num_tanh_layers):
+        W, b = params[2 * i], params[2 * i + 1]
+        z = np.dot(activations[-1], W) + b
+        pre_activations.append(z)
+        activations.append(np.tanh(z))
+
+    probs = ll.classifier_output(activations[-1], params[-2:])
+    loss = -np.log(probs[y])
+
+    # Backward pass
+    grads = []
+    y_hat = probs.copy()
+    y_hat[y] -= 1
+
+    # Gradient for the last layer
+    gW = np.outer(activations[-1], y_hat)
+    gb = y_hat
+    grads = [gW, gb]
+
+    delta = y_hat
+
+    # Gradients for the hidden layers
+    for i in range(num_tanh_layers - 1, -1, -1):
+        W = params[2 * i]
+        z = pre_activations[i]
+        delta = np.dot(delta, params[2 * (i + 1)].T) * tanh_derivative(z)
+        gW = np.outer(activations[i], delta)
+        gb = delta
+        grads = [gW, gb] + grads
+
+    return loss, grads
+
 
 def create_classifier(dims):
     """
@@ -48,7 +96,7 @@ def create_classifier(dims):
     We will have input of 300 dimension, a hidden layer of 20 dimension, passed
     to a layer of 30 dimensions, passed to learn of 40 dimensions, and finally
     an output of 5 dimensions.
-    
+
     Assume a tanh activation function between all the layers.
 
     return:
@@ -69,18 +117,19 @@ if __name__ == '__main__':
     # If they pass, it is likely, but not certainly, correct.
     from grad_check import gradient_check
 
-    params = create_classifier([20, 30, 40, 10])
+    params = create_classifier([3, 20, 30, 40, 10])
 
     for i in range(len(params)):
         print(params[i].shape)
 
     def _loss_and_grad(parameters):
         global params
-        for i in range(len(params)):
-            params[i][:] = parameters[i]
-        return loss_and_gradients(np.random.randn(20), 0, params)
+        params[index] = parameters
+        loss, grads = loss_and_gradients([1, 2, 3], 0, params)
+        return loss, grads[index]
 
     for _ in range(10):
         for i in range(len(params)):
-            params[i] = np.random.randn(*params[i].shape)
+            index = i
+            params[i] = np.random.random_sample(params[i].shape)
             gradient_check(_loss_and_grad, params[i])
