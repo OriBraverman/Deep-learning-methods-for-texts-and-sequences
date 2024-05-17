@@ -20,7 +20,15 @@ def gradient_check(f, x):
         ### modify x[ix] with h defined above to compute the numerical gradient.
         ### if you change x, make sure to return it back to its original state for the next iteration.
         ### YOUR CODE HERE:
-        
+        # Gradient check for a function f
+        # df/dx1 (x1,x2,...,xn) = (f(x1+h,x2,...,xn) - f(x1-h,x2,...,xn)) / 2h
+        numeric_gradient = 0
+        x[ix] += h
+        fx_plus_h, _ = f(x)
+        x[ix] -= 2*h
+        fx_minus_h, _ = f(x)
+        x[ix] += h
+        numeric_gradient = (fx_plus_h - fx_minus_h) / (2*h)
         ### END YOUR CODE
 
         # Compare gradients

@@ -1,10 +1,16 @@
 import numpy as np
+import loglinear as ll
 
 STUDENT={'name': 'YOUR NAME',
          'ID': 'YOUR ID NUMBER'}
 
 def classifier_output(x, params):
-    # YOUR CODE HERE.
+
+    W,b,U,b_tag = params
+
+    layer_1 = np.dot(x, W) + b
+    tanh_out = np.tanh(layer_1)
+    probs = ll.classifier_output(tanh_out, [U, b_tag])
     return probs
 
 def predict(x, params):
@@ -51,5 +57,30 @@ def create_classifier(dims):
     second layer, and so on.
     """
     params = []
+    for i in range(len(dims) - 1):
+        W = np.random.randn(dims[i], dims[i + 1])
+        b = np.random.randn(dims[i + 1])
+        params.append(W)
+        params.append(b)
     return params
 
+if __name__ == '__main__':
+    # Sanity checks. If these fail, your gradient calculation is definitely wrong.
+    # If they pass, it is likely, but not certainly, correct.
+    from grad_check import gradient_check
+
+    params = create_classifier([20, 30, 40, 10])
+
+    for i in range(len(params)):
+        print(params[i].shape)
+
+    def _loss_and_grad(parameters):
+        global params
+        for i in range(len(params)):
+            params[i][:] = parameters[i]
+        return loss_and_gradients(np.random.randn(20), 0, params)
+
+    for _ in range(10):
+        for i in range(len(params)):
+            params[i] = np.random.randn(*params[i].shape)
+            gradient_check(_loss_and_grad, params[i])

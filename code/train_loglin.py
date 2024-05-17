@@ -1,5 +1,7 @@
 import loglinear as ll
+import numpy as np
 import random
+from utils import *
 
 STUDENT={'name': 'YOUR NAME',
          'ID': 'YOUR ID NUMBER'}
@@ -7,7 +9,12 @@ STUDENT={'name': 'YOUR NAME',
 def feats_to_vec(features):
     # YOUR CODE HERE.
     # Should return a numpy vector of features.
-    return None
+    features_vec = np.zeros(len(vocab))
+    bigrams = text_to_bigrams(features)
+    for b in bigrams:
+        if b in vocab:
+            features_vec[F2I[b]] += 1
+    return features_vec
 
 def accuracy_on_dataset(dataset, params):
     good = bad = 0.0
@@ -16,7 +23,11 @@ def accuracy_on_dataset(dataset, params):
         # Compute the accuracy (a scalar) of the current parameters
         # on the dataset.
         # accuracy is (correct_predictions / all_predictions)
-        pass
+        y_pred = ll.predict(feats_to_vec(features), params)
+        if y_pred == L2I[label]:
+            good += 1
+        else:
+            bad += 1
     return good / (good + bad)
 
 def train_classifier(train_data, dev_data, num_iterations, learning_rate, params):
@@ -34,12 +45,16 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
         random.shuffle(train_data)
         for label, features in train_data:
             x = feats_to_vec(features) # convert features to a vector.
-            y = label                  # convert the label to number if needed.
-            loss, grads = ll.loss_and_gradients(x,y,params)
+            y = L2I[label]             # convert the label to number if needed.
+            loss, grads = ll.loss_and_gradients(x, y, params)
             cum_loss += loss
             # YOUR CODE HERE
             # update the parameters according to the gradients
             # and the learning rate.
+
+            params[0] -= learning_rate * grads[0]
+            params[1] -= learning_rate * grads[1]
+
 
         train_loss = cum_loss / len(train_data)
         train_accuracy = accuracy_on_dataset(train_data, params)
@@ -47,13 +62,18 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
         print(I, train_loss, train_accuracy, dev_accuracy)
     return params
 
+
 if __name__ == '__main__':
     # YOUR CODE HERE
     # write code to load the train and dev sets, set up whatever you need,
     # and call train_classifier.
-    
-    # ...
-   
+    train_data = [(l, t) for l, t in read_data("train")]
+    dev_data = [(l, t) for l, t in read_data("dev")]
+    num_iterations = 100
+    learning_rate = 0.001
+    in_dim = len(vocab)
+    out_dim = len(L2I)
+
     params = ll.create_classifier(in_dim, out_dim)
     trained_params = train_classifier(train_data, dev_data, num_iterations, learning_rate, params)
 

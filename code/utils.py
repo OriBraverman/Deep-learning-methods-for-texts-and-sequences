@@ -3,7 +3,7 @@
 import random
 def read_data(fname):
     data = []
-    for line in file(fname):
+    for line in open(f'../data/{fname}', encoding='utf-8'):
         label, text = line.strip().lower().split("\t",1)
         data.append((label, text))
     return data
