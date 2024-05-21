@@ -9,11 +9,11 @@ STUDENT={'name': 'YOUR NAME',
 def feats_to_vec(features):
     # YOUR CODE HERE.
     # Should return a numpy vector of features.
-    features_vec = np.zeros(len(vocab))
-    bigrams = text_to_bigrams(features)
-    for b in bigrams:
-        if b in vocab:
-            features_vec[F2I[b]] += 1
+    features_vec = np.zeros(len(vocab_UNI))
+    unigrams = text_to_unigrams(features)
+    for b in unigrams:
+        if b in vocab_UNI:
+            features_vec[F2I_UNI[b]] += 1
     return features_vec
 
 def accuracy_on_dataset(dataset, params):
@@ -55,10 +55,6 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
             params[0] -= learning_rate * grads[0]
             params[1] -= learning_rate * grads[1]
 
-            # Early stopping
-            if cum_loss < 0.001:
-                break
-
 
         train_loss = cum_loss / len(train_data)
         train_accuracy = accuracy_on_dataset(train_data, params)
@@ -75,7 +71,7 @@ if __name__ == '__main__':
     dev_data = [(l, t) for l, t in read_data("dev")]
     num_iterations = 100
     learning_rate = 0.001
-    in_dim = len(vocab)
+    in_dim = len(vocab_UNI)
     out_dim = len(L2I)
 
     params = ll.create_classifier(in_dim, out_dim)

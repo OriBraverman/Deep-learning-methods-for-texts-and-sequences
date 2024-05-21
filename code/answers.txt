@@ -1,0 +1,26 @@
+1) No the accuracies obtained on the Log-Linear Classifier were slightly better
+
+2) With the unigrams we can reach 70% accuracy on the dev set with the loglinear model and with the mlp model we could
+only reach 65%
+In language classification, using bigrams (sequences of two consecutive characters) often yields better results than
+unigrams (single characters) because bigrams capture more contextual information about the text. Here’s a brief explanation:
+
+    Contextual Information: Bigrams provide context by considering pairs of characters together, which helps in
+    identifying patterns and structures that are more indicative of specific languages. For example, in English,
+     the bigram "th" is very common, whereas in other languages, it might be rare or absent.
+
+    Disambiguation: Bigrams can help disambiguate characters that may appear frequently in isolation (as unigrams) but
+    have different meanings or roles depending on their neighboring characters. For instance, the character 'e' is
+    common in many languages, but the bigram "qu" is more distinctive and typically indicates English or French text.
+
+    Richer Feature Set: Using bigrams increases the feature set, providing a richer representation of the language.
+    This richer feature set allows machine learning models to learn more nuanced differences between languages,
+    leading to better classification performance .
+
+In summary, bigrams enhance language classification by capturing more contextual and structural information, leading to
+more accurate and reliable identification of languages.
+
+
+3) The linear model cannot learn the xor function. Which is known and proven. However, the mlp model is able to learn
+xor after five iterations
+

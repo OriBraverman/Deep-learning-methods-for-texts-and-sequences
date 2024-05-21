@@ -1,4 +1,4 @@
-import loglinear as ll
+import mlp1
 import numpy as np
 import random
 from utils import *
@@ -15,7 +15,6 @@ def feats_to_vec(features):
         if b in vocab:
             features_vec[F2I[b]] += 1
     return features_vec
-
 def accuracy_on_dataset(dataset, params):
     good = bad = 0.0
     for label, features in dataset:
@@ -23,7 +22,7 @@ def accuracy_on_dataset(dataset, params):
         # Compute the accuracy (a scalar) of the current parameters
         # on the dataset.
         # accuracy is (correct_predictions / all_predictions)
-        y_pred = ll.predict(feats_to_vec(features), params)
+        y_pred = mlp1.predict(feats_to_vec(features), params)
         if y_pred == L2I[label]:
             good += 1
         else:
@@ -46,18 +45,14 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
         for label, features in train_data:
             x = feats_to_vec(features) # convert features to a vector.
             y = L2I[label]             # convert the label to number if needed.
-            loss, grads = ll.loss_and_gradients(x, y, params)
+            loss, grads = mlp1.loss_and_gradients(x, y, params)
             cum_loss += loss
             # YOUR CODE HERE
             # update the parameters according to the gradients
             # and the learning rate.
 
-            params[0] -= learning_rate * grads[0]
-            params[1] -= learning_rate * grads[1]
-
-            # Early stopping
-            if cum_loss < 0.001:
-                break
+            for i in range(len(grads)):
+                params[i] -= learning_rate * grads[i]
 
 
         train_loss = cum_loss / len(train_data)
@@ -74,10 +69,12 @@ if __name__ == '__main__':
     train_data = [(l, t) for l, t in read_data("train")]
     dev_data = [(l, t) for l, t in read_data("dev")]
     num_iterations = 100
-    learning_rate = 0.001
+    learning_rate = 0.005
     in_dim = len(vocab)
+    hid_dim = 16
     out_dim = len(L2I)
 
-    params = ll.create_classifier(in_dim, out_dim)
-    trained_params = train_classifier(train_data, dev_data, num_iterations, learning_rate, params)
+    print(train_data[1])
 
+    params = mlp1.create_classifier(in_dim,hid_dim ,out_dim)
+    trained_params = train_classifier(train_data, dev_data, num_iterations, learning_rate, params)
