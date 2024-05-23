@@ -2,6 +2,11 @@ import loglinear as ll
 import train_loglin as classifier
 from utils import *
 
+STUDENT = {'name': 'ORI BRAVERMAN',
+            'ID': '318917010'}
+
+STUDENT = {'name': 'ELIE NEDJAR',
+            'ID': '336140116'}
 
 def predict_test(test_data, model):
     preds = []

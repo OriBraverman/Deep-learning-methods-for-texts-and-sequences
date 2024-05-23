@@ -1,7 +1,10 @@
 import numpy as np
 
-STUDENT={'name': 'YOUR NAME',
-         'ID': 'YOUR ID NUMBER'}
+STUDENT = {'name': 'ORI BRAVERMAN',
+            'ID': '318917010'}
+
+STUDENT = {'name': 'ELIE NEDJAR',
+            'ID': '336140116'}
 
 def softmax(x):
     """
@@ -70,7 +73,10 @@ def create_classifier(in_dim, out_dim):
     returns the parameters (W,b) for a log-linear classifier
     with input dimension in_dim and output dimension out_dim.
     """
-    W = np.zeros((in_dim, out_dim))
+    # Set Random Seed
+    np.random.seed(2200)
+
+    W = np.random.randn(in_dim, out_dim) * np.sqrt(2 / (in_dim + out_dim))
     b = np.zeros(out_dim)
     return [W,b]
 

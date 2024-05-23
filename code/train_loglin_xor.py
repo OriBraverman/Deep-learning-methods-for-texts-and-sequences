@@ -5,8 +5,11 @@ from utils import *
 from xor_data import data
 
 
-STUDENT={'name': 'YOUR NAME',
-         'ID': 'YOUR ID NUMBER'}
+STUDENT = {'name': 'ORI BRAVERMAN',
+            'ID': '318917010'}
+
+STUDENT = {'name': 'ELIE NEDJAR',
+            'ID': '336140116'}
 
 def feats_to_vec(features):
     # YOUR CODE HERE.

@@ -3,8 +3,11 @@ import numpy as np
 import random
 from utils import *
 
-STUDENT={'name': 'YOUR NAME',
-         'ID': 'YOUR ID NUMBER'}
+STUDENT = {'name': 'ORI BRAVERMAN',
+            'ID': '318917010'}
+
+STUDENT = {'name': 'ELIE NEDJAR',
+            'ID': '336140116'}
 
 def feats_to_vec(features):
     # YOUR CODE HERE.
@@ -40,6 +43,10 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
     learning_rate: the learning rate to use.
     params: list of parameters (initial values)
     """
+    # Set Random Seed
+    random.seed(2200)
+    np.random.seed(2200)
+
     for I in range(num_iterations):
         cum_loss = 0.0 # total loss in this iteration.
         random.shuffle(train_data)
