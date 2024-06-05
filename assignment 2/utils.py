@@ -28,6 +28,8 @@ def read_vectors(path='Data/wordVectors.txt'):
 def word2vec(words, vectors):
     return {w: v for w, v in zip(words, vectors)}
 
+#TEST GIT COOL
+
 
 # Read the data from the file and return the list of the sequences of words and tags
 def read_data(filename, start_token='<s>', end_token='<e>'):
