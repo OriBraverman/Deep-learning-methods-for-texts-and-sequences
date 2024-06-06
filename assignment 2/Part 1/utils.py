@@ -101,9 +101,9 @@ def convert_words_to_window(words, tags,word2vec,unknown_vec,padding_vec,window_
     vector_out = []
     tag_out = []
     padding = (window_size - 1) // 2
-    for sentence in tqdm(words):
+    for sentence, sentence_tag in zip(words, tags):
         sentence = ['<PAD>']*padding + sentence + ['<PAD>']*padding
-        for i, tag in zip(range(2, len(sentence) - 2), tags):
+        for i, tag in zip(range(2, len(sentence) - 2), sentence_tag):
             vecs = []
 
             for window in range(-2,3):
@@ -130,7 +130,7 @@ if __name__ == '__main__':
     padding_vec = torch.zeros(50)
     unknown_vec = torch.ones(50)
 
-    words, tags = read_data('../Data/ner/train')
+    words, tags = read_data('../Data/pos/train')
     vectors = read_vectors('../Data/wordVectors.txt')
 
     word2idx, idx2word, tag2idx, idx2tag = make_vocabs(words, tags)
