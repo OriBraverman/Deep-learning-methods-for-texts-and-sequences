@@ -3,24 +3,25 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
+from torch.utils.data import DataLoader
 import numpy as np
 import os
 # import the utils.py file from the father directory
-from ..utils import *
+from utils import *
 
 
 class Tagger1(nn.Module):
-    def __init__(self, vocab_size, hidden_dim, output_dim, embedding_dim=50, window_size=5):
+    def __init__(self, vocab_size, hidden_dim, output_dim, word2vec, embedding_dim=50, window_size=5):
         super(Tagger1, self).__init__()
         # Embedding layer - 50 dimensions
-        self.embedding = nn.Embedding(vocab_size, embedding_dim)
+        #self.embedding = word2vec
         # Fully connected
         self.fc1 = nn.Linear(embedding_dim * window_size, hidden_dim)
         self.fc2 = nn.Linear(hidden_dim, output_dim)
         # Loss function
         self.loss_function = nn.CrossEntropyLoss()
     def forward(self, x):
-        x = self.embedding(x)
+        #x = self.embedding(x)
         # Flatten the tensor to 1D
         x = x.view(x.size(0), -1)
         x = F.tanh(self.fc1(x))
