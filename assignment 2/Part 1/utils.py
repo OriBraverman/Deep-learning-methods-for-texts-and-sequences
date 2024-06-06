@@ -33,7 +33,6 @@ def word2vec(words, vectors):
     out['<PAD>'] = torch.zeros(50)
     out['<UNK>'] = torch.ones(50)
     return out
-#TEST GIT COOL
 
 
 # Read the data from the file and return the list of the sequences of words and tags
@@ -78,6 +77,7 @@ def make_vocabs(words, tags):
     words = [w for sent in words for w in sent]
     words = sorted(set(words))
     words.append('<UNK>')
+    words.append('<PAD>')
     tags = [t for tag in tags for t in tag]
     tags = sorted(set(tags))
 
@@ -88,10 +88,9 @@ def make_vocabs(words, tags):
 
     return word2idx, idx2word, tag2idx, idx2tag
 
-#TODO
+
 def convert_words_to_window(words, tags,word2vec,unknown_vec,padding_vec,window_size=5):
     """
-
     @param words:
     @param tags:
     @param window_size:

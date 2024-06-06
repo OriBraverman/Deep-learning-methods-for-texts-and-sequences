@@ -14,7 +14,7 @@ class Tagger1(nn.Module):
     def __init__(self, vocab_size, hidden_dim, output_dim, word2vec, embedding_dim=50, window_size=5):
         super(Tagger1, self).__init__()
         # Embedding layer - 50 dimensions
-        #self.embedding = word2vec
+        self.embedding = nn.Embedding(vocab_size, embedding_dim)
         # Fully connected
         self.fc1 = nn.Linear(embedding_dim * window_size, hidden_dim)
         self.fc2 = nn.Linear(hidden_dim, output_dim)
