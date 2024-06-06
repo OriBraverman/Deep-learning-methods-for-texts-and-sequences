@@ -3,7 +3,8 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, TensorDataset
+from tqdm import tqdm
 import numpy as np
 import os
 # import the utils.py file from the father directory
@@ -11,7 +12,7 @@ from utils import *
 
 
 class Tagger1(nn.Module):
-    def __init__(self, vocab_size, hidden_dim, output_dim, word2vec, embedding_dim=50, window_size=5):
+    def __init__(self, vocab_size, hidden_dim, output_dim, embedding_dim=50, window_size=5):
         super(Tagger1, self).__init__()
         # Embedding layer - 50 dimensions
         self.embedding = nn.Embedding(vocab_size, embedding_dim)
@@ -21,18 +22,18 @@ class Tagger1(nn.Module):
         # Loss function
         self.loss_function = nn.CrossEntropyLoss()
     def forward(self, x):
-        #x = self.embedding(x)
+        x = self.embedding(x)
         # Flatten the tensor to 1D
         x = x.view(x.size(0), -1)
         x = F.tanh(self.fc1(x))
         x = self.fc2(x)
         return F.log_softmax(x, dim=1)
 
-    def train(self, optimizer, loss_function, train_data, dev_data, idx2tag, epochs=10):
+    def train(self, optimizer, loss_function, train_data, idx2tag, epochs=10):
         dev_loss_list, dev_accuracy_list = [], []
         for epoch in range(epochs):
             total_loss = 0
-            for data in train_data:
+            for data in tqdm(train_data):
                 # Zero the gradients before the backward pass
                 optimizer.zero_grad()
                 words, tags = data
@@ -46,12 +47,13 @@ class Tagger1(nn.Module):
 
             # Calculate loss and accuracy on the training data
             total_loss /= len(train_data)
-            train_accuracy, _ = self.evaluate(train_data, idx2tag)
-            dev_accuracy, dev_loss = self.evaluate(dev_data, idx2tag)
+            #train_accuracy, _ = self.evaluate(train_data, idx2tag)
+            #dev_accuracy, dev_loss = self.evaluate(dev_data, idx2tag)
 
-            dev_loss_list.append(dev_loss)
-            dev_accuracy_list.append(dev_accuracy)
-            print(f'Epoch {epoch + 1}/{epochs} - Loss: {total_loss:.4f} - Train Accuracy: {train_accuracy:.4f} - Dev Accuracy: {dev_accuracy:.4f}')
+            #dev_loss_list.append(dev_loss)
+            #dev_accuracy_list.append(dev_accuracy)
+            print(f'Epoch {epoch + 1}/{epochs} - Loss: {total_loss:.4f} - Train Accuracy: {train_accuracy:.4f}')
+            #print(f'Epoch {epoch + 1}/{epochs} - Loss: {total_loss:.4f} - Train Accuracy: {train_accuracy:.4f} - Dev Accuracy: {dev_accuracy:.4f}')
 
 
     def evaluate(self, data):
@@ -77,14 +79,27 @@ if __name__ == '__main__':
     if not os.path.exists('Output'):
         os.makedirs('Output')
 
-    words, tags = read_data('Data/ner/train')
+    words, tags = read_data('Data/pos/train')
+    vectors = read_vectors('Data/wordVectors.txt')
+
     word2idx, idx2word, tag2idx, idx2tag = make_vocabs(words, tags)
+    vectors_ds, tag_ds = convert_words_to_window_idx(words, tags, word2idx, tag2idx)
+
     vocab_size = len(word2idx)
     output_dim = len(tag2idx)
     hidden_dim = 100
+
+    batch_size = 16
     model = Tagger1(vocab_size, hidden_dim, output_dim)
     optimizer = optim.Adam(model.parameters(), lr=0.001)
-    model.train(optimizer, model.loss_function, train_data, dev_data, idx2tag, epochs=10)
-    test_accuracy, test_loss = model.evaluate(test_data, idx2tag)
-    print(f'Test Accuracy: {test_accuracy:.4f} - Test Loss: {test_loss:.4f}')
-    torch.save(model.state_dict(), 'model1.pth')
+    print('Len vector-ds', len(vectors_ds))
+    print('Len tag-ds', len(tag_ds))
+    train_dataset = list(zip(vectors_ds, tag_ds))
+
+    #TODO SAVE THE DATASET TO SAVE TIME AT EACH RUN
+    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+
+    model.train(optimizer, model.loss_function, train_dataloader, idx2tag, epochs=10)
+    #test_accuracy, test_loss = model.evaluate(test_data, idx2tag)
+    #print(f'Test Accuracy: {test_accuracy:.4f} - Test Loss: {test_loss:.4f}')
+    #torch.save(model.state_dict(), 'model1.pth')

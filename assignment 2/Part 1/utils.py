@@ -9,14 +9,12 @@ vocab_path = 'Data/vocab.txt'
 word_vectors_path = 'Data/wordVectors.txt'
 
 
-
 # Return the list of words
 def read_vocab(path='Data/vocab.txt'):
     with open(path, 'r') as f:
         lines = f.readlines()
     lines = [l.replace('\n', '') for l in lines]
     return lines
-
 
 
 # Return the word vectors
@@ -27,6 +25,7 @@ def read_vectors(path='Data/wordVectors.txt'):
     lines = [[float(v) for v in l.replace('\n', '').split()] for l in lines]
 
     return torch.tensor(lines)
+
 
 def word2vec(words, vectors):
     out = {w: v for w, v in zip(chain.from_iterable(words), vectors)}
@@ -77,7 +76,8 @@ def make_vocabs(words, tags):
     words = [w for sent in words for w in sent]
     words = sorted(set(words))
     words.append('<UNK>')
-    words.append('<PAD>')
+    words.append('<PAD_END>')
+    words.append('<PAD_START>')
     tags = [t for tag in tags for t in tag]
     tags = sorted(set(tags))
 
@@ -89,7 +89,7 @@ def make_vocabs(words, tags):
     return word2idx, idx2word, tag2idx, idx2tag
 
 
-def convert_words_to_window(words, tags,word2vec,unknown_vec,padding_vec,window_size=5):
+def convert_words_to_window_vectors(words, tags, word2vec, unknown_vec, padding_vec, window_size=5):
     """
     @param words:
     @param tags:
@@ -101,16 +101,16 @@ def convert_words_to_window(words, tags,word2vec,unknown_vec,padding_vec,window_
     tag_out = []
     padding = (window_size - 1) // 2
     for sentence, sentence_tag in zip(words, tags):
-        sentence = ['<PAD>']*padding + sentence + ['<PAD>']*padding
+        sentence = ['<PAD>'] * padding + sentence + ['<PAD>'] * padding
         for i, tag in zip(range(2, len(sentence) - 2), sentence_tag):
             vecs = []
 
-            for window in range(-2,3):
+            for window in range(-2, 3):
 
-                #print(word2vec[sentence[i + window]])
+                # print(word2vec[sentence[i + window]])
                 w = sentence[i + window]
                 if w in word2vec:
-                    v = word2vec[sentence[i +window]]
+                    v = word2vec[sentence[i + window]]
                 else:
                     v = word2vec['<UNK>']
                 vecs.append(v)
@@ -120,23 +120,50 @@ def convert_words_to_window(words, tags,word2vec,unknown_vec,padding_vec,window_
     return vector_out, tag_out
 
 
+def convert_words_to_window_idx(words, tags, word2idx, tag2idx, window_size=5):
+    """
+    @param words:
+    @param tags:
+    @param window_size:
+    #TODO Maybe add a function that pre converts words to indexes
+    @return: a list of tuples that return the full vector of window_size*emb_size and the actual tag
+    """
+    vector_out = []
+    tag_out = []
+    padding = (window_size - 1) // 2
+    for sentence, sentence_tag in zip(words, tags):
+        sentence = ['<PAD_START>'] * padding + sentence + ['<PAD_END>'] * padding
+        for i, tag in zip(range(2, len(sentence) - 2), sentence_tag):
+            vecs = []
 
+            for window in range(-2, 3):
 
+                # print(word2vec[sentence[i + window]])
+                w = sentence[i + window]
+                if w in word2idx:
+                    v = word2idx[sentence[i + window]]
+                else:
+                    v = word2idx['<UNK>']
+                vecs.append(v)
+            vector_out.append(torch.tensor(vecs))
+            tag_out.append(tag2idx[tag])
+
+    return vector_out, tag_out
 
 
 if __name__ == '__main__':
 
-    padding_vec = torch.zeros(50)
-    unknown_vec = torch.ones(50)
+
 
     words, tags = read_data('../Data/pos/train')
     vectors = read_vectors('../Data/wordVectors.txt')
 
     word2idx, idx2word, tag2idx, idx2tag = make_vocabs(words, tags)
     word2vec = word2vec(words, vectors)
-    vectors_ds, tag_ds = convert_words_to_window(words, tags, word2vec,unknown_vec,padding_vec)
-    #print(word2idx)
-    #print(idx2word)
-    #print(tag2idx)
-    #print(idx2tag)
-    print(vectors_ds[0], tag_ds[0])
+    vectors_ds, tag_ds = convert_words_to_window_idx(words, tags, word2idx, tag2idx)
+    # print(word2idx)
+    # print(idx2word)
+    # print(tag2idx)
+    # print(idx2tag)
+    for i in range(10):
+        print(vectors_ds[i], tag_ds[i])
