@@ -1,35 +1,46 @@
 import torch
+import numpy as np
 from itertools import chain
 from matplotlib import pyplot as plt
 
 # Paths
-vocab_path = 'Data/vocab.txt'
-word_vectors_path = 'Data/wordVectors.txt'
+VOCAB_PATH = '../Data/vocab.txt'
+WORD_VECTORS_PATH = '../Data/wordVectors.txt'
 
 
-# Return the list of words
-def read_vocab(path='Data/vocab.txt'):
-    with open(path, 'r') as f:
+def read_vocab(vocab_path=VOCAB_PATH):
+    with open(vocab_path, 'r') as f:
         lines = f.readlines()
     lines = [l.replace('\n', '') for l in lines]
     return lines
 
 
-# Return the word vectors
-def read_vectors(path='Data/wordVectors.txt'):
-    with open(path, 'r') as f:
-        lines = f.readlines()
+# Load the pre-trained word2vec
+def load_word2vec(vocab_path=VOCAB_PATH, word_vectors_path=WORD_VECTORS_PATH):
+    vecs = np.loadtxt(word_vectors_path)
+    words = read_vocab(vocab_path)
+    word2vec = {word: vecs[i] for i, word in enumerate(words)}
+    # Add special tokens
+    word2vec['<PAD_START>'] = np.zeros(50)
+    word2vec['<PAD_END>'] = np.zeros(50)
+    word2vec['<UNK>'] = np.ones(50)
+    return word2vec
 
-    lines = [[float(v) for v in l.replace('\n', '').split()] for l in lines]
 
-    return torch.tensor(lines)
+def cosine_similarity(u, v):
+    if np.linalg.norm(u) == 0 or np.linalg.norm(v) == 0:
+        return 0
+    return np.dot(u, v) / (np.linalg.norm(u) * np.linalg.norm(v))
 
 
-def word2vec(words, vectors):
-    out = {w: v for w, v in zip(chain.from_iterable(words), vectors)}
-    out['<PAD>'] = torch.zeros(50)
-    out['<UNK>'] = torch.ones(50)
-    return out
+def most_similar(word, k, word2vec):
+    if word not in word2vec:
+        return []
+
+    word_vec = word2vec[word]
+    similarities = [(w, cosine_similarity(word_vec, vec)) for w, vec in word2vec.items() if w != word]
+    similarities.sort(key=lambda x: x[1], reverse=True)
+    return similarities[:k]
 
 
 # Read the data from the file and return the list of the sequences of words and tags
@@ -87,37 +98,6 @@ def make_vocabs(words, tags):
     return word2idx, idx2word, tag2idx, idx2tag
 
 
-def convert_words_to_window_vectors(words, tags, word2vec, unknown_vec, padding_vec, window_size=5):
-    """
-    @param words:
-    @param tags:
-    @param window_size:
-
-    @return: a list of tuples that return the full vector of window_size*emb_size and the actual tag
-    """
-    vector_out = []
-    tag_out = []
-    padding = (window_size - 1) // 2
-    for sentence, sentence_tag in zip(words, tags):
-        sentence = ['<PAD>'] * padding + sentence + ['<PAD>'] * padding
-        for i, tag in zip(range(2, len(sentence) - 2), sentence_tag):
-            vecs = []
-
-            for window in range(-2, 3):
-
-                # print(word2vec[sentence[i + window]])
-                w = sentence[i + window]
-                if w in word2vec:
-                    v = word2vec[sentence[i + window]]
-                else:
-                    v = word2vec['<UNK>']
-                vecs.append(v)
-            vector_out.append(torch.cat(vecs))
-            tag_out.append(tag)
-
-    return vector_out, tag_out
-
-
 def convert_words_to_window(words, tags, window_size=5):
     """
     @param words: a list of lists of words in the sentences
@@ -137,9 +117,10 @@ def convert_words_to_window(words, tags, window_size=5):
             # Extract the window
             window = padded_sentence[i - padding: i + padding + 1]
             vector_out.append(window)
-            tag_out.append(sentence_tag[i - padding])  # Adjust index for original sentence
+            if tags is not None:
+                tag_out.append(sentence_tag[i - padding])  # Adjust index for original sentence
 
-    return vector_out, tag_out
+    return vector_out, tag_out if tags is not None else vector_out
 
 
 def convert_window_to_window_idx(window, tag, word2idx, tag2idx):
@@ -171,8 +152,8 @@ def make_graph(y, title, ylabel, filename, xlabel='Epochs'):
 
 
 if __name__ == '__main__':
-    train_words, train_tags = read_data('./../Data/pos/train')
-    dev_words, dev_tags = read_data('./../Data/pos/dev')
+    train_words, train_tags = read_data('Data/pos/train')
+    dev_words, dev_tags = read_data('Data/pos/dev')
     #test_words,_ = read_test_data('./../Data/pos/test')
 
 

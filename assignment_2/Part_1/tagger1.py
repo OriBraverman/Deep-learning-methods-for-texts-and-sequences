@@ -1,14 +1,12 @@
-
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, TensorDataset
 from tqdm import tqdm
-import numpy as np
 import os
 # import the utils.py file from the father directory
-from utils import *
+from assignment_2.utils import *
 
 # Constants
 TASK = 'pos'
@@ -91,6 +89,7 @@ class Tagger1(nn.Module):
                     total += len(tags)
         return correct / total, total_loss / len(data.dataset)
 
+    def predict(self, data, idx2tag, device='cpu'):
 
 if __name__ == '__main__':
     # Create an output directory in which to save the generated files
