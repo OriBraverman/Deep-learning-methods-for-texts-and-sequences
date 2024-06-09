@@ -32,6 +32,7 @@ class Tagger1(nn.Module):
         x = x.view(x.size(0), -1)
         x = F.tanh(self.fc1(x))
         x = self.fc2(x)
+        print(self.embedding.weight.data)
         return F.log_softmax(x, dim=1)
 
     def train(self, optimizer, train_data, dev_data, idx2tag, device='cpu', epochs=10):
@@ -98,7 +99,7 @@ if __name__ == '__main__':
         os.makedirs('Output')
 
     # Read the training
-    train_words, train_tags = read_data(f'./../Data/{TASK}/train')
+    train_words, train_tags = read_data(f'Data/{TASK}/train')
     # Create the vocabularies
     word2idx, idx2word, tag2idx, idx2tag = make_vocabs(train_words, train_tags)
     # Convert the words to windows
@@ -107,12 +108,12 @@ if __name__ == '__main__':
     windows_idx, window_tags_idx = convert_window_to_window_idx(windows, window_tags, word2idx, tag2idx)
 
     # Cut the data to 1000 samples in order to debug faster
-    windows_idx = windows_idx[:1000]
-    window_tags_idx = window_tags_idx[:1000]
+    windows_idx = windows_idx
+    window_tags_idx = window_tags_idx
 
     vocab_size = len(word2idx)
     output_dim = len(tag2idx)
-    hidden_dim = 100
+    hidden_dim = 32
 
     batch_size = 16
     model = Tagger1(vocab_size, hidden_dim, output_dim)
@@ -122,7 +123,8 @@ if __name__ == '__main__':
     train_data = TensorDataset(torch.tensor(windows_idx), torch.tensor(window_tags_idx))
     train_dataloader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
 
-    dev_words, dev_tags = read_data(f'./../Data/{TASK}/dev')
+    print(len(train_data))
+    dev_words, dev_tags = read_data(f'Data/{TASK}/dev')
     dev_windows, dev_window_tags = convert_words_to_window(dev_words, dev_tags, window_size=5)
     dev_windows_idx, dev_window_tags_idx = convert_window_to_window_idx(dev_windows, dev_window_tags, word2idx, tag2idx)
     dev_data = TensorDataset(torch.tensor(dev_windows_idx), torch.tensor(dev_window_tags_idx))
