@@ -62,22 +62,39 @@ def read_data(filename, window_size=5):
     return sentences, tags
 
 
-# Read test data
 def read_test_data(filename, window_size=5):
-    sentences, full_sentences = [], []
+    sentences = []
 
     with open(filename, 'r', encoding='utf-8') as f:
         lines = f.readlines()
-        sentence, full_sentence = [], []
+        sentence, sentence_tags = [], []
         for line in lines:
             if line == '\n':
                 sentences.append(sentence)
-                full_sentences.append(full_sentence)
-                sentence, full_sentence = [], []
+                sentence_tags.append(['<TEST>' for _ in sentence])
+                sentence = []
             else:
                 word = line.replace('\n', '')
                 sentence.append(word)
-                full_sentence.append(word)
+
+    return sentences, sentence_tags
+
+# Read test data
+# def read_test_data(filename, window_size=5):
+#     sentences, full_sentences = [], []
+#
+#     with open(filename, 'r', encoding='utf-8') as f:
+#         lines = f.readlines()
+#         sentence, full_sentence = [], []
+#         for line in lines:
+#             if line == '\n':
+#                 sentences.append(sentence)
+#                 full_sentences.append(full_sentence)
+#                 sentence, full_sentence = [], []
+#             else:
+#                 word = line.replace('\n', '')
+#                 sentence.append(word)
+#                 full_sentence.append(word)
 
 
 # making a words vocabulary and a tags vocabulary which are dictionaries that map words/tags to indices
