@@ -1,7 +1,10 @@
+from typing import Iterator
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
+from torch.nn import Parameter
 from torch.utils.data import DataLoader, TensorDataset
 from tqdm import tqdm
 import os
@@ -9,7 +12,7 @@ import os
 from assignment_2.utils import *
 
 # Constants
-TASK = 'pos'
+TASK = 'ner'
 
 
 class Tagger1(nn.Module):
@@ -30,10 +33,9 @@ class Tagger1(nn.Module):
         x = x.view(x.size(0), -1)
         x = F.tanh(self.fc1(x))
         x = self.fc2(x)
-        print(self.embedding.weight.data)
         return F.log_softmax(x, dim=1)
 
-    def train(self, optimizer, train_data, dev_data, idx2tag, device='cpu', epochs=10):
+    def train(self, optimizer, train_data, dev_data, idx2tag, device='cpu', epochs=10, is_ner=False):
         dev_loss_list, dev_accuracy_list = [], []
         # Move the model to the device
         self.to(device)
@@ -57,17 +59,17 @@ class Tagger1(nn.Module):
             # Calculate average loss for the epoch
             avg_loss = total_loss / len(train_data)
             # Evaluate the model on the training data
-            train_accuracy, _ = self.evaluate(train_data, idx2tag, device)
+            train_accuracy, _ = self.evaluate(train_data, idx2tag, device, is_ner=is_ner)
             # Evaluate the model on the dev data
-            dev_accuracy, dev_loss = self.evaluate(dev_data, idx2tag, device)
+            dev_accuracy, dev_loss = self.evaluate(dev_data, idx2tag, device, is_ner=is_ner)
             # Save the dev loss and accuracy
             dev_loss_list.append(dev_loss)
             dev_accuracy_list.append(dev_accuracy)
 
-            print(f'Epoch {epoch + 1}/{epochs} - Avg. Loss: {avg_loss:.4f} - Train Accuracy: {train_accuracy:.4f} - Dev Accuracy: {dev_accuracy:.4f} - Dev Loss: {dev_loss:.4f}')
+            print(
+                f'Epoch {epoch + 1}/{epochs} - Avg. Loss: {avg_loss:.4f} - Train Accuracy: {train_accuracy:.4f} - Dev Accuracy: {dev_accuracy:.4f} - Dev Loss: {dev_loss:.4f}')
 
         return dev_loss_list, dev_accuracy_list
-
 
     def evaluate(self, data, idx2tag, device='cpu', is_ner=False):
         correct, total = 0, 0
@@ -90,7 +92,12 @@ class Tagger1(nn.Module):
                     total += len(tags)
         return correct / total, total_loss / len(data.dataset)
 
+    def parameters(self, recurse: bool = True):
+        return list(self.fc1.parameters()) + list(self.fc2.parameters())
+
     def predict(self, data, idx2tag, device='cpu'):
+        pass
+
 
 if __name__ == '__main__':
     # Create an output directory in which to save the generated files
@@ -114,11 +121,11 @@ if __name__ == '__main__':
     output_dim = len(tag2idx)
     hidden_dim = 32
 
-    batch_size = 16
+    batch_size = 64
     model = Tagger1(vocab_size, hidden_dim, output_dim)
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    #TODO SAVE THE DATASET TO SAVE TIME AT EACH RUN
+    # TODO SAVE THE DATASET TO SAVE TIME AT EACH RUN
     train_data = TensorDataset(torch.tensor(windows_idx), torch.tensor(window_tags_idx))
     train_dataloader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
 
@@ -129,7 +136,10 @@ if __name__ == '__main__':
     dev_data = TensorDataset(torch.tensor(dev_windows_idx), torch.tensor(dev_window_tags_idx))
     dev_dataloader = DataLoader(dev_data, batch_size=batch_size, shuffle=True)
 
-    dev_loss_list, dev_accuracy_list = model.train(optimizer, train_dataloader, dev_dataloader, idx2tag, epochs=10)
+    dev_loss_list, dev_accuracy_list = model.train(optimizer, train_dataloader, dev_dataloader, idx2tag, epochs=25,
+                                                   is_ner=TASK == 'ner')
 
     make_graph(dev_loss_list, 'Loss over epochs', 'Loss', 'Output/loss.png')
     make_graph(dev_accuracy_list, 'Accuracy over epochs', 'Accuracy', 'Output/accuracy.png')
+
+    torch.save(model.state_dict(), f'model_part1_{TASK}.pth')
