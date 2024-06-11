@@ -120,12 +120,6 @@ class Tagger1(nn.Module):
 
 
 
-
-
-
-
-
-
 if __name__ == '__main__':
     vocab = read_vocab()
     train_words, train_tags = read_data(f'Data/{TASK}/train')
