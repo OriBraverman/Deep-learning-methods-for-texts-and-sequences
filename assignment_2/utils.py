@@ -1,11 +1,13 @@
+import random
+
 import torch
 import numpy as np
 from itertools import chain
 from matplotlib import pyplot as plt
 
 # Paths
-VOCAB_PATH = '../Data/vocab.txt'
-WORD_VECTORS_PATH = '../Data/wordVectors.txt'
+VOCAB_PATH = 'Data/vocab.txt'
+WORD_VECTORS_PATH = 'Data/wordVectors.txt'
 
 
 def read_vocab(vocab_path=VOCAB_PATH):
@@ -13,6 +15,7 @@ def read_vocab(vocab_path=VOCAB_PATH):
         lines = f.readlines()
     lines = [l.replace('\n', '') for l in lines]
     return lines
+
 
 
 # Load the pre-trained word2vec
@@ -62,6 +65,42 @@ def read_data(filename, window_size=5):
     return sentences, tags
 
 
+def read_data_pre_suf(filename, window_size=5):
+    sentences, prefixes, suffixes, tags = [], [], [], []
+
+    with open(filename, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+        sentence, prefixe, suffixe, sentence_tags = [], [], [], []
+        for line in lines:
+            if line == '\n':
+                sentences.append(sentence)
+                prefixes.append(prefixe)
+                suffixes.append(suffixe)
+                tags.append(sentence_tags)
+                sentence, prefixe, suffixe, sentence_tags = [], [], [], []
+            else:
+                word, tag = line.replace('\n', '').split()
+                l = min(len(word), 3)
+                sentence.append(word)
+                prefixe.append(word[:l])
+                suffixe.append(word[len(word) - l:])
+                sentence_tags.append(tag)
+    return sentences, prefixes, suffixes, tags
+
+
+def get_pre_suf_list(prefixes, suffixes):
+    words = []
+    [words.extend(s) for s in prefixes]
+    [words.extend(s) for s in suffixes]
+    return list(set(words))
+
+
+def make_pre_suf(pre_suf):
+    d = {w: i for i, w in enumerate(pre_suf)}
+    d['<UNK>'] = len(d)
+    return d
+
+
 def read_test_data(filename, window_size=5):
     sentences = []
 
@@ -78,6 +117,7 @@ def read_test_data(filename, window_size=5):
                 sentence.append(word)
 
     return sentences, sentence_tags
+
 
 # Read test data
 # def read_test_data(filename, window_size=5):
@@ -99,8 +139,7 @@ def read_test_data(filename, window_size=5):
 
 # making a words vocabulary and a tags vocabulary which are dictionaries that map words/tags to indices
 def make_vocabs(words, tags):
-    words = [w for sent in words for w in sent]
-    words = sorted(set(words))
+    words = list(set(words))
     words.append('<UNK>')
     words.append('<PAD_START>')
     words.append('<PAD_END>')
@@ -151,10 +190,38 @@ def convert_window_to_window_idx(window, tag, word2idx, tag2idx):
     vector_out = []
     tag_out = []
     for w, t in zip(window, tag):
+
+
+
         vector_out.append([word2idx[w] if w in word2idx else word2idx['<UNK>'] for w in w])
         tag_out.append(tag2idx[t])
 
     return vector_out, tag_out
+
+
+def convert_window_to_window_idx_presuf(window, tag, word2idx, pre_suf2idx, tag2idx):
+    """
+    @param window: a list of lists of words in the sentences
+    @param tag: a list of lists of tags in the sentences
+    @param word2idx: the dictionary that maps words to indices
+    @param tag2idx: the dictionary that maps tags to indices
+    @return: a list of tuples that return the full vector of window_size*emb_size and the actual tag as indices
+    """
+    vector_out = []
+    tag_out = []
+    for w, t in zip(window, tag):
+        w = w[0]
+        l = min(len(w), 3)
+        vec_word_pre_suf = [word2idx[w] if w in word2idx else word2idx['<UNK>'],
+             pre_suf2idx[w[:l]] if w in pre_suf2idx else pre_suf2idx['<UNK>'],
+             pre_suf2idx[w[len(w) - l:]] if w in pre_suf2idx else pre_suf2idx['<UNK>']]
+
+        vector_out.append(vec_word_pre_suf)
+        tag_out.append(tag2idx[t])
+
+    return vector_out, tag_out
+
+
 
 # this function graph loss/acuracy over epochs
 def make_graph(y, title, ylabel, filename, xlabel='Epochs'):
@@ -167,18 +234,14 @@ def make_graph(y, title, ylabel, filename, xlabel='Epochs'):
     plt.show()
 
 
-
 if __name__ == '__main__':
     train_words, train_tags = read_data('Data/pos/train')
     dev_words, dev_tags = read_data('Data/pos/dev')
-    #test_words,_ = read_test_data('./../Data/pos/test')
-
-
+    # test_words,_ = read_test_data('./../Data/pos/test')
 
     word2idx, idx2word, tag2idx, idx2tag = make_vocabs(train_words, train_tags)
     windows, window_tags = convert_words_to_window(train_words, train_tags, window_size=5)
     windows_idx, window_tags_idx = convert_window_to_window_idx(windows, window_tags, word2idx, tag2idx)
-
 
     for i in range(10):
         print(windows[i], window_tags[i])

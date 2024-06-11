@@ -91,6 +91,7 @@ class Tagger2(nn.Module):
         return correct / total, total_loss / len(data.dataset)
 
     def predict(self, data, idx2tag, device='cpu'):
+        pass
 
 if __name__ == '__main__':
     # Create an output directory in which to save the generated files
@@ -116,7 +117,7 @@ if __name__ == '__main__':
     hidden_dim = 100
 
     batch_size = 16
-    model = Tagger1(vocab_size, hidden_dim, output_dim)
+    model = Tagger2(vocab_size, hidden_dim, output_dim)
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
     #TODO SAVE THE DATASET TO SAVE TIME AT EACH RUN
