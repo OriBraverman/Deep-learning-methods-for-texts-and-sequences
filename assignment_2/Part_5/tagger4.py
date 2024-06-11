@@ -1,20 +1,42 @@
 import torch
+import numpy as np
 import torch.nn as nn
-import torch.optim as optim
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, TensorDataset
 from tqdm import tqdm
 import os
-# import the utils.py file from the father directory
+
 from assignment_2.utils import *
 
-# Constants
+
 TASK = 'pos'
 TRAIN = True
 
-class Tagger2(nn.Module):
-    def __init__(self, vocab_size, embedding, hidden_dim, output_dim, embedding_dim=50, window_size=5):
-        super(Tagger2, self).__init__()
+
+class CharCNN(nn.Module):
+    def __init__(self, char_embedding, num_filters, window_size, max_word_length):
+        super(CharCNN, self).__init__()
+
+        self.char_embedding - char_embedding
+        self.char_embedding_dim = char_embedding.shape[1]
+        self.max_word_length = max_word_length
+
+        input_dim = self.char_embedding_dim
+        self.conv1 = nn.Conv2d(in_channels=input_dim, out_channels=num_filters, kernel_size=window_size, stride=self.max_word_length)
+        self.activation = nn.ReLU()
+
+    def forward(self, x):
+        x = self.char_embedding(x)
+        x = x.view(x.size(0), 1, self.max_word_length, self.char_embedding_dim)
+        x = self.conv1(x)
+        x = self.activation(x)
+        x = F.max_pool2d(x, kernel_size=(x.size(2), 1))
+        x = x.view(x.size(0), -1)
+        return x
+
+class Tagger4(nn.Module):
+    def __init__(self, vocab_size, embedding, char_embedding, hidden_dim, output_dim, embedding_dim=50, window_size=5):
+        super(Tagger4, self).__init__()
 
         # Embedding layer - 50 dimensions
         self.embedding = nn.Embedding(vocab_size, embedding_dim)
@@ -25,11 +47,14 @@ class Tagger2(nn.Module):
         # Loss function
         self.loss_function = nn.CrossEntropyLoss()
 
+        self.char_cnn = CharCNN(char_embedding, num_filters=50, window_size=5, max_word_length=20)
+
     def forward(self, x):
         x = self.embedding(x)
         # Flatten the tensor to 1D
         x = x.view(x.size(0), -1)
         x = F.tanh(self.fc1(x))
+        x = F.dropout(x, p=0.5)
         x = self.fc2(x)
         return F.log_softmax(x, dim=1)
 
@@ -46,6 +71,10 @@ class Tagger2(nn.Module):
                 # Move the data to the device
                 words, tags = torch.tensor(words).to(device), torch.tensor(tags).to(device)
                 # Forward pass
+                # first use the char_cnn to get the char embeddings
+                char_embeddings = self.char_cnn(words)
+                # then concatenate the char embeddings with the word embeddings
+                words = torch.cat([words, char_embeddings], dim=1)
                 output = self(words)
                 # Compute the loss
                 loss = self.loss_function(output, tags)
@@ -205,7 +234,7 @@ if __name__ == '__main__':
 
 
         batch_size = 64
-        model = Tagger2(vocab_size=vocab_size, embedding=vecs, hidden_dim=hidden_dim, output_dim=output_dim)
+        model = Tagger4(vocab_size=vocab_size, embedding=vecs, hidden_dim=hidden_dim, output_dim=output_dim)
         optimizer = optim.Adam(model.parameters(), lr=0.001)
 
         # TODO SAVE THE DATASET TO SAVE TIME AT EACH RUN
@@ -225,7 +254,7 @@ if __name__ == '__main__':
         make_graph(dev_loss_list, 'Loss over epochs', 'Loss', 'Output/loss.png')
         make_graph(dev_accuracy_list, 'Accuracy over epochs', 'Accuracy', 'Output/accuracy.png')
 
-        torch.save(model.state_dict(), f'model_part2_{TASK}.pth')
+        torch.save(model.state_dict(), f'model_part4_{TASK}.pth')
 
     tag2idx['<TEST>'] = len(tag2idx)
 
@@ -235,6 +264,7 @@ if __name__ == '__main__':
     test_data = TensorDataset(torch.tensor(test_windows_idx), torch.tensor(test_window_tags_idx))
     test_dataloader = DataLoader(test_data, batch_size=128)
 
-    model = Tagger2(vocab_size=vocab_size, embedding=vecs, hidden_dim=hidden_dim, output_dim=output_dim)
-    model.load_state_dict(torch.load(f'model_part2_{TASK}.pth'))
-    model.predict(test_dataloader, idx2tag, f'Output/part2.{TASK}')
+    model = Tagger4(vocab_size=vocab_size, embedding=vecs, hidden_dim=hidden_dim, output_dim=output_dim)
+    model.load_state_dict(torch.load(f'model_part4_{TASK}.pth'))
+    model.predict(test_dataloader, idx2tag, f'Output/part4.{TASK}')
+
