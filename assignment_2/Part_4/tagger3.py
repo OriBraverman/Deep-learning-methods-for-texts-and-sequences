@@ -34,7 +34,7 @@ class Tagger3(nn.Module):
         self.loss_function = nn.CrossEntropyLoss()
 
     def forward(self, x):
-        x = self.embedding(x[:,0]) + self.pre_suff_embedding(x[:,1]) + self.pre_suff_embedding(x[:,2])
+        x = self.embedding(x[:, 0]) + self.pre_suff_embedding(x[:, 1]) + self.pre_suff_embedding(x[:, 2])
         # Flatten the tensor to 1D
         x = x.view(x.size(0), -1)
         x = F.tanh(self.fc1(x))
@@ -102,6 +102,12 @@ class Tagger3(nn.Module):
     def predict(self, data, idx2tag, device='cpu'):
         pass
 
+    def parameters(self, recurse: bool = True, use_embeddings: bool = True):
+        if use_embeddings:
+            return list(self.fc1.parameters()) + list(self.fc2.parameters()) + list(
+                self.pre_suff_embedding.parameters())
+        return list(self.fc1.parameters()) + list(self.fc2.parameters())
+
 
 if __name__ == '__main__':
     vocab = read_vocab()
@@ -111,7 +117,6 @@ if __name__ == '__main__':
 
     pre_suf_list = get_pre_suf_list(train_prefixes, train_suffixes)
     pre_suf2idx = make_pre_suf(pre_suf_list)
-
 
     vocab_size = len(word2idx)
     pre_suf_size = len(pre_suf2idx)
@@ -128,21 +133,23 @@ if __name__ == '__main__':
         # Convert the words to windows
         windows, window_tags = convert_words_to_window(train_words, train_tags, window_size=1)
         # Convert the windows to indices
-        windows_idx, window_tags_idx = convert_window_to_window_idx_presuf(windows, window_tags, word2idx, pre_suf2idx, tag2idx)
+        windows_idx, window_tags_idx = convert_window_to_window_idx_presuf(windows, window_tags, word2idx, pre_suf2idx,
+                                                                           tag2idx)
 
-
-
-        model = Tagger3(vocab_size,pre_suf_size, hidden_dim, output_dim)
+        model = Tagger3(vocab_size, pre_suf_size, hidden_dim, output_dim)
         optimizer = optim.Adam(model.parameters(), lr=0.001)
 
         # TODO SAVE THE DATASET TO SAVE TIME AT EACH RUN
         train_data = TensorDataset(torch.tensor(windows_idx), torch.tensor(window_tags_idx))
         train_dataloader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
 
-        dev_words, dev_tags = read_data(f'Data/{TASK}/dev')
-        dev_windows, dev_window_tags = convert_words_to_window(dev_words, dev_tags, window_size=5)
-        dev_windows_idx, dev_window_tags_idx = convert_window_to_window_idx(dev_windows, dev_window_tags, word2idx,
-                                                                           tag2idx)
+        dev_words, dev_prefixes, dev_suffixes, dev_tags = read_data_pre_suf(f'Data/{TASK}/dev')
+
+        dev_windows, dev_window_tags = convert_words_to_window(dev_words, dev_tags, window_size=1)
+        # Convert the windows to indices
+        dev_windows_idx, dev_window_tags_idx = convert_window_to_window_idx_presuf(windows, window_tags, word2idx,
+                                                                                   pre_suf2idx,
+                                                                                   tag2idx)
         dev_data = TensorDataset(torch.tensor(dev_windows_idx), torch.tensor(dev_window_tags_idx))
         dev_dataloader = DataLoader(dev_data, batch_size=batch_size, shuffle=True)
 
