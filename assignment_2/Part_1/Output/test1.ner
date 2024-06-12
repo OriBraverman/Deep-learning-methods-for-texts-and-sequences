@@ -1,56 +1,56 @@
 -DOCSTART- O
 
-SOCCER PER
+SOCCER LOC
 
-Nadim PER
+Nadim O
 
-AL-AIN PER
+AL-AIN O
 
-Japan PER
+Japan O
 
 But O
 
-China O
+China ORG
 
-Oleg O
+Oleg ORG
 
 The O
 
 Despite O
 
-Two O
+Two MISC
 
 Takuya O
 
 It O
 
-Defender PER
+Defender ORG
 
-Nader ORG
-
-Japan O
-
-Bitar O
+Nader PER
 
 Japan O
 
-The PER
+Bitar PER
+
+Japan O
+
+The O
 
 ' O
 
 Japan O
 
-Hosts O
+Hosts MISC
 
-All O
+All PER
 
--DOCSTART- O
+-DOCSTART- PER
 
-RUGBY O
+RUGBY PER
 
 ROME O
 
-Italy O
+Italy ORG
 
 on O
 
@@ -58,27 +58,27 @@ Cuttitta O
 
 Stefano O
 
-Cuttitta ORG
+Cuttitta O
 
-Coste PER
+Coste O
+
+" MISC
 
 " O
 
-" O
-
-I LOC
+I O
 
 Squad O
 
 -DOCSTART- O
 
-SOCCER O
+SOCCER LOC
 
-AL-AIN MISC
+AL-AIN O
 
-Two ORG
+Two O
 
-Takuya O
+Takuya PER
 
 It O
 
@@ -90,23 +90,23 @@ Nader O
 
 Japan O
 
-A ORG
+A O
 
 Bitar O
 
 Japan O
 
-Japan O
+Japan ORG
 
-Syria LOC
+Syria O
 
 -DOCSTART- O
 
 FREESTYLE O
 
-TIGNES O
+TIGNES LOC
 
-Results O
+Results PER
 
 freestyle O
 
@@ -114,25 +114,25 @@ Men O
 
 1. O
 
-2. O
+2. PER
 
-3. O
+3. PER
 
-4. O
+4. PER
 
 5. O
 
-6. PER
+6. O
 
-7. PER
+7. O
 
 8. O
 
 9. O
 
-10. O
+10. PER
 
-Women PER
+Women O
 
 1. O
 
@@ -144,13 +144,13 @@ Women PER
 
 5. O
 
-6. PER
+6. O
 
-7. PER
+7. O
 
-8. O
+8. PER
 
-9. O
+9. PER
 
 10. O
 
@@ -160,55 +160,55 @@ SOCCER O
 
 AL-AIN O
 
-Results O
+Results LOC
 
 Japan O
 
-Scorers O
+Scorers PER
 
-Japan O
+Japan PER
 
-Syria O
+Syria LOC
 
 Attendance O
 
-China O
+China PER
 
 Scorers O
 
 Attendence O
 
-Standings O
+Standings PER
 
-for O
+for LOC
 
 Uzbekistan O
 
 Japan O
 
-Syria PER
+Syria O
 
 China O
 
--DOCSTART- PER
+-DOCSTART- O
 
 CRICKET PER
 
-[ PER
+[ O
 
-SIALKOT O
+SIALKOT PER
 
-Scoreboard O
+Scoreboard PER
 
-one-day O
+one-day PER
 
 on O
 
-Pakistan O
+Pakistan PER
 
 Saeed O
 
-Zahoor O
+Zahoor PER
 
 Ijaz O
 
@@ -218,7 +218,7 @@ Wasim O
 
 Shahid O
 
-Moin O
+Moin PER
 
 Waqar O
 
@@ -226,29 +226,29 @@ Saqlain O
 
 Mushtaq O
 
-Salim O
+Salim PER
 
-Extras O
+Extras PER
 
-Total PER
+Total O
 
 Fall O
 
-Bowling O
+Bowling PER
 
 Cairns O
 
-Astle O
+Astle LOC
 
 New O
 
-B. O
+B. ORG
 
-C. O
+C. ORG
 
 A. LOC
 
-S. O
+S. ORG
 
 C. O
 
@@ -256,27 +256,27 @@ N. O
 
 C. O
 
-L. O
+L. PER
 
-J. LOC
+J. ORG
 
 S. O
 
-R. O
+R. MISC
 
-Extras O
+Extras PER
 
-Total O
+Total PER
 
 Fall O
 
-8-213 O
+8-213 ORG
 
-Bowling MISC
+Bowling O
 
-6-0-32-2 LOC
+6-0-32-2 O
 
-10-0-42-0 O
+10-0-42-0 ORG
 
 Ijaz O
 
@@ -294,43 +294,43 @@ Result O
 
 Cup O
 
-Plymouth MISC
+Plymouth O
 
--DOCSTART- O
+-DOCSTART- PER
 
 SOCCER O
 
-LONDON O
+LONDON LOC
 
 Dutch O
 
 Blinker O
 
-FIFA ORG
+FIFA MISC
 
-The O
+The LOC
 
 Blinker O
 
--DOCSTART- ORG
+-DOCSTART- O
 
-SOCCER ORG
+SOCCER O
 
-LONDON ORG
-
-Leeds ORG
-
-Bowyer O
-
-He O
+LONDON LOC
 
 Leeds O
 
 Bowyer O
 
--DOCSTART- O
+He PER
 
-BASKETBALL O
+Leeds O
+
+Bowyer LOC
+
+-DOCSTART- PER
+
+BASKETBALL PER
 
 LONDON O
 
@@ -342,35 +342,35 @@ played O
 
 Group O
 
-CSKA ORG
+CSKA O
 
-Stefanel ORG
+Stefanel MISC
 
-Maccabi ORG
+Maccabi O
 
 Ulker O
 
 Limoges O
 
-Panionios O
+Panionios PER
 
 Group O
 
-Teamsystem PER
+Teamsystem O
 
 Olympiakos O
 
-Cibona ORG
+Cibona O
 
-Alba O
+Alba LOC
 
-Estudiantes ORG
+Estudiantes O
 
-Charleroi O
+Charleroi ORG
 
 Group ORG
 
-Panathinaikos PER
+Panathinaikos O
 
 Ljubljana O
 
@@ -380,13 +380,13 @@ Barcelona O
 
 Split ORG
 
-Bayer O
+Bayer ORG
 
 Group ORG
 
-Efes O
+Efes ORG
 
-Pau-Orthez MISC
+Pau-Orthez O
 
 Partizan O
 
@@ -396,101 +396,101 @@ Sevilla O
 
 Dynamo O
 
--DOCSTART- O
+-DOCSTART- ORG
 
-RUGBY O
+RUGBY ORG
 
-Robert O
+Robert ORG
 
-LONDON O
+LONDON PER
 
-Centre O
+Centre PER
 
-Little O
+Little PER
 
-Owen O
+Owen PER
 
-The O
+The PER
 
-The O
+The LOC
 
-Campese O
+Campese PER
 
 " O
 
-On LOC
+On O
 
 League O
 
-Teams ORG
+Teams O
 
 Barbarians O
 
-Australia ORG
+Australia MISC
 
 -DOCSTART- O
 
-GOLF O
+GOLF PER
 
-HARARE O
+HARARE PER
 
-Leading LOC
+Leading PER
 
-Andrew O
+Andrew PER
 
 Botes O
 
 70 O
 
-68 MISC
+68 PER
 
-Steve MISC
-
--DOCSTART- MISC
-
-SOCCER LOC
-
-BUCHAREST O
-
-Romania O
-
-Midfielder PER
-
-Iordanescu O
-
-I O
-
-League LOC
-
-Attacking O
-
-Squad O
-
-Goalkeepers O
-
-Defenders O
-
-Midfielders O
-
-Forwards ORG
-
-REUTER O
+Steve PER
 
 -DOCSTART- O
 
 SOCCER O
 
-RIO MISC
+BUCHAREST O
 
-Results O
+Romania O
 
-soccer ORG
+Midfielder O
+
+Iordanescu O
+
+I O
+
+League O
+
+Attacking PER
+
+Squad O
+
+Goalkeepers PER
+
+Defenders O
+
+Midfielders O
+
+Forwards O
+
+REUTER O
+
+-DOCSTART- PER
+
+SOCCER O
+
+RIO LOC
+
+Results PER
+
+soccer PER
 
 Goias O
 
 Portuguesa O
 
--DOCSTART- O
+-DOCSTART- PER
 
 CRICKET O
 
@@ -498,43 +498,43 @@ Robert O
 
 MELBOURNE O
 
-Australia PER
+Australia O
 
-Lara PER
+Lara O
 
 Australia O
 
-All-rounder LOC
+All-rounder O
 
 Man-of-the O
 
-His ORG
+His O
 
-Lara O
+Lara MISC
 
 West O
 
 He O
 
-The O
+The PER
 
-It O
+It PER
 
-Chanderpaul O
+Chanderpaul PER
 
-Pakistan O
+Pakistan PER
 
--DOCSTART- LOC
+-DOCSTART- O
 
 CRICKET O
 
-MELBOURNE PER
+MELBOURNE O
 
 Scoreboard O
 
-limited O
+limited ORG
 
-West MISC
+West O
 
 S. O
 
@@ -542,11 +542,11 @@ R. O
 
 B. O
 
-S. O
+S. PER
 
 C. O
 
-J. MISC
+J. O
 
 J. O
 
@@ -554,43 +554,43 @@ N. O
 
 K. O
 
-C. O
+C. ORG
 
 C. O
 
 Extras O
 
-Total ORG
+Total PER
 
-Fall O
+Fall PER
 
-9-153 O
+9-153 MISC
 
 Bowling O
 
-Moody O
-
-M. O
-
-Australia ORG
-
-M. MISC
+Moody PER
 
 M. PER
 
-R. PER
-
-G. O
+Australia O
 
 M. O
 
+M. O
+
+R. PER
+
+G. PER
+
+M. PER
+
 S. PER
 
-T. O
+T. LOC
 
 Extras O
 
-Total O
+Total MISC
 
 Fall O
 
@@ -598,39 +598,73 @@ Did O
 
 Bowling O
 
-Benjamin MISC
+Benjamin O
 
-10-1-33-2 O
+10-1-33-2 PER
 
 Result O
 
--DOCSTART- O
+-DOCSTART- PER
 
 CRICKET O
 
-MELBOURNE MISC
+MELBOURNE O
 
-Australia PER
+Australia O
 
 Scores O
 
--DOCSTART- O
+-DOCSTART- PER
 
-CRICKET O
+CRICKET PER
 
-MELBOURNE PER
+MELBOURNE O
+
+West MISC
+
+-DOCSTART- PER
+
+CRICKET PER
+
+HOBART O
+
+Score LOC
+
+Tasmania O
+
+-DOCSTART- ORG
+
+CRICKET ORG
+
+MELBOURNE ORG
+
+West PER
+
+Lara PER
+
+The O
 
 West O
 
--DOCSTART- O
+Lara O
 
-CRICKET O
+As O
 
-HOBART PER
+On LOC
 
-Score O
+Tour O
 
-Tasmania O
+Lloyd ORG
+
+Lara ORG
+
+Australia MISC
+
+Lara O
+
+Both LOC
+
+Pakistan LOC
 
 -DOCSTART- O
 
@@ -638,57 +672,23 @@ CRICKET O
 
 MELBOURNE O
 
-West O
-
-Lara O
-
-The MISC
-
-West MISC
-
-Lara O
-
-As O
-
-On O
-
-Tour O
-
-Lloyd O
-
-Lara O
-
-Australia O
-
-Lara O
-
-Both O
-
-Pakistan O
-
--DOCSTART- O
-
-CRICKET PER
-
-MELBOURNE PER
-
-West O
+West LOC
 
 Teams O
 
-Australia O
+Australia MISC
 
-West MISC
+West O
 
 -DOCSTART- O
 
 BADMINTON O
 
-BALI O
+BALI ORG
 
-Results O
+Results ORG
 
-Men O
+Men ORG
 
 Group O
 
@@ -696,47 +696,47 @@ Chen O
 
 Dong O
 
-Indra O
+Indra PER
 
 Group O
 
 Sun O
 
-Hermawan PER
+Hermawan ORG
 
-Group O
+Group MISC
 
 Allan O
 
 Budi O
 
-Semifinals O
+Semifinals PER
 
 Wijaya O
 
 ( O
 
-Women MISC
+Women O
 
 Group O
 
 Gong O
 
-Group O
+Group LOC
 
-Ye O
+Ye LOC
 
-Group O
+Group MISC
 
-Camilla O
+Camilla PER
 
 Group O
 
 Susi O
 
-Semifinals O
+Semifinals PER
 
--DOCSTART- O
+-DOCSTART- PER
 
 SOCCER O
 
@@ -746,53 +746,53 @@ Result O
 
 Scorers O
 
-Aly LOC
+Aly ORG
 
-Contractors PER
+Contractors MISC
 
--DOCSTART- O
+-DOCSTART- MISC
 
-NHL O
+NHL PER
 
-NEW ORG
+NEW PER
 
-Standings ORG
+Standings PER
 
-League ORG
+League PER
 
-won O
+won PER
 
-EASTERN O
+EASTERN ORG
 
 NORTHEAST O
 
-W MISC
+W O
 
-HARTFORD O
+HARTFORD ORG
 
-BUFFALO LOC
+BUFFALO ORG
 
 BOSTON O
 
-MONTREAL PER
+MONTREAL O
 
 PITTSBURGH O
 
 OTTAWA O
 
-ATLANTIC PER
+ATLANTIC O
 
-W PER
+W O
 
-FLORIDA MISC
+FLORIDA O
 
 PHILADELPHIA O
 
-NEW ORG
+NEW O
 
-WASHINGTON O
+WASHINGTON ORG
 
-NY ORG
+NY O
 
 NY O
 
@@ -814,27 +814,27 @@ ST O
 
 TORONTO PER
 
-PHOENIX MISC
+PHOENIX PER
 
 PACIFIC O
 
-W MISC
+W LOC
 
-COLORADO ORG
+COLORADO O
 
 VANCOUVER O
 
-EDMONTON O
+EDMONTON LOC
 
-LOS ORG
+LOS O
 
 SAN O
 
 CALGARY ORG
 
-ANAHEIM O
+ANAHEIM ORG
 
-FRIDAY O
+FRIDAY ORG
 
 ANAHEIM O
 
@@ -842,9 +842,9 @@ TORONTO O
 
 PITTSBURGH O
 
-MONTREAL PER
+MONTREAL ORG
 
-PHILADELPHIA PER
+PHILADELPHIA O
 
 ST O
 
@@ -852,9 +852,9 @@ OTTAWA O
 
 -DOCSTART- O
 
-NHL O
+NHL PER
 
-[ O
+[ MISC
 
 NEW O
 
@@ -862,7 +862,7 @@ NEW O
 
 ) O
 
-Results ORG
+Results O
 
 League O
 
@@ -878,37 +878,37 @@ Tampa O
 
 -DOCSTART- O
 
-NFL MISC
+NFL O
 
-INDIANAPOLIS MISC
+INDIANAPOLIS ORG
 
-The LOC
+The ORG
 
 Marshall O
 
 Paul PER
 
-Indianapolis MISC
-
-The O
-
-Philadelphia O
-
-The O
+Indianapolis O
 
 The PER
 
-Faulk O
+Philadelphia PER
+
+The O
+
+The O
+
+Faulk PER
 
 Justin O
 
-Justin O
+Justin PER
 
-Third-stringer O
+Third-stringer MISC
 
 A O
 
-Eagles MISC
+Eagles O
 
 Ricky O
 
@@ -918,7 +918,7 @@ NBA O
 
 NEW O
 
-Standings PER
+Standings ORG
 
 Basketball O
 
@@ -928,23 +928,23 @@ EASTERN O
 
 ATLANTIC O
 
-W O
+W PER
 
 MIAMI O
 
-NEW PER
+NEW MISC
 
-ORLANDO O
+ORLANDO ORG
 
-WASHINGTON O
+WASHINGTON ORG
 
 PHILADELPHIA O
 
 BOSTON O
 
-NEW LOC
+NEW O
 
-CENTRAL PER
+CENTRAL O
 
 W O
 
@@ -958,57 +958,57 @@ ATLANTA O
 
 CHARLOTTE O
 
-MILWAUKEE PER
+MILWAUKEE O
 
 INDIANA O
 
-TORONTO PER
+TORONTO O
 
-WESTERN MISC
+WESTERN O
 
 MIDWEST O
 
-W O
+W LOC
 
 HOUSTON O
 
-UTAH O
+UTAH LOC
 
-MINNESOTA O
+MINNESOTA PER
 
-DALLAS O
+DALLAS LOC
 
-DENVER PER
+DENVER O
 
-SAN PER
+SAN LOC
 
 VANCOUVER O
 
-PACIFIC O
+PACIFIC PER
 
-W O
+W MISC
 
-SEATTLE MISC
+SEATTLE O
 
 LA O
 
 PORTLAND O
 
-LA O
+LA ORG
 
 GOLDEN O
 
-SACRAMENTO PER
+SACRAMENTO O
 
-PHOENIX PER
+PHOENIX O
 
-FRIDAY PER
+FRIDAY O
 
 NEW O
 
 CLEVELAND O
 
-NEW O
+NEW MISC
 
 PHOENIX O
 
@@ -1024,51 +1024,51 @@ ORLANDO O
 
 -DOCSTART- O
 
-NFL PER
+NFL O
 
 NEW O
 
-National O
+National PER
 
-standings O
+standings PER
 
 tied O
 
-AMERICAN O
+AMERICAN PER
 
-EASTERN ORG
+EASTERN O
 
 W O
 
-NEW MISC
+NEW O
 
-BUFFALO O
+BUFFALO PER
 
-INDIANAPOLIS O
+INDIANAPOLIS MISC
 
-MIAMI O
+MIAMI MISC
 
 NY O
 
 CENTRAL O
 
-W PER
+W O
 
 PITTSBURGH O
 
 HOUSTON O
 
-JACKSONVILLE O
+JACKSONVILLE LOC
 
 CINCINNATI O
 
-BALTIMORE PER
+BALTIMORE O
 
 WESTERN O
 
-W O
+W ORG
 
-X-DENVER MISC
+X-DENVER O
 
 KANSAS O
 
@@ -1076,15 +1076,15 @@ SAN O
 
 OAKLAND O
 
-SEATTLE O
+SEATTLE PER
 
-NATIONAL O
+NATIONAL MISC
 
-EASTERN O
+EASTERN MISC
 
 W O
 
-DALLAS O
+DALLAS PER
 
 WASHINGTON O
 
@@ -1096,13 +1096,13 @@ NY O
 
 CENTRAL O
 
-W MISC
+W ORG
 
 Y-GREEN O
 
-MINNESOTA O
+MINNESOTA MISC
 
-CHICAGO O
+CHICAGO PER
 
 DETROIT O
 
@@ -1110,35 +1110,35 @@ TAMPA O
 
 WESTERN O
 
-W PER
+W MISC
 
-SAN O
+SAN MISC
 
-CAROLINA O
+CAROLINA MISC
 
-ST O
+ST PER
 
-ATLANTA O
+ATLANTA PER
 
 NEW O
 
 X O
 
-Y O
+Y ORG
 
 SUNDAY O
 
 ST O
 
-BALTIMORE O
+BALTIMORE PER
 
-DENVER O
+DENVER MISC
 
-JACKSONVILLE O
+JACKSONVILLE LOC
 
-NY O
+NY LOC
 
-ATLANTA O
+ATLANTA LOC
 
 SAN O
 
@@ -1156,35 +1156,35 @@ MINNESOTA O
 
 MONDAY O
 
-KANSAS O
+KANSAS PER
 
--DOCSTART- O
+-DOCSTART- PER
 
-NFL O
+NFL PER
 
 NEW O
 
 Result O
 
-League O
+League PER
 
 INDIANAPOLIS O
 
 -DOCSTART- O
 
-NCAA O
+NCAA PER
 
-HOUSTON O
+HOUSTON ORG
 
-Ohio O
+Ohio ORG
 
 Pace O
 
 He O
 
-Last O
+Last ORG
 
-Pace O
+Pace PER
 
 The O
 
@@ -1192,11 +1192,11 @@ The O
 
 SOCCER O
 
-AMSTERDAM O
+AMSTERDAM MISC
 
 Result O
 
-soccer PER
+soccer O
 
 RKC O
 
@@ -1214,31 +1214,31 @@ Graafschap O
 
 Vitesse O
 
-Ajax O
+Ajax MISC
 
 Heerenveen O
 
 Roda O
 
-Utrecht O
+Utrecht ORG
 
-Volendam O
+Volendam PER
 
-Sparta O
+Sparta ORG
 
-NAC MISC
+NAC O
 
-Willem O
+Willem PER
 
-Groningen LOC
+Groningen PER
 
-AZ O
+AZ ORG
 
-Fortuna MISC
+Fortuna O
 
 NEC O
 
-RKC MISC
+RKC O
 
 -DOCSTART- O
 
@@ -1250,141 +1250,141 @@ Results O
 
 soccer O
 
-Bochum LOC
+Bochum O
 
 Werder O
 
-Karlsruhe ORG
+Karlsruhe PER
 
 Schalke O
 
-Standings O
+Standings PER
 
-for O
+for PER
 
 Bayer O
 
-Bayern O
+Bayern PER
 
-VfB O
+VfB PER
 
-Borussia O
+Borussia PER
 
-Karlsruhe ORG
+Karlsruhe PER
 
-VfL O
+VfL PER
 
 1. O
 
-Schalke O
+Schalke PER
 
-Werder O
+Werder PER
 
 MSV O
 
-SV O
+SV PER
 
-FC O
+FC PER
 
 Fortuna O
 
 Hamburger O
 
-Arminia O
+Arminia PER
 
-FC ORG
+FC O
 
 Borussia O
 
-SC ORG
+SC PER
 
 -DOCSTART- O
 
-SOCCER O
+SOCCER PER
 
-PARIS O
+PARIS PER
 
-Summaries ORG
+Summaries MISC
 
-matches O
+matches MISC
 
-Lens O
+Lens PER
 
 Gourvennec O
 
-Halftime O
+Halftime PER
 
-Attendance O
+Attendance PER
 
-15,000 O
+15,000 MISC
 
-Paris O
+Paris MISC
 
-70 O
+70 PER
 
 1-0 O
 
-30,000 O
+30,000 PER
 
--DOCSTART- O
+-DOCSTART- PER
 
 SOCCER O
 
 AMSTERDAM O
 
-Summary O
+Summary ORG
 
-soccer O
+soccer PER
 
-RKC O
+RKC MISC
 
-Van O
+Van MISC
 
-Halftime O
+Halftime PER
 
 Attendance O
 
--DOCSTART- O
+-DOCSTART- PER
 
-SOCCER O
+SOCCER PER
 
 PARIS O
 
-Standings O
+Standings PER
 
-division O
+division PER
 
 drawn O
 
 Paris O
 
-Monaco O
+Monaco PER
 
 Bordeaux O
 
-Strasbourg ORG
+Strasbourg PER
 
-Bastia ORG
+Bastia PER
 
-Auxerre ORG
+Auxerre O
 
 Metz O
 
-Nantes O
+Nantes PER
 
 Guingamp MISC
 
-Lille O
+Lille MISC
 
 Marseille O
 
 Lyon O
 
-Rennes PER
+Rennes LOC
 
-Lens PER
+Lens O
 
-Le PER
+Le O
 
 Cannes O
 
@@ -1392,9 +1392,9 @@ Montpellier O
 
 Caen O
 
-Nancy O
+Nancy LOC
 
-Nice PER
+Nice O
 
 -DOCSTART- O
 
@@ -1402,11 +1402,11 @@ SOCCER O
 
 PARIS O
 
-Results O
+Results PER
 
 matches O
 
-Lens PER
+Lens O
 
 Paris O
 
@@ -1414,27 +1414,27 @@ Paris O
 
 SOCCER O
 
-BONN ORG
+BONN O
 
-Summaries O
+Summaries PER
 
-Bochum O
+Bochum PER
 
 Halftime O
 
-Attendance PER
+Attendance O
 
 Werder O
 
-Halftime O
+Halftime PER
 
 Attendance O
 
-Karlsruhe O
+Karlsruhe MISC
 
-Halftime O
+Halftime MISC
 
-Attendance O
+Attendance ORG
 
 Schalke O
 
@@ -1442,7 +1442,7 @@ Halftime O
 
 Attendance O
 
--DOCSTART- MISC
+-DOCSTART- O
 
 TENNIS O
 
@@ -1458,83 +1458,83 @@ SOCCER O
 
 LISBON PER
 
-Portugal MISC
-
-Costa O
-
 Portugal O
 
-The O
+Costa PER
 
-Squad O
+Portugal PER
 
-Goalkeepers O
+The PER
+
+Squad PER
+
+Goalkeepers PER
 
 Defenders O
 
 Midfielders O
 
-Forwards O
+Forwards PER
 
--DOCSTART- O
+-DOCSTART- PER
 
-SOCCER O
+SOCCER PER
 
-MADRID O
+MADRID PER
 
 William O
 
-Spanish O
+Spanish MISC
 
 To O
 
 Draw O
 
-Correct ORG
+Correct O
 
-Real PER
+Real O
 
-1-0 ORG
+1-0 O
 
-2-0 ORG
+2-0 PER
 
-2-1 O
+2-1 PER
 
 3-0 O
 
-3-1 O
+3-1 PER
 
-3-2 O
+3-2 PER
 
-4-0 MISC
+4-0 O
 
 4-1 O
 
-4-2 PER
+4-2 O
 
-Draw O
+Draw PER
 
 0-0 PER
 
 1-1 O
 
-2-2 ORG
+2-2 O
 
 3-3 O
 
-Double O
+Double PER
 
 half-time O
 
-5-2 ORG
+5-2 O
 
 14-1 O
 
-28-1 ORG
+28-1 O
 
-5-1 O
+5-1 ORG
 
-4-1 MISC
+4-1 ORG
 
 11-2 O
 
@@ -1542,43 +1542,43 @@ half-time O
 
 14-1 O
 
-4-1 PER
+4-1 O
 
-First PER
+First O
 
 Real O
 
-9-2 LOC
+9-2 O
 
 5-1 O
 
-7-1 ORG
+7-1 O
 
-12-1 O
+12-1 MISC
 
 14-1 O
 
 Amor O
 
-16-1 O
+16-1 PER
 
-16-1 O
+16-1 PER
 
-Popescu O
+Popescu PER
 
-16-1 O
+16-1 PER
 
-JosepGuardiola LOC
-
-20-1 O
-
-laPena PER
+JosepGuardiola O
 
 20-1 O
 
-Enrique O
+laPena O
 
-33-1 MISC
+20-1 O
+
+Enrique ORG
+
+33-1 O
 
 AbelardoFernandez O
 
@@ -1586,11 +1586,11 @@ AbelardoFernandez O
 
 40-1 O
 
-Ferrer O
+Ferrer PER
 
 40-1 O
 
-40-1 MISC
+40-1 O
 
 Laurent O
 
@@ -1598,71 +1598,71 @@ Laurent O
 
 SOCCER O
 
-MADRID O
+MADRID ORG
 
 Spanish O
 
 Although O
 
-Tickets O
+Tickets ORG
 
--DOCSTART- O
+-DOCSTART- PER
 
-SOCCER O
+SOCCER PER
 
-MADRID O
+MADRID ORG
 
-Standings LOC
+Standings ORG
 
-division O
+division ORG
 
 ( O
 
-against O
+against PER
 
-Real LOC
+Real O
 
-Barcelona O
+Barcelona PER
 
-Deportivo O
+Deportivo PER
 
 Real PER
 
-Atletico O
+Atletico LOC
 
 Athletic O
 
 Real O
 
-Valladolid ORG
+Valladolid O
 
-Racing ORG
+Racing O
 
-Rayo ORG
+Rayo O
 
-Valencia ORG
+Valencia O
 
-Celta ORG
+Celta MISC
 
-Tenerife O
+Tenerife PER
 
-Espanyol LOC
+Espanyol PER
 
-Oviedo ORG
+Oviedo PER
 
-Sporting ORG
+Sporting O
 
 Logrones O
 
 Zaragoza O
 
-Sevilla O
+Sevilla PER
 
-Compostela O
+Compostela PER
 
-Hercules LOC
+Hercules ORG
 
-Extremadura MISC
+Extremadura O
 
 -DOCSTART- O
 
@@ -1672,11 +1672,11 @@ MADRID O
 
 Spain O
 
-" O
+" ORG
 
 I O
 
--DOCSTART- O
+-DOCSTART- MISC
 
 SOCCER O
 
@@ -1684,15 +1684,15 @@ ROME O
 
 FIFA O
 
-In MISC
+In O
+
+" PER
 
 " O
 
-" O
+" PER
 
-" O
-
-Weah O
+Weah PER
 
 The O
 
@@ -1700,21 +1700,21 @@ Weah O
 
 He O
 
-Costa O
+Costa LOC
 
 Weah O
 
-The MISC
+The O
 
 -DOCSTART- O
 
-GUNMEN O
+GUNMEN MISC
 
-VIENNA O
+VIENNA PER
 
-Two MISC
+Two O
 
-" O
+" LOC
 
 The O
 
@@ -1722,35 +1722,35 @@ Police O
 
 The O
 
-Manchester O
+Manchester PER
 
--DOCSTART- O
+-DOCSTART- PER
 
-SOCCER O
+SOCCER PER
 
 ROME O
 
 Italian O
 
-Bologna O
+Bologna PER
 
 Along O
 
-Led MISC
+Led O
+
+Cagliari PER
 
 Cagliari O
 
-Cagliari O
+Bottom LOC
 
-Bottom ORG
+Fiorentina ORG
 
-Fiorentina O
-
-Fiorentina O
+Fiorentina ORG
 
 Lazio O
 
-Poor PER
+Poor ORG
 
 Lazio O
 
@@ -1758,19 +1758,19 @@ AC O
 
 Can O
 
-Following PER
+Following O
 
-Liberian O
+Liberian PER
 
-Good O
+Good PER
 
-Napoli O
+Napoli ORG
 
 In-form O
 
 Verona O
 
-Parma LOC
+Parma O
 
 Parma O
 
@@ -1778,39 +1778,39 @@ Parma O
 
 Atalanta ORG
 
-Sampdoria O
+Sampdoria MISC
 
-All-conquering O
+All-conquering PER
 
-The O
+The PER
 
 Vicenza O
 
-Not O
+Not PER
 
-Full O
+Full PER
 
 Inter O
 
--DOCSTART- ORG
+-DOCSTART- O
 
 BASKETBALL O
 
-BRUSSELS ORG
+BRUSSELS PER
 
 Result ORG
 
-Group MISC
+Group O
 
-In MISC
-
-Charleroi O
-
-Leading O
+In O
 
 Charleroi O
 
-Estudiantes O
+Leading MISC
+
+Charleroi O
+
+Estudiantes PER
 
 Group O
 
@@ -1818,7 +1818,7 @@ In O
 
 Partizan O
 
-Leading PER
+Leading O
 
 Partizan O
 
@@ -1836,17 +1836,17 @@ The O
 
 Top-seeded O
 
-Nicol MISC
+Nicol O
 
 He O
 
--DOCSTART- LOC
+-DOCSTART- ORG
 
-SQUASH LOC
+SQUASH O
 
-BOMBAY MISC
+BOMBAY O
 
-Results MISC
+Results O
 
 Peter O
 
@@ -1854,15 +1854,15 @@ Final O
 
 -DOCSTART- O
 
-GUNMEN O
+GUNMEN PER
 
-DURBAN O
+DURBAN PER
 
-At O
+At PER
 
 A O
 
-The O
+The LOC
 
 In O
 
@@ -1870,65 +1870,65 @@ In O
 
 There O
 
-The PER
+The O
 
-They PER
+They O
 
-More PER
-
--DOCSTART- ORG
-
-HAVEL O
-
-Klara ORG
-
-PRAGUE PER
-
-Czech O
-
-In ORG
-
-" O
-
-with O
-
-I PER
-
-Havel O
-
-Havel O
-
-Albright O
-
-As O
-
-Czech PER
-
-" PER
-
-is ORG
-
-" O
-
-Czech PER
+More O
 
 -DOCSTART- PER
 
-RADIO PER
+HAVEL PER
 
-BUCHAREST MISC
+Klara O
 
-Radio O
+PRAGUE O
 
-* O
+Czech O
+
+In PER
+
+" PER
+
+with O
+
+I O
+
+Havel O
+
+Havel PER
+
+Albright PER
+
+As O
+
+Czech O
+
+" O
+
+is PER
+
+" PER
+
+Czech O
+
+-DOCSTART- O
+
+RADIO O
+
+BUCHAREST PER
+
+Radio PER
+
+* LOC
 
 The O
 
 * O
 
-* LOC
+* PER
 
-* O
+* PER
 
 -- O
 
@@ -1936,75 +1936,75 @@ The O
 
 CZECH O
 
-PRAGUE PER
+PRAGUE O
 
-Saturday LOC
+Saturday O
 
 " O
 
-are PER
+are O
 
 He O
 
 " O
 
-The LOC
-
-Zieleniec O
-
 The O
 
-But PER
-
-Klaus PER
-
--- PER
-
--DOCSTART- O
-
-POLAND O
-
-Marcin O
-
-WARSAW PER
-
-Poland O
-
-Foreign O
-
-" O
-
-What O
-
-Switzerland PER
-
-Many O
-
-Rosati ORG
-
-" O
-
-Rosati O
-
-He PER
-
-" O
-
-The MISC
-
-Under PER
+Zieleniec MISC
 
 The PER
 
-But PER
+But ORG
 
--DOCSTART- LOC
+Klaus O
 
-INTERVIEW-ZYWIEC PER
+-- O
 
-Steven PER
+-DOCSTART- PER
+
+POLAND PER
+
+Marcin PER
 
 WARSAW O
+
+Poland O
+
+Foreign PER
+
+" PER
+
+What PER
+
+Switzerland O
+
+Many O
+
+Rosati PER
+
+" PER
+
+Rosati O
+
+He O
+
+" O
+
+The O
+
+Under ORG
+
+The O
+
+But O
+
+-DOCSTART- O
+
+INTERVIEW-ZYWIEC O
+
+Steven O
+
+WARSAW MISC
 
 Polish O
 
@@ -2012,69 +2012,69 @@ Company O
 
 So O
 
-It PER
+It O
+
+Van O
+
+" O
+
+He PER
 
 Van PER
 
-" PER
-
-He ORG
-
-Van O
-
 Zywiec O
 
-Earlier PER
+Earlier O
 
 Van O
 
-He MISC
+He O
 
 But O
 
 Some O
 
-" PER
+" O
 
-I PER
+I O
 
 Van O
 
-He O
+He PER
 
-" PER
+" O
 
-Van PER
+Van O
 
--- PER
+-- O
 
--DOCSTART- MISC
+-DOCSTART- PER
 
-HAVEL O
+HAVEL PER
 
-PRAGUE O
+PRAGUE LOC
 
 Doctors O
 
 He O
 
-" PER
+" ORG
 
-" PER
+" ORG
 
-After PER
+After ORG
 
-Havel PER
+Havel O
 
-Doctors PER
+Doctors O
 
-His PER
+His O
 
 -DOCSTART- O
 
-UK-US O
+UK-US MISC
 
-LONDON O
+LONDON PER
 
 The O
 
@@ -2082,69 +2082,69 @@ A O
 
 useful O
 
-No O
-
--DOCSTART- O
-
-Tambang O
-
-LONDON O
-
-PT O
-
-It O
-
-It O
-
-One O
-
--- PER
-
--DOCSTART- ORG
-
-Telkom O
-
-LONDON O
-
-PT O
-
-It PER
-
-Its LOC
-
-One LOC
-
--DOCSTART- ORG
-
-Woman ORG
-
-BELFAST LOC
-
-A PER
-
-Police PER
-
-The O
-
-She O
-
-Her O
-
-Security O
+No PER
 
 -DOCSTART- PER
 
-Britain PER
+Tambang PER
 
-Edna LOC
+LONDON O
 
-LONDON MISC
+PT O
+
+It O
+
+It ORG
+
+One O
+
+-- O
+
+-DOCSTART- ORG
+
+Telkom PER
+
+LONDON PER
+
+PT O
+
+It O
+
+Its O
+
+One O
+
+-DOCSTART- O
+
+Woman ORG
+
+BELFAST O
+
+A O
+
+Police O
+
+The ORG
+
+She MISC
+
+Her MISC
+
+Security PER
+
+-DOCSTART- O
+
+Britain O
+
+Edna O
+
+LONDON O
 
 The O
 
-Trade O
+Trade ORG
 
-Lang PER
+Lang O
 
 " O
 
@@ -2158,7 +2158,7 @@ American O
 
 However O
 
-British ORG
+British O
 
 It O
 
@@ -2168,27 +2168,27 @@ It O
 
 The O
 
-Lang O
+Lang PER
 
 -DOCSTART- O
 
 Med O
 
-LONDON PER
+LONDON O
 
 Mediterranean O
 
-Gas O
+Gas PER
 
-Volume O
+Volume PER
 
 The O
 
 Trades O
 
-Interest O
+Interest LOC
 
-Fuel O
+Fuel ORG
 
 High O
 
@@ -2200,23 +2200,23 @@ Low O
 
 Gasoline ORG
 
-But O
+But LOC
 
--DOCSTART- O
+-DOCSTART- LOC
 
 New O
 
-LONDON ORG
+LONDON MISC
 
-A O
+A MISC
 
-The O
+The MISC
 
-The O
+The PER
 
 " O
 
-However O
+However MISC
 
 The O
 
@@ -2226,49 +2226,49 @@ At LOC
 
 In O
 
-A O
+A MISC
 
 Three O
 
-More LOC
+More O
 
--DOCSTART- ORG
+-DOCSTART- O
 
-Major ORG
+Major O
 
-LONDON ORG
+LONDON O
 
-British ORG
+British O
 
-" O
+" LOC
 
 The O
 
 Gorst O
 
-He PER
+He O
 
-Before O
+Before MISC
 
-In ORG
+In LOC
 
-Gorst ORG
+Gorst O
 
--DOCSTART- O
+-DOCSTART- LOC
 
 Electronic O
 
 LONDON O
 
-Information O
+Information PER
 
 In ORG
 
 The ORG
 
-The ORG
-
 The O
+
+The MISC
 
 -- O
 
@@ -2278,17 +2278,17 @@ RTRS O
 
 MELBOURNE O
 
-Play LOC
+Play ORG
 
 West O
 
-Rain O
+Rain MISC
 
 -- O
 
 -DOCSTART- O
 
-Cricket PER
+Cricket MISC
 
 SIALKOT MISC
 
@@ -2296,21 +2296,21 @@ Pakistan ORG
 
 Scores O
 
--DOCSTART- O
+-DOCSTART- MISC
 
 Manitoba O
 
-WINNIPEG MISC
+WINNIPEG O
 
 Manitoba O
 
-CONTRACT ORG
+CONTRACT O
 
-DATE ORG
+DATE LOC
 
-Feb ORG
+Feb O
 
-Mar O
+Mar LOC
 
 Apr O
 
@@ -2318,85 +2318,85 @@ May O
 
 Jun O
 
-Jul O
+Jul PER
 
-Aug LOC
+Aug ORG
 
 Sep O
 
-Oct O
+Oct MISC
 
 Nov O
 
-Note ORG
+Note O
 
-Dec O
+Dec ORG
 
 Manitoba O
 
-CAN ORG
+CAN LOC
 
 Source O
 
-( O
+( MISC
 
 -DOCSTART- O
 
 Canadian O
 
-WINNIPEG O
+WINNIPEG LOC
 
-The O
+The LOC
 
-The O
+The MISC
 
-Two ORG
+Two LOC
 
 Two O
 
-Port O
+Port MISC
 
 Vancouver O
 
-Prince O
+Prince MISC
 
 ( O
 
 -DOCSTART- O
 
-New LOC
+New ORG
 
 NEW O
 
-No O
-
--- O
-
--DOCSTART- LOC
-
-New LOC
-
-NEW O
-
-ORE LOC
+No MISC
 
 -- O
 
 -DOCSTART- O
+
+New O
+
+NEW ORG
+
+ORE ORG
+
+-- O
+
+-DOCSTART- MISC
 
 Clean O
 
 NEW O
 
-FIXTURES PER
+FIXTURES O
 
-WESTERN O
+WESTERN MISC
 
-Danila PER
+Danila ORG
 
--- O
+-- MISC
 
--DOCSTART- O
+-DOCSTART- MISC
 
 Dirty O
 
@@ -2410,7 +2410,7 @@ MEDITERRANEAN ORG
 
 Lula O
 
-Spetses O
+Spetses MISC
 
 Mesipia O
 
@@ -2420,39 +2420,39 @@ Mesipia O
 
 NYC O
 
-NEW ORG
+NEW LOC
 
 New O
 
-A O
+A MISC
 
 By O
 
 The O
 
-In O
+In ORG
 
-The O
+The MISC
 
-No ORG
+No LOC
 
 -- O
 
--DOCSTART- O
+-DOCSTART- MISC
 
 USDA O
 
-DES MISC
+DES O
 
 The O
 
-- O
+- PER
 
 -DOCSTART- LOC
 
 Wall O
 
-Brendan O
+Brendan MISC
 
 NEW O
 
@@ -2460,43 +2460,43 @@ Homestake O
 
 Santa O
 
-Wall O
+Wall PER
 
 Newmont LOC
 
 Analysts O
 
-They O
+They MISC
 
 Newmont O
 
-Any ORG
+Any O
 
-Analysts PER
+Analysts O
 
 Placer O
 
-A LOC
+A ORG
 
 Homestake O
 
-Earnings O
+Earnings MISC
 
 Santa O
 
 Santa O
 
-PaineWebber PER
+PaineWebber LOC
 
-" PER
+" O
 
 One O
 
-" PER
+" O
 
-But PER
+But MISC
 
-Newmont O
+Newmont MISC
 
 In O
 
@@ -2504,17 +2504,17 @@ In O
 
 Two O
 
--- O
+-- PER
 
 -DOCSTART- O
 
-Russ PER
+Russ O
 
 OAKLAND O
 
 Russ O
 
-Cooke ORG
+Cooke O
 
 -DOCSTART- O
 
@@ -2524,11 +2524,11 @@ HARARE O
 
 Zimbabwe O
 
-A O
+A PER
 
-President O
+President PER
 
--DOCSTART- O
+-DOCSTART- MISC
 
 Multinational O
 
@@ -2536,53 +2536,53 @@ Jonathan O
 
 NAIROBI O
 
-The O
+The MISC
 
 Lieutenant-General O
 
 If O
 
-" ORG
+" PER
 
-General LOC
+General PER
 
-The O
+The LOC
 
 Kinshasa O
 
-Canadian O
+Canadian MISC
 
 " O
 
 But O
 
-" PER
-
-" PER
-
-If PER
-
-Asked PER
-
-It PER
-
-Do PER
-
-And O
-
-Under O
+" LOC
 
 " O
 
-He O
+If O
+
+Asked O
+
+It O
+
+Do O
+
+And PER
+
+Under MISC
 
 " O
+
+He PER
+
+" ORG
 
 I O
 
 When O
 
-Baril PER
+Baril O
 
 The O
 
@@ -2590,11 +2590,11 @@ The O
 
 -DOCSTART- O
 
-Mauritius LOC
+Mauritius O
 
 PORT O
 
-Mauritian O
+Mauritian LOC
 
 The O
 
@@ -2602,35 +2602,35 @@ Although O
 
 Winds O
 
-The ORG
+The O
 
-The ORG
+The O
 
 -DOCSTART- ORG
 
-U.N. O
+U.N. ORG
 
 ABIDJAN O
 
-The O
+The MISC
 
 The O
 
 -DOCSTART- O
 
-Senegal O
+Senegal LOC
 
 DAKAR O
 
-Senegal ORG
+Senegal O
 
-Diouf ORG
+Diouf PER
 
 The O
 
-" ORG
+" O
 
-Some ORG
+Some O
 
 I O
 
@@ -2640,51 +2640,51 @@ Ex-minister O
 
 Raphael O
 
-BANGUI PER
+BANGUI LOC
 
 A O
 
-With PER
+With LOC
 
-" O
+" PER
 
-" O
+" PER
 
 Public O
 
-Witnesses O
+Witnesses PER
 
-Grelombe O
+Grelombe MISC
+
+The MISC
+
+The O
+
+The PER
 
 The O
 
-The O
+A O
 
-The ORG
+Yakomas PER
 
-The ORG
+Roadblocks O
 
-A MISC
+Shops O
 
-Yakomas O
-
-Roadblocks ORG
-
-Shops ORG
-
-The O
+The PER
 
 Chirac O
 
-The O
+The MISC
 
 His O
 
-Patasse ORG
+Patasse PER
 
-Church-led ORG
+Church-led PER
 
-Soldiers ORG
+Soldiers PER
 
 Patasse O
 
@@ -2696,71 +2696,71 @@ Hospital O
 
 An O
 
-In O
+In MISC
 
--DOCSTART- ORG
+-DOCSTART- PER
 
-Five ORG
+Five PER
 
 JOHANNESBURG O
 
 Five O
 
-The ORG
+The O
 
-The ORG
+The PER
 
 -DOCSTART- O
 
 WEATHER O
 
-MOSCOW LOC
+MOSCOW PER
 
 No O
 
 -- O
 
--DOCSTART- ORG
+-DOCSTART- PER
 
-Skinheads ORG
+Skinheads PER
 
-BRATISLAVA ORG
+BRATISLAVA O
 
 Four O
 
 " O
 
-" ORG
+" MISC
 
 He O
 
 " O
 
-It O
+It MISC
 
 Meyers O
 
--DOCSTART- ORG
+-DOCSTART- O
 
 Albanian O
 
 TIRANA O
 
-An MISC
-
-Buza PER
+An O
 
 Buza O
 
-" O
+Buza O
 
-The LOC
+" ORG
+
+The PER
 
 Medical O
 
--DOCSTART- MISC
+-DOCSTART- O
 
-Polish O
+Polish PER
 
 WARSAW O
 
@@ -2770,35 +2770,35 @@ Poland O
 
 A O
 
-Rosati PER
+Rosati MISC
 
-@ O
+@ MISC
 
-The ORG
+The O
 
-The ORG
+The PER
 
-The ORG
+The O
 
--DOCSTART- O
+-DOCSTART- PER
 
-Russia LOC
+Russia MISC
 
-Lynnley O
+Lynnley PER
 
-MOSCOW O
+MOSCOW PER
 
 Russian O
 
-" PER
+" LOC
 
 Livshits PER
 
 The PER
 
-" PER
+" O
 
-" ORG
+" O
 
 Russian O
 
@@ -2812,17 +2812,17 @@ Norilsk O
 
 Analysts O
 
-But ORG
+But O
 
-" ORG
+" O
 
 It O
 
-" PER
+" ORG
 
 He O
 
-Norilsk O
+Norilsk ORG
 
 But LOC
 
@@ -2830,31 +2830,31 @@ But LOC
 
 Norilsk ORG
 
-The ORG
+The O
 
--- O
+-- MISC
 
--DOCSTART- O
+-DOCSTART- LOC
 
 Estonian O
 
-TALLINN ORG
+TALLINN LOC
 
 Tallinna O
 
-It O
+It LOC
 
-The ORG
+The LOC
 
-Tallinna O
+Tallinna ORG
 
 Demand ORG
 
 -- O
 
--DOCSTART- O
+-DOCSTART- MISC
 
-Russia O
+Russia LOC
 
 MOSCOW O
 
@@ -2862,85 +2862,85 @@ Russia LOC
 
 Interfax LOC
 
-But ORG
+But LOC
 
 Clinton O
 
-" PER
+" MISC
 
-The MISC
+The O
 
 Interfax O
 
-Russia O
+Russia PER
 
 -DOCSTART- O
 
-Yeltsin ORG
+Yeltsin LOC
 
-MOSCOW ORG
+MOSCOW O
 
-Russian ORG
+Russian O
 
 " O
 
 He O
 
-December MISC
+December LOC
 
-He O
+He LOC
 
 Yeltsin O
 
-Surgeon O
+Surgeon LOC
 
 -DOCSTART- O
 
-Bomb ORG
+Bomb LOC
 
 BRATISLAVA O
 
-A ORG
+A O
 
 The O
 
-Gaulieder LOC
+Gaulieder O
 
-He MISC
+He LOC
 
 " LOC
 
-Gaulieder MISC
+Gaulieder LOC
 
 It O
 
--DOCSTART- ORG
+-DOCSTART- PER
 
 Bomb O
 
-SOFIA MISC
+SOFIA O
 
-A O
+A LOC
 
 Violent O
 
-Bombings MISC
+Bombings PER
 
 Some O
 
 The O
 
-The O
+The LOC
 
--DOCSTART- O
+-DOCSTART- LOC
 
 Hungary PER
 
 BUDAPEST O
 
-Hungarian ORG
+Hungarian O
 
-" O
+" PER
 
 They O
 
@@ -2948,9 +2948,9 @@ The O
 
 But O
 
-On ORG
+On O
 
-Dealers ORG
+Dealers PER
 
 -- O
 
@@ -2958,41 +2958,41 @@ Dealers ORG
 
 Mexico O
 
-MEXICO ORG
+MEXICO PER
 
-Mexican O
+Mexican LOC
 
 " LOC
 
-Then O
+Then ORG
 
-The O
+The ORG
 
-Volume PER
+Volume O
 
-Mexican O
+Mexican MISC
 
-Yields ORG
+Yields O
 
 On MISC
 
+Traders O
+
+Simec O
+
+Sidek ORG
+
 Traders MISC
 
-Simec MISC
+Heavyweights ORG
 
-Sidek O
+" PER
 
-Traders O
+It MISC
 
-Heavyweights O
+Traders MISC
 
-" MISC
-
-It O
-
-Traders O
-
-" O
+" PER
 
 Volume O
 
@@ -3010,9 +3010,9 @@ RIO ORG
 
 Plastic ORG
 
-The ORG
+The MISC
 
-The O
+The MISC
 
 " O
 
@@ -3034,21 +3034,21 @@ Hakme O
 
 What O
 
-Brazil O
+Brazil ORG
 
-Stomach O
+Stomach ORG
 
 " ORG
 
 Beauty O
 
-Plastic O
+Plastic MISC
 
-Saldanha O
+Saldanha MISC
 
 -DOCSTART- O
 
-Daily O
+Daily PER
 
 BUENOS ORG
 
@@ -3056,85 +3056,85 @@ Avg O
 
 Buenos O
 
-Oats O
+Oats MISC
 
-Wheat O
-
-Maize O
+Wheat PER
 
 Maize O
 
-Sorghum ORG
+Maize O
+
+Sorghum LOC
 
 Millet O
 
-Soybeans O
+Soybeans MISC
 
-Sunseeds O
+Sunseeds PER
 
 -- O
 
--DOCSTART- O
+-DOCSTART- PER
 
-Mexican O
+Mexican PER
 
 MEXICO O
 
-All O
+All PER
 
-Tampico ORG
+Tampico PER
 
 The O
 
-- O
+- MISC
 
-Light O
+Light PER
 
-Winds O
+Winds ORG
 
-A O
+A ORG
 
 - ORG
 
-Cold O
+Cold ORG
 
 Winds O
 
-- O
+- MISC
 
 Tropical O
 
-Winds PER
+Winds O
 
--- PER
+-- O
 
--DOCSTART- O
+-DOCSTART- ORG
 
-Brazil O
+Brazil ORG
 
-RIO LOC
+RIO ORG
 
-Brazilian LOC
+Brazilian O
 
-Rio LOC
+Rio O
 
-Seventy-seven ORG
+Seventy-seven LOC
 
 -DOCSTART- O
 
 Chile O
 
-SANTIAGO O
+SANTIAGO ORG
 
 Chile O
 
-Chile LOC
+Chile ORG
 
-Both LOC
+Both O
 
-' ORG
+' O
 
-' MISC
+' O
 
 It O
 
@@ -3146,121 +3146,121 @@ Aninat O
 
 -DOCSTART- LOC
 
-Indonesia O
+Indonesia PER
 
 DILI O
 
-East MISC
+East LOC
 
-Witnesses O
-
-It O
-
-The PER
-
-The O
-
-" O
-
-will O
-
-He ORG
-
-Ramos O
-
-Belo O
-
-The O
-
-Alatas O
-
-Asked MISC
-
-Alatas O
-
-Kohl O
-
--DOCSTART- MISC
-
-China O
-
-BEIJING LOC
-
-China O
-
-Xinhua O
-
-Wenchang ORG
+Witnesses LOC
 
 It O
-
-( O
-
--DOCSTART- O
-
-Government O
-
-RANGOON O
-
-Burmese O
-
-They ORG
 
 The O
 
 The ORG
 
-The PER
+" PER
 
-They O
+will O
 
-The O
+He LOC
 
--DOCSTART- ORG
+Ramos O
 
-Burmese ORG
+Belo O
 
-Vithoon ORG
+The LOC
+
+Alatas O
+
+Asked LOC
+
+Alatas LOC
+
+Kohl MISC
+
+-DOCSTART- O
+
+China O
+
+BEIJING LOC
+
+China PER
+
+Xinhua O
+
+Wenchang PER
+
+It PER
+
+( O
+
+-DOCSTART- PER
+
+Government LOC
 
 RANGOON O
 
+Burmese PER
+
+They LOC
+
+The O
+
+The O
+
+The PER
+
+They PER
+
+The LOC
+
+-DOCSTART- LOC
+
+Burmese O
+
+Vithoon O
+
+RANGOON MISC
+
 About O
 
-Seven LOC
+Seven ORG
 
-There LOC
+There O
 
-" ORG
+" O
 
-One MISC
+One O
 
 But O
 
 They O
 
-On PER
+On O
 
 On O
 
-She PER
+She ORG
 
-The PER
+The ORG
 
-The PER
+The O
 
 Thousands O
 
 Earlier O
 
-They O
+They MISC
 
-" ORG
+" LOC
 
-We O
+We ORG
 
-But ORG
+But LOC
 
-Suu LOC
+Suu O
 
 But O
 
@@ -3270,37 +3270,37 @@ The O
 
 The O
 
-On O
+On LOC
 
 -DOCSTART- LOC
 
-Union O
+Union ORG
 
-SINGAPORE O
+SINGAPORE ORG
 
-International O
+International ORG
 
-Bill O
+Bill MISC
+
+Jordan MISC
+
+" ORG
+
+The MISC
 
 Jordan O
 
-" O
-
-The PER
-
-Jordan PER
-
 The O
 
 Bill O
 
-" O
+" MISC
 
-ASEAN O
+ASEAN ORG
 
-The O
+The MISC
 
-Speaking O
+Speaking MISC
 
 But O
 
@@ -3308,11 +3308,11 @@ But O
 
 Indian O
 
-SINGAPORE O
+SINGAPORE MISC
 
 Indian O
 
-K.J. O
+K.J. ORG
 
 For O
 
@@ -3338,21 +3338,21 @@ Japan O
 
 George O
 
-TOKYO O
+TOKYO ORG
 
-Comments O
+Comments ORG
 
-In PER
+In ORG
 
-This O
+This PER
 
-But O
-
-" O
-
-Asked O
+But PER
 
 " O
+
+Asked MISC
+
+" PER
 
 In O
 
@@ -3360,27 +3360,27 @@ In O
 
 Takao O
 
-Market ORG
+Market O
 
 He O
 
-Dealers O
+Dealers PER
 
-Adding ORG
+Adding O
 
-" O
+" MISC
 
-" O
+" MISC
 
-Some O
+Some LOC
 
-" O
+" MISC
 
 The O
 
-Senior O
+Senior PER
 
-" O
+" MISC
 
 The O
 
@@ -3390,27 +3390,27 @@ Lebanon ORG
 
 Haitham O
 
-BEIRUT O
+BEIRUT MISC
 
-A O
+A MISC
 
 The O
 
 Lahd O
 
-Lahd ORG
+Lahd PER
 
-He ORG
+He PER
 
-The ORG
+The PER
 
 Shortly O
 
-No O
+No PER
 
-Israel O
+Israel PER
 
-Israel O
+Israel PER
 
 But O
 
@@ -3418,17 +3418,17 @@ Former O
 
 Peres O
 
-The ORG
+The O
 
 Saqr O
 
--DOCSTART- ORG
+-DOCSTART- O
 
 Texas O
 
-AMARILLO O
+AMARILLO PER
 
-Trade O
+Trade ORG
 
 Slaughter O
 
@@ -3436,7 +3436,7 @@ Feedlots O
 
 Sales O
 
-Note PER
+Note LOC
 
 Slaughter O
 
@@ -3446,31 +3446,31 @@ Confirmed O
 
 ( O
 
--DOCSTART- O
+-DOCSTART- PER
 
 USDA O
 
-Est MISC
+Est O
 
 CATTLE O
 
 Friday O
 
-Week ORG
+Week LOC
 
-Year ORG
+Year O
 
-Saturday ORG
+Saturday O
 
-Week ORG
-
-Same ORG
+Week O
 
 Same O
 
-1996 O
+Same O
 
-1995 PER
+1996 LOC
+
+1995 O
 
 Percent O
 
@@ -3478,7 +3478,7 @@ Percent O
 
 Previous O
 
-Thursday ORG
+Thursday O
 
 -DOCSTART- O
 
@@ -3486,7 +3486,7 @@ BALANCE O
 
 , O
 
-CITY MISC
+CITY O
 
 RE O
 
@@ -3504,21 +3504,21 @@ Maturity O
 
 12/15/2001 O
 
-12/15/2003 MISC
+12/15/2003 O
 
 12/15/2004 O
 
 12/15/2005 O
 
-12/15/2006 ORG
+12/15/2006 PER
 
 12/15/2007 O
 
-12/15/2008 PER
+12/15/2008 LOC
 
-12/15/2009 PER
+12/15/2009 O
 
-12/15/2010 ORG
+12/15/2010 O
 
 12/15/2011 O
 
@@ -3530,25 +3530,25 @@ Maturity O
 
 Total O
 
-State O
+State ORG
 
-Prudential MISC
+Prudential ORG
 
 PaineWebber O
 
-First O
+First PER
 
--- O
+-- ORG
 
 -DOCSTART- O
 
-14 O
+14 PER
 
 TALLAHASSEE O
 
 Fourteen O
 
-, ORG
+, PER
 
 As O
 
@@ -3560,9 +3560,9 @@ Prison O
 
 Mills O
 
-Prison O
+Prison PER
 
-He PER
+He O
 
 Mills O
 
@@ -3586,7 +3586,7 @@ Mana O
 
 -- O
 
--DOCSTART- O
+-DOCSTART- ORG
 
 Iowa-S O
 
@@ -3596,17 +3596,17 @@ Slaughter O
 
 Trade O
 
-Demand O
+Demand LOC
 
-Offerings O
+Offerings LOC
 
 Steers O
 
-Heifers O
+Heifers LOC
 
 Carcass PER
 
-Steers PER
+Steers O
 
 Holstein O
 
@@ -3616,17 +3616,17 @@ Heifers O
 
 Confirmed O
 
-Wk MISC
+Wk O
 
-( MISC
+( O
 
--DOCSTART- MISC
+-DOCSTART- O
 
-Man MISC
+Man O
 
 APPLETON O
 
-1996-12-06 MISC
+1996-12-06 O
 
 A O
 
@@ -3644,9 +3644,9 @@ One O
 
 -DOCSTART- O
 
-Canadian MISC
+Canadian O
 
-CHICAGO MISC
+CHICAGO O
 
 - O
 
@@ -3656,13 +3656,13 @@ Curr O
 
 Wheat O
 
-Durum O
+Durum LOC
 
 Oats O
 
 Barley O
 
-Rye O
+Rye PER
 
 Flax O
 
@@ -3670,39 +3670,39 @@ Canola O
 
 Corn O
 
-Total O
+Total MISC
 
-Exports O
+Exports MISC
 
 Curr O
 
 Wheat O
 
-Durum O
+Durum PER
 
-Oats O
+Oats PER
 
-Barley O
+Barley MISC
 
 Rye O
 
-Flax ORG
+Flax O
 
-Canola ORG
+Canola O
 
-Corn O
+Corn PER
 
 Total O
 
-In PER
+In MISC
 
 Oats O
 
-Exports O
+Exports MISC
 
-Year O
+Year ORG
 
-( O
+( ORG
 
 -DOCSTART- O
 
@@ -3712,41 +3712,41 @@ NEW O
 
 NYMEX O
 
-January O
+January PER
 
-Feb O
+Feb PER
 
 Most O
 
-" O
+" LOC
 
 Now O
 
-In ORG
+In PER
 
-With ORG
+With PER
 
-The ORG
+The LOC
 
-Resistance ORG
+Resistance O
 
 In O
 
-Midcontinent ORG
+Midcontinent O
+
+NYMEX PER
 
 NYMEX O
-
-NYMEX MISC
 
 Physical O
 
-NYMEX O
+NYMEX ORG
 
-In O
+In ORG
 
 On O
 
-February PER
+February LOC
 
 The PER
 
@@ -3756,33 +3756,33 @@ Physical O
 
 -DOCSTART- O
 
-U.S. PER
+U.S. O
 
-ST. PER
+ST. O
 
 U.S. O
 
-No PER
-
-- PER
-
-- PER
-
-Two O
+No O
 
 - O
 
-- MISC
+- O
+
+Two O
 
 - MISC
 
--- MISC
+- O
+
+- LOC
+
+-- O
 
 -DOCSTART- O
 
-CBOT O
+CBOT PER
 
-CHICAGO O
+CHICAGO PER
 
 Grain O
 
@@ -3792,9 +3792,9 @@ Wheat O
 
 Chicago O
 
-St. O
+St. PER
 
-Toledo LOC
+Toledo O
 
 Corn O
 
@@ -3802,13 +3802,13 @@ Chicago O
 
 St. O
 
-Toledo PER
+Toledo LOC
 
-Oats PER
+Oats O
 
 Chicago O
 
-Minneapolis O
+Minneapolis LOC
 
 Soybeans O
 
@@ -3816,11 +3816,11 @@ Chicago O
 
 St. O
 
-Toledo ORG
+Toledo O
 
 ( O
 
--DOCSTART- O
+-DOCSTART- MISC
 
 Clinton O
 
@@ -3832,57 +3832,57 @@ The O
 
 White O
 
-But O
+But LOC
 
-" O
+" MISC
 
--DOCSTART- O
+-DOCSTART- PER
 
 Action O
 
-TEMPE MISC
+TEMPE ORG
 
 1996-12-06 O
 
 Action O
 
-The PER
+The O
 
 The O
 
--DOCSTART- O
+-DOCSTART- LOC
 
-Half ORG
+Half LOC
 
-CHICAGO ORG
+CHICAGO O
 
-As O
+As PER
 
-The O
+The MISC
 
 " O
 
 " O
 
-Dogs MISC
+Dogs O
 
-Let MISC
+Let O
 
 Cornwell O
 
-He ORG
+He O
 
-Don O
+Don LOC
+
+The LOC
 
 The PER
 
-The O
-
 Speaking O
 
-Today MISC
+Today O
 
-If ORG
+If O
 
 -DOCSTART- O
 
@@ -3892,17 +3892,17 @@ DES O
 
 Steers O
 
-Reported O
+Reported LOC
 
 Week O
 
 ( O
 
--DOCSTART- O
+-DOCSTART- PER
 
 Nebraska O
 
-OMAHA O
+OMAHA PER
 
 Slaughter O
 
@@ -3912,35 +3912,35 @@ Seller O
 
 - O
 
-Thursday O
+Thursday PER
 
-Week O
+Week PER
 
-Dressed ORG
-
-Dressed O
+Dressed PER
 
 Dressed O
 
--DOCSTART- O
+Dressed O
 
-Four O
-
-Evelyn O
-
-UNITED LOC
+-DOCSTART- PER
 
 Four PER
 
-The LOC
+Evelyn PER
+
+UNITED O
+
+Four O
+
+The O
 
 Representatives O
 
-It MISC
+It O
 
-Diplomats PER
+Diplomats O
 
-Boutros-Ghali PER
+Boutros-Ghali O
 
 His O
 
@@ -3954,55 +3954,55 @@ The O
 
 Spain O
 
-MADRID PER
+MADRID O
 
 Spanish O
 
 Hooded O
 
-Police LOC
+Police O
 
-The MISC
+The O
 
--DOCSTART- LOC
+-DOCSTART- O
 
-Mussolini PER
+Mussolini O
 
 ROME O
 
 Alessandra O
 
+" LOC
+
 " O
 
-" ORG
+Fini LOC
 
-Fini O
+Mussolini LOC
 
-Mussolini O
+The LOC
 
-The O
+Mussolini LOC
 
-Mussolini PER
+-DOCSTART- LOC
 
--DOCSTART- O
+German MISC
 
-German O
-
-HANOVER O
+HANOVER PER
 
 A O
 
-The O
+The LOC
 
 -DOCSTART- O
 
-Italy MISC
+Italy O
 
 ROME O
 
 The O
 
-From O
+From LOC
 
 -- O
 
@@ -4010,45 +4010,45 @@ From O
 
 EU O
 
-BRUSSELS O
+BRUSSELS PER
 
 The O
 
-The PER
+The O
 
-The PER
+The O
 
 " ORG
 
-Under O
+Under LOC
 
-The ORG
+The LOC
 
-The ORG
+The O
 
 -DOCSTART- O
 
-Hindu O
+Hindu MISC
 
 NEW O
 
-Hindu PER
+Hindu O
 
 Members O
 
-The PER
+The O
 
-When O
+When MISC
 
 The O
 
 Indian O
 
+The PER
+
 The O
 
-The ORG
-
--DOCSTART- PER
+-DOCSTART- O
 
 Indian O
 
@@ -4058,63 +4058,63 @@ India O
 
 STEEL O
 
-1996 O
+1996 PER
 
-Crude O
+Crude PER
 
-Petroleum O
+Petroleum LOC
 
 Note O
 
 -DOCSTART- O
 
-LUXEMBOURG O
+LUXEMBOURG PER
 
 BRUSSELS O
 
-Luxembourg O
+Luxembourg MISC
 
-The MISC
+The O
 
--- O
+-- PER
 
 -DOCSTART- O
 
 London O
 
-LONDON O
+LONDON MISC
 
-COAL O
+COAL PER
 
-Royal MISC
+Royal O
 
 ORE O
 
--DOCSTART- O
-
-UK O
-
-LONDON ORG
+-DOCSTART- LOC
 
 UK LOC
 
-William O
+LONDON LOC
+
+UK O
+
+William PER
 
 The O
 
-The O
+The MISC
 
--- O
+-- PER
 
 -DOCSTART- O
 
 Italy PER
 
-LONDON PER
+LONDON O
 
-High-flying PER
+High-flying O
 
-In ORG
+In O
 
 The O
 
@@ -4128,7 +4128,7 @@ Returns O
 
 Australia O
 
-German PER
+German O
 
 Spanish O
 
@@ -4142,9 +4142,9 @@ Salomon O
 
 Only O
 
-Returns O
+Returns LOC
 
--- O
+-- PER
 
 -DOCSTART- O
 
@@ -4158,21 +4158,21 @@ The O
 
 -- O
 
--DOCSTART- MISC
+-DOCSTART- O
 
 Relations O
 
 LONDON O
 
-Relations PER
+Relations ORG
 
 Asked O
 
-Asked PER
+Asked LOC
 
-He O
+He PER
 
-The O
+The PER
 
 Both O
 
@@ -4180,19 +4180,19 @@ Both O
 
 Two O
 
-STEPHENVILLE O
+STEPHENVILLE PER
 
 Two O
 
-The O
+The MISC
 
 Snow O
 
-That ORG
+That O
 
 " O
 
-That O
+That PER
 
 He O
 
@@ -4200,27 +4200,27 @@ The LOC
 
 Investigators O
 
--DOCSTART- O
+-DOCSTART- LOC
 
-PLO O
+PLO LOC
 
 JERUSALEM O
 
 PLO O
 
-" ORG
+" LOC
 
-There O
+There ORG
 
-Israeli ORG
+Israeli MISC
 
 Arafat O
 
-" O
+" MISC
 
 " MISC
 
-Especially O
+Especially ORG
 
 But O
 
@@ -4232,11 +4232,11 @@ The O
 
 The O
 
-Mubarak PER
+Mubarak O
 
 Palestinian O
 
-Abdel-Rahman O
+Abdel-Rahman MISC
 
 But O
 
@@ -4246,87 +4246,87 @@ Turkey O
 
 ANKARA O
 
-Turkey O
+Turkey ORG
 
-" O
+" MISC
 
-The PER
+The LOC
 
-Officials O
+Officials MISC
 
-It O
+It ORG
 
-" O
+" LOC
 
 They O
 
-An PER
+An O
 
 Turkey O
 
 Damascus O
 
-The LOC
+The ORG
 
 More O
 
--DOCSTART- O
+-DOCSTART- LOC
 
-Three O
+Three LOC
 
 DIYARBAKIR O
 
-Three O
+Three ORG
 
-Four O
+Four ORG
 
 Police O
 
-One ORG
+One LOC
 
-The O
+The ORG
 
-The O
+The LOC
 
-More PER
+More MISC
 
 -DOCSTART- O
 
-Texas O
+Texas ORG
 
-AMARILLO O
+AMARILLO ORG
 
-Trade ORG
+Trade O
 
 Slaughter O
 
-Feedlots O
+Feedlots ORG
 
 - O
 
-Thursday ORG
+Thursday MISC
 
 Wk O
 
-Sales O
+Sales MISC
 
-Slaughter LOC
+Slaughter O
 
 Pen O
 
--DOCSTART- ORG
+-DOCSTART- O
 
-Kansas O
+Kansas ORG
 
-DODGE PER
+DODGE O
 
-Trade PER
+Trade O
 
-Not LOC
+Not MISC
 
-- O
+- ORG
 
-Thursday PER
+Thursday MISC
 
 week O
 
@@ -4338,11 +4338,11 @@ For O
 
 Steers O
 
-Heifers PER
+Heifers O
 
 -DOCSTART- O
 
-Delphis O
+Delphis ORG
 
 Delphis MISC
 
@@ -4354,15 +4354,15 @@ Aaa O
 
 2006 O
 
-2011 LOC
+2011 O
 
 2016 LOC
 
 2021 O
 
-2026 O
+2026 LOC
 
-*from PER
+*from MISC
 
 -- O
 
@@ -4370,17 +4370,17 @@ Aaa O
 
 ACCESS O
 
-LOS ORG
+LOS O
 
-U.S. PER
+U.S. O
 
-" LOC
+" O
 
 Earlier O
 
-Front-month O
+Front-month LOC
 
-About PER
+About MISC
 
 NYMEX O
 
@@ -4388,53 +4388,53 @@ January O
 
 About O
 
--- PER
+-- O
 
--DOCSTART- PER
+-DOCSTART- O
 
 U.S. O
 
-WASHINGTON O
+WASHINGTON MISC
 
-The O
+The MISC
 
 " O
 
-We PER
+We ORG
 
-Mohammed O
-
-It ORG
+Mohammed ORG
 
 It O
 
+It PER
+
 He O
 
-The ORG
+The LOC
 
-Mahammad O
+Mahammad ORG
 
-Rashid O
+Rashid MISC
 
-His LOC
-
-A O
-
-The ORG
-
-Three O
-
--DOCSTART- ORG
-
-School LOC
-
-ALBUQUERQUE PER
+His O
 
 A O
 
-Mike O
+The O
 
-One O
+Three ORG
+
+-DOCSTART- O
+
+School O
+
+ALBUQUERQUE MISC
+
+A MISC
+
+Mike LOC
+
+One ORG
 
 Officials O
 
@@ -4442,15 +4442,15 @@ Cito O
 
 -DOCSTART- O
 
-Cyberspace LOC
+Cyberspace ORG
 
 Elif O
 
-GENEVA O
+GENEVA MISC
 
-In O
+In LOC
 
-But O
+But ORG
 
 After O
 
@@ -4458,37 +4458,37 @@ Cyberspace O
 
 " O
 
-They LOC
+They O
 
 Attempts O
 
-" O
+" ORG
 
-It O
+It MISC
 
 We O
 
-But PER
+But O
 
 " O
 
-These O
+These ORG
 
 At ORG
 
 Supporters O
 
-But O
+But ORG
 
-A O
+A ORG
 
 Mongolia O
 
-" PER
+" O
 
 Alexander O
 
-He O
+He PER
 
 " O
 
@@ -4496,47 +4496,47 @@ There MISC
 
 A O
 
-" O
+" MISC
 
-" O
+" MISC
 
 People O
 
-Because PER
+Because ORG
 
-Before O
+Before ORG
 
-Their ORG
+Their O
 
-But ORG
+But PER
 
-Network O
+Network ORG
 
-" O
+" MISC
 
-How PER
+How LOC
 
--DOCSTART- O
+-DOCSTART- MISC
+
+Italy MISC
+
+ROME O
 
 Italy O
 
-ROME PER
-
-Italy O
+The O
 
 The ORG
 
 The O
 
-The O
-
--DOCSTART- LOC
+-DOCSTART- ORG
 
 Third O
 
-PARIS O
+PARIS MISC
 
-Moroccan MISC
+Moroccan O
 
 Benchaou O
 
@@ -4544,17 +4544,17 @@ A O
 
 An O
 
-Investigators O
+Investigators ORG
 
--DOCSTART- O
+-DOCSTART- ORG
 
-Italian LOC
+Italian ORG
 
 MANTUA O
 
-Italian O
+Italian LOC
 
-Addressing PER
+Addressing MISC
 
 " O
 
@@ -4562,65 +4562,65 @@ Let O
 
 " O
 
-But O
+But ORG
 
 Scalfaro O
 
-He ORG
+He MISC
 
 Witnesses O
 
-The O
+The MISC
 
-A O
+A MISC
 
 -DOCSTART- O
 
-Denmark PER
+Denmark O
 
 COPENHAGEN O
 
 A O
 
-An LOC
+An ORG
 
 They O
 
--- O
+-- ORG
 
--DOCSTART- O
+-DOCSTART- MISC
 
 Moslem O
 
-PARIS PER
+PARIS O
 
 Moslem O
 
 In O
 
--DOCSTART- PER
+-DOCSTART- O
 
-Belgian PER
+Belgian LOC
 
 BRUSSELS O
 
-Police O
+Police MISC
 
-Police PER
+Police MISC
 
 He O
 
 The O
 
-The O
+The PER
 
 She O
 
 He O
 
-( PER
+( ORG
 
--DOCSTART- PER
+-DOCSTART- O
 
 Port O
 
@@ -4634,39 +4634,39 @@ HAMBURG O
 
 German O
 
-Imports LOC
+Imports PER
 
-Colombia O
+Colombia PER
 
 Brazil O
 
 -- O
 
--DOCSTART- PER
+-DOCSTART- O
 
-Munich PER
+Munich O
 
-MUNICH PER
+MUNICH ORG
 
-Muenchener PER
-
-The ORG
-
-The PER
+Muenchener ORG
 
 The O
 
-Munich O
+The O
+
+The O
+
+Munich PER
 
 -- PER
 
 -DOCSTART- PER
 
-EU O
+EU PER
 
-BRUSSELS O
+BRUSSELS PER
 
-European MISC
+European O
 
 " O
 
@@ -4676,21 +4676,21 @@ European O
 
 -DOCSTART- O
 
-Frankfurt PER
+Frankfurt ORG
 
-FRANKFURT MISC
+FRANKFURT ORG
 
 The O
 
 There O
 
--DOCSTART- ORG
+-DOCSTART- O
 
 John O
 
 LONDON O
 
-The O
+The PER
 
 In O
 
@@ -4706,27 +4706,27 @@ LONDON O
 
 PT O
 
-It PER
+It O
 
 Its PER
 
-One PER
+One O
 
 -- O
 
--DOCSTART- O
+-DOCSTART- PER
 
-British O
+British PER
 
 LONDON O
 
-A PER
+A O
 
 Member O
 
-" ORG
+" PER
 
-This O
+This PER
 
 It O
 
@@ -4738,23 +4738,23 @@ Marlow O
 
 Clarke O
 
-Major O
+Major ORG
 
 His ORG
 
-Pro-European ORG
+Pro-European O
 
 -DOCSTART- ORG
 
-Court O
+Court PER
 
-CANBERRA O
-
-The O
+CANBERRA ORG
 
 The O
 
-" O
+The LOC
+
+" ORG
 
 But O
 
@@ -4764,9 +4764,9 @@ Accordingly O
 
 A O
 
-A PER
+A O
 
-One ORG
+One PER
 
 Police O
 
@@ -4778,11 +4778,11 @@ Australian O
 
 SYDNEY O
 
-An O
+An PER
 
-Paul O
+Paul PER
 
-But PER
+But O
 
 The O
 
@@ -4798,35 +4798,35 @@ NZ O
 
 WELLINGTON O
 
-New O
+New ORG
 
 Bolger O
 
--DOCSTART- O
+-DOCSTART- ORG
 
 NZ O
 
-WELLINGTON MISC
+WELLINGTON O
 
-New MISC
+New O
 
 Peters O
 
-He LOC
+He O
 
-Peters LOC
+Peters O
 
--DOCSTART- O
+-DOCSTART- LOC
 
-RTRS O
+RTRS LOC
 
 CANBERRA O
 
-Australian O
+Australian PER
 
-" ORG
+" O
 
-Halverson PER
+Halverson O
 
 Langmore O
 
@@ -4834,21 +4834,21 @@ He O
 
 Langmore O
 
-He PER
+He O
 
 His O
 
 -- O
 
--DOCSTART- LOC
+-DOCSTART- O
 
-Burmese O
+Burmese MISC
 
 RANGOON O
 
-A O
+A PER
 
-The LOC
+The O
 
 On O
 
@@ -4858,33 +4858,33 @@ They O
 
 On O
 
-They ORG
+They O
 
--DOCSTART- PER
+-DOCSTART- O
 
-Thai ORG
+Thai O
 
 BANGKOK O
 
-The O
+The ORG
 
-Vessel O
+Vessel ORG
 
-Iran O
+Iran PER
 
 Princess O
 
-Deligst O
+Deligst LOC
 
-Seagramd PER
+Seagramd O
 
-Lucky PER
+Lucky O
 
 Algoa O
 
 Sangthai O
 
-Myos O
+Myos PER
 
 Budisuryana O
 
@@ -4894,47 +4894,47 @@ Tong O
 
 But O
 
--- LOC
+-- O
 
--DOCSTART- LOC
+-DOCSTART- O
 
-Chinese LOC
+Chinese O
 
-SHANGHAI O
+SHANGHAI MISC
 
-A PER
+A O
 
 The PER
 
-It O
+It PER
 
 -DOCSTART- O
 
 South O
 
-SEOUL PER
+SEOUL O
 
-The PER
+The O
 
-The PER
+The O
 
-It LOC
+It O
 
 " O
 
 Dealers O
 
--DOCSTART- MISC
+-DOCSTART- O
 
-Foreign MISC
+Foreign O
 
 BEIJING O
 
 China O
 
-An O
+An PER
 
-" O
+" PER
 
 Guilin O
 
@@ -4942,11 +4942,11 @@ Guilin O
 
 EPA O
 
-TOKYO O
+TOKYO ORG
 
 Japan O
 
-He O
+He ORG
 
 When O
 
@@ -4954,31 +4954,31 @@ The O
 
 -DOCSTART- O
 
-Sangetsu O
+Sangetsu LOC
 
 TOKYO PER
 
-Year O
+Year PER
+
+( LOC
+
+LATEST O
 
 ( O
 
-LATEST PER
-
-( PER
-
-Sales PER
+Sales LOC
 
 Current O
 
-Net O
+Net PER
 
-EPS O
+EPS PER
 
 Ord O
 
 NOTE O
 
--DOCSTART- PER
+-DOCSTART- O
 
 Bre-X O
 
@@ -4986,9 +4986,9 @@ K.T. O
 
 JAKARTA O
 
-Canada O
+Canada PER
 
-" O
+" PER
 
 Another O
 
@@ -4996,53 +4996,53 @@ Both O
 
 The O
 
+The O
+
+" O
+
+He PER
+
+The O
+
+" O
+
+we O
+
+" O
+
+The MISC
+
 The PER
 
 " PER
 
-He O
-
-The ORG
-
-" MISC
-
-we ORG
-
-" O
-
 The O
 
-The O
+The MISC
 
-" O
+Umar MISC
 
-The O
+He MISC
 
-The O
-
-Umar O
-
-He O
-
-Bre-X O
+Bre-X MISC
 
 Barrick O
 
--DOCSTART- O
+-DOCSTART- ORG
 
-Honda LOC
+Honda O
 
-TOKYO ORG
+TOKYO LOC
 
-Honda PER
+Honda O
 
-Honda ORG
+Honda O
 
 A O
 
--DOCSTART- O
+-DOCSTART- PER
 
-FEATURE MISC
+FEATURE PER
 
 Ramthan O
 
@@ -5050,17 +5050,17 @@ SINGAPORE O
 
 Singapore PER
 
-" O
+" PER
 
-" O
+" PER
 
-The O
+The PER
 
 In O
 
 That O
 
-But LOC
+But O
 
 Derek O
 
@@ -5068,51 +5068,51 @@ There O
 
 At O
 
-In O
+In PER
+
+Supple O
+
+" O
 
 Supple PER
 
-" O
+From MISC
 
-Supple O
-
-From O
-
-A O
+A ORG
 
 " O
 
 Supple O
 
-" O
+" PER
 
 But O
 
-I O
+I PER
 
--DOCSTART- LOC
+-DOCSTART- O
 
-Japan O
+Japan ORG
 
-TOKYO O
+TOKYO ORG
 
 Nippon O
 
-" O
+" PER
 
-The O
+The PER
 
 Earlier O
 
 One O
 
-One O
+One MISC
 
-The O
+The PER
 
-The O
+The PER
 
--DOCSTART- PER
+-DOCSTART- O
 
 Ahold O
 
@@ -5120,33 +5120,33 @@ ZAANDAM O
 
 Dutch O
 
-The PER
+The LOC
 
-The PER
+The O
 
-" PER
+" O
 
 As O
 
 Ahold O
 
--- O
+-- PER
 
--DOCSTART- O
+-DOCSTART- PER
 
-ALPINE ORG
+ALPINE O
 
 VAIL O
 
-Profile O
+Profile PER
 
-Name O
+Name PER
 
 Age O
 
-Nation O
+Nation MISC
 
-Previous O
+Previous PER
 
 Other O
 
@@ -5158,37 +5158,37 @@ VAIL O
 
 Provisional O
 
-Saturday PER
+Saturday LOC
 
 1. O
 
 2. O
 
-3. MISC
+3. O
 
-4. O
+4. MISC
 
 5. O
 
-6. O
+6. ORG
 
-7. O
+7. ORG
 
-8. O
+8. PER
 
-9. O
+9. PER
 
-10= O
+10= PER
 
-10= O
+10= LOC
 
 12. O
 
 13. O
 
-14. PER
+14. O
 
-15. PER
+15. O
 
 16. O
 
@@ -5200,9 +5200,9 @@ Saturday PER
 
 20. O
 
-21. O
+21. MISC
 
-22= PER
+22= O
 
 22= O
 
@@ -5214,13 +5214,13 @@ Saturday PER
 
 26= O
 
-28. O
+28. MISC
 
 29. O
 
-30. O
+30. PER
 
-The MISC
+The O
 
 -DOCSTART- PER
 
@@ -5230,7 +5230,7 @@ VAIL O
 
 Svetlana O
 
-Pernilla PER
+Pernilla O
 
 -DOCSTART- O
 
@@ -5244,133 +5244,45 @@ Officials O
 
 The O
 
-The PER
+The ORG
 
-The PER
+The O
 
 Defending O
 
--DOCSTART- PER
+-DOCSTART- O
 
 ALPINE O
 
-VAIL MISC
+VAIL O
 
-Profile PER
+Profile MISC
 
-Name O
+Name MISC
 
-Age O
+Age MISC
 
 Nation O
 
-Previous PER
+Previous O
 
-Other PER
+Other O
 
--DOCSTART- LOC
+-DOCSTART- PER
 
 ALPINE PER
 
 VAIL LOC
 
-Women O
+Women PER
 
-standings O
+standings MISC
 
-Downhill O
-
-1. O
-
-2. PER
-
-3. O
-
-4. O
-
-5. LOC
-
-6. LOC
-
-7. O
-
-8. O
-
-9. O
-
-10= PER
-
-10= O
-
-10= O
-
-13= PER
-
-13= O
-
-15. O
-
-16. O
-
-17. O
-
-18. PER
-
-19= O
-
-19= MISC
-
-19= LOC
-
-Overall O
-
-Saturday O
+Downhill PER
 
 1. O
 
 2. O
-
-3. PER
-
-4. O
-
-5. O
-
-6. LOC
-
-7. O
-
-8= O
-
-8= O
-
-10. PER
-
-11. PER
-
-12. O
-
-13. O
-
-14. LOC
-
-15. LOC
-
-16= O
-
-16= O
-
-18. O
-
-19. PER
-
-20. PER
-
-Super PER
-
-1. LOC
-
-2. LOC
 
 3. O
 
@@ -5380,9 +5292,169 @@ Super PER
 
 6. PER
 
+7. MISC
+
+8. PER
+
+9. ORG
+
+10= O
+
+10= ORG
+
+10= O
+
+13= ORG
+
+13= PER
+
+15. MISC
+
+16. PER
+
+17. PER
+
+18. O
+
+19= ORG
+
+19= MISC
+
+19= MISC
+
+Overall MISC
+
+Saturday MISC
+
+1. O
+
+2. PER
+
+3. O
+
+4. O
+
+5. O
+
+6. MISC
+
+7. MISC
+
+8= MISC
+
+8= MISC
+
+10. ORG
+
+11. O
+
+12. ORG
+
+13. O
+
+14. ORG
+
+15. PER
+
+16= MISC
+
+16= O
+
+18. O
+
+19. O
+
+20. MISC
+
+Super MISC
+
+1. LOC
+
+2. PER
+
+3. MISC
+
+4. O
+
+5. O
+
+6. O
+
+7. ORG
+
+8. O
+
+9. MISC
+
+10. MISC
+
+11. MISC
+
+12= PER
+
+12= LOC
+
+12= O
+
+15. O
+
+16. ORG
+
+17. ORG
+
+18= O
+
+18= MISC
+
+20. O
+
+Nation O
+
+1. O
+
+2. O
+
+3. O
+
+4. O
+
+5. O
+
+6. O
+
+7. LOC
+
+8. ORG
+
+9. O
+
+10. O
+
+-DOCSTART- O
+
+ALPINE O
+
+VAIL MISC
+
+Provisional PER
+
+Saturday MISC
+
+1. PER
+
+2. O
+
+3. O
+
+4. O
+
+5. O
+
+6. MISC
+
 7. O
 
-8. LOC
+8. MISC
 
 9. PER
 
@@ -5390,29 +5462,83 @@ Super PER
 
 11. O
 
-12= O
+12. O
 
-12= O
+13. ORG
 
-12= O
+14. ORG
 
 15. O
 
 16. O
 
-17. ORG
+17. MISC
 
-18= O
+18. PER
 
-18= O
+19. PER
 
 20. O
 
-Nation PER
+21. O
+
+22. O
+
+23. O
+
+24. O
+
+25. MISC
+
+26. O
+
+27. O
+
+28. O
+
+29. O
+
+30. O
+
+The O
+
+-DOCSTART- O
+
+NORDIC O
+
+OESTERSUND O
+
+Results O
+
+World O
+
+Men O
 
 1. PER
 
-2. PER
+rounds O
+
+2. O
+
+3. O
+
+4. O
+
+5. LOC
+
+World O
+
+1. O
+
+2. O
+
+3. O
+
+Women MISC
+
+1. O
+
+2. MISC
 
 3. PER
 
@@ -5420,25 +5546,7 @@ Nation PER
 
 5. O
 
-6. ORG
-
-7. O
-
-8. O
-
-9. O
-
-10. PER
-
--DOCSTART- O
-
-ALPINE LOC
-
-VAIL LOC
-
-Provisional LOC
-
-Saturday O
+World O
 
 1. O
 
@@ -5446,127 +5554,19 @@ Saturday O
 
 3. PER
 
-4. O
-
-5. O
-
-6. LOC
-
-7. O
-
-8. O
-
-9. O
-
-10. ORG
-
-11. PER
-
-12. O
-
-13. O
-
-14. PER
-
-15. O
-
-16. ORG
-
-17. O
-
-18. O
-
-19. ORG
-
-20. PER
-
-21. LOC
-
-22. LOC
-
-23. LOC
-
-24. LOC
-
-25. O
-
-26. O
-
-27. PER
-
-28. PER
-
-29. O
-
-30. PER
-
-The O
-
--DOCSTART- PER
-
-NORDIC O
-
-OESTERSUND PER
-
-Results PER
-
-World O
-
-Men O
-
-1. O
-
-rounds O
-
-2. PER
-
-3. O
-
-4. O
-
-5. O
-
-World O
-
-1. PER
-
-2. O
-
-3. O
-
-Women PER
-
-1. O
-
-2. O
-
-3. O
-
-4. O
-
-5. PER
-
-World O
-
-1. MISC
-
-2. O
-
-3. O
-
--DOCSTART- PER
+-DOCSTART- O
 
 ALPINE O
 
 VAIL O
 
-Renate O
+Renate PER
 
-Katja O
+Katja LOC
 
 -DOCSTART- O
 
-BOBSLEIGH-SHIMER O
+BOBSLEIGH-SHIMER PER
 
 IGLS O
 
@@ -5580,75 +5580,75 @@ Canada O
 
 The O
 
-They O
+They PER
 
 -DOCSTART- O
 
-SKIING-CHINESE PER
+SKIING-CHINESE O
 
 TIGNES O
 
 China O
 
-While O
+While PER
 
-But O
+But LOC
 
 Alexis O
 
 Blanc O
 
-Canada ORG
+Canada PER
 
-Veronica O
+Veronica PER
 
-Swiss PER
+Swiss O
 
--DOCSTART- PER
+-DOCSTART- O
 
 BOBSLEIGH-WORLD O
 
 IGLS O
 
-Results O
+Results PER
 
 1. O
 
-minute PER
+minute O
 
 2. O
 
 ( O
 
-3. O
+3. PER
 
 ( O
 
-4. PER
+4. O
 
 ( O
 
-5. ORG
-
-( ORG
-
-6. ORG
+5. O
 
 ( PER
 
-7. PER
+6. O
 
-1:46.06 O
+( O
 
-8. O
+7. O
 
-( ORG
+1:46.06 PER
+
+8. PER
+
+( PER
 
 9. PER
 
-53.29 PER
+53.29 O
 
-10 PER
+10 O
 
 United O
 
@@ -5656,15 +5656,15 @@ Hines O
 
 ( O
 
-53.04). PER
+53.04). O
 
--DOCSTART- O
+-DOCSTART- LOC
 
 CRICKET O
 
 KANPUR O
 
-South O
+South LOC
 
 Woolmer O
 
@@ -5674,7 +5674,7 @@ A O
 
 Woolmer O
 
-His PER
+His O
 
 His O
 
@@ -5682,31 +5682,107 @@ Now O
 
 Woolmer O
 
-" O
+" ORG
 
-I O
+I PER
 
-" MISC
+" PER
 
-Also O
+Also PER
 
-Woolmer O
+Woolmer PER
 
--DOCSTART- O
+-DOCSTART- PER
 
-FREESTYLE O
+FREESTYLE PER
 
-TIGNES PER
+TIGNES O
 
-Results PER
+Results O
 
-freestyle MISC
+freestyle O
 
 Men O
 
 1. O
 
-2. MISC
+2. O
+
+3. PER
+
+4. PER
+
+5. MISC
+
+6. MISC
+
+7. MISC
+
+8. O
+
+9. O
+
+10. O
+
+Women O
+
+1. O
+
+2. O
+
+3. O
+
+4. O
+
+5. O
+
+6. ORG
+
+7. O
+
+8. MISC
+
+9. O
+
+10. O
+
+-DOCSTART- O
+
+SKI ORG
+
+KUUSAMO PER
+
+Leading O
+
+World O
+
+1. O
+
+145.4 O
+
+2. O
+
+3. O
+
+4. LOC
+
+5. O
+
+6. MISC
+
+7. O
+
+8. O
+
+9. PER
+
+10. O
+
+Leading O
+
+1. O
+
+2. O
 
 3. PER
 
@@ -5718,111 +5794,35 @@ Men O
 
 7. O
 
-8. O
+8. MISC
 
 9. O
-
-10. O
-
-Women O
-
-1. O
-
-2. O
-
-3. O
-
-4. ORG
-
-5. ORG
-
-6. ORG
-
-7. LOC
-
-8. O
-
-9. MISC
 
 10. O
 
 -DOCSTART- O
 
-SKI O
-
-KUUSAMO O
-
-Leading O
-
-World O
-
-1. LOC
-
-145.4 O
-
-2. ORG
-
-3. LOC
-
-4. ORG
-
-5. ORG
-
-6. O
-
-7. O
-
-8. ORG
-
-9. ORG
-
-10. ORG
-
-Leading O
-
-1. PER
-
-2. O
-
-3. O
-
-4. O
-
-5. O
-
-6. ORG
-
-7. O
-
-8. O
-
-9. O
-
-10. O
-
--DOCSTART- ORG
-
-BADMINTON ORG
+BADMINTON O
 
 TEMBAU ORG
 
 Results ORG
 
-semifinals LOC
+semifinals O
 
-Men O
+Men MISC
 
 Fung O
 
 Sun O
 
-Women O
+Women MISC
 
-Susi ORG
+Susi O
 
-11-3 PER
+11-3 O
 
-Ye PER
+Ye O
 
 -DOCSTART- O
 
@@ -5830,75 +5830,53 @@ SPEED O
 
 CHONJU O
 
-Results PER
+Results O
 
 Men O
 
 Horii O
 
-Jaegal O
+Jaegal PER
 
 Grunde O
 
 Shimizu O
 
-Sergey LOC
+Sergey O
 
 Yamakage O
 
-Casey O
+Casey MISC
 
-Sylvain PER
+Sylvain O
 
 Kim PER
 
-Inoue PER
+Inoue O
 
-Women PER
+Women O
 
-Xuc ORG
+Xuc O
 
 Svetlana O
 
-Franziska O
+Franziska MISC
 
 Okazaki O
 
-Shimazaki O
+Shimazaki PER
 
-Marianne O
+Marianne PER
 
 Jin O
 
 Alena O
 
-Chris ORG
+Chris O
 
-Anke ORG
+Anke O
 
-Men O
-
-1. O
-
-2. O
-
-3. MISC
-
-4. MISC
-
-5. O
-
-6. O
-
-7. LOC
-
-8. ORG
-
-9. ORG
-
-10. O
-
-Women O
+Men PER
 
 1. O
 
@@ -5908,15 +5886,37 @@ Women O
 
 4. O
 
-5. O
+5. PER
 
 6. O
 
 7. O
 
+8. ORG
+
+9. MISC
+
+10. PER
+
+Women PER
+
+1. O
+
+2. O
+
+3. O
+
+4. PER
+
+5. O
+
+6. PER
+
+7. O
+
 8. O
 
-9. PER
+9. O
 
 10. O
 
@@ -5924,13 +5924,13 @@ Women O
 
 ALPINE O
 
-WHISTLER LOC
+WHISTLER O
 
 World O
 
-For O
+For MISC
 
-Rules PER
+Rules O
 
 Organisers O
 
@@ -5938,45 +5938,45 @@ Organisers O
 
 If O
 
--DOCSTART- O
+-DOCSTART- PER
 
 SOCCER O
 
-GLASGOW ORG
+GLASGOW O
 
-Leading O
+Leading PER
 
-Scottish O
+Scottish PER
 
-10 ORG
+10 PER
 
-9 LOC
+9 ORG
 
 7 O
 
-6 O
+6 MISC
 
-Brian ORG
+Brian O
 
 ( O
 
-5 ORG
+5 O
 
-( ORG
+( O
 
-Winters ORG
+Winters PER
 
--DOCSTART- ORG
+-DOCSTART- LOC
 
 SOCCER O
 
-LONDON O
+LONDON MISC
 
 Leading O
 
 premier O
 
-13 O
+13 PER
 
 9 O
 
@@ -5984,15 +5984,15 @@ premier O
 
 8 O
 
-Villa O
+Villa PER
 
-Gianluca O
+Gianluca PER
 
-7 O
+7 ORG
 
-6 O
+6 ORG
 
-Sutton ORG
+Sutton O
 
 5 ORG
 
@@ -6008,9 +6008,9 @@ Results O
 
 division O
 
-Ards PER
+Ards LOC
 
-Cliftonville PER
+Cliftonville O
 
 Glenavon O
 
@@ -6026,25 +6026,25 @@ Linfield O
 
 Crusaders O
 
-Glenavon O
+Glenavon PER
 
 Glentoran O
 
-Portadown ORG
+Portadown O
 
-Ards LOC
+Ards MISC
 
 Cliftonville O
 
--DOCSTART- LOC
+-DOCSTART- PER
 
-RUGBY MISC
+RUGBY ORG
 
-LONDON O
+LONDON ORG
 
-Results PER
+Results MISC
 
-matches O
+matches MISC
 
 Pilkington O
 
@@ -6052,39 +6052,39 @@ Reading O
 
 English O
 
-Bath O
+Bath LOC
 
 Gloucester O
 
 Orrell O
 
-Wasps PER
+Wasps O
 
-Welsh MISC
+Welsh O
 
 Caerphilly O
 
 Llanelli O
 
-Newport PER
+Newport O
 
-Pontypridd O
+Pontypridd LOC
 
 Swansea O
 
-Treorchy O
+Treorchy MISC
 
 Scottish O
 
-Boroughmuir O
+Boroughmuir PER
 
 -DOCSTART- O
 
-SOCCER ORG
+SOCCER MISC
 
 GLASGOW O
 
-Summaries ORG
+Summaries PER
 
 Dunfermline O
 
@@ -6096,13 +6096,13 @@ Hearts O
 
 10,719 O
 
-Kilmarnock PER
+Kilmarnock O
 
-0-1 PER
+0-1 O
 
 5,812 O
 
-Motherwell PER
+Motherwell O
 
 1-0 O
 
@@ -6114,15 +6114,15 @@ Rangers O
 
 48,053 O
 
--DOCSTART- O
+-DOCSTART- PER
 
-RUGBY O
+RUGBY PER
 
-LONDON O
+LONDON PER
 
-David MISC
+David O
 
-The O
+The LOC
 
 " O
 
@@ -6130,9 +6130,9 @@ The O
 
 I O
 
-Former O
+Former LOC
 
-" O
+" LOC
 
 -DOCSTART- O
 
@@ -6140,11 +6140,11 @@ SOCCER O
 
 LONDON O
 
-Summaries PER
+Summaries O
 
 lealgue O
 
-Arsenal O
+Arsenal ORG
 
 71 O
 
@@ -6160,17 +6160,17 @@ Kanchelskis O
 
 28,418 O
 
-Coventry O
+Coventry ORG
 
-0-1 O
+0-1 ORG
 
 19,675 O
 
-Leicester O
+Leicester PER
 
-0-1 O
+0-1 PER
 
-19,306 MISC
+19,306 O
 
 Liverpool O
 
@@ -6180,35 +6180,35 @@ Liverpool O
 
 Middlesbrough O
 
-30,018 O
+30,018 ORG
 
-Southampton O
+Southampton ORG
 
 0-1 O
 
 15,232 O
 
-Sunderland PER
+Sunderland O
 
-89 PER
+89 O
 
-0-2 MISC
+0-2 O
 
 19,672 O
 
 -DOCSTART- O
 
-SOCCER O
+SOCCER PER
 
-GLASGOW O
+GLASGOW PER
 
 Scottish O
 
 Saturday O
 
-for PER
+for O
 
-Premier MISC
+Premier O
 
 Rangers O
 
@@ -6218,49 +6218,49 @@ Aberdeen O
 
 Hearts O
 
-Hibernian O
+Hibernian PER
 
 Dundee O
 
 Motherwell O
 
-Dunfermline PER
+Dunfermline ORG
 
-Raith PER
+Raith O
 
 Kilmarnock O
 
-Division O
+Division ORG
 
 St O
 
 Falkirk O
 
-Airdrieonians O
+Airdrieonians PER
 
-Dundee O
+Dundee PER
 
 Partick O
 
-St O
+St ORG
 
 Greenock O
 
-Clydebank O
+Clydebank ORG
 
-Stirling O
+Stirling ORG
 
 East O
 
-Division O
+Division ORG
 
-Ayr O
+Ayr MISC
 
-Livingston O
+Livingston MISC
 
-Hamilton O
+Hamilton PER
 
-Clyde O
+Clyde PER
 
 Queen O
 
@@ -6270,15 +6270,15 @@ Stranraer O
 
 Dumbarton O
 
-Brechin ORG
+Brechin O
 
-Berwick ORG
+Berwick PER
 
 Division O
 
-Montrose O
+Montrose LOC
 
-Inverness O
+Inverness PER
 
 Ross O
 
@@ -6296,25 +6296,25 @@ Arbroath O
 
 East O
 
--DOCSTART- O
+-DOCSTART- ORG
 
-SOCCER O
+SOCCER ORG
 
 LONDON ORG
 
 Standings O
 
-after ORG
+after O
 
-goals O
+goals PER
 
 Premier O
 
-Arsenal ORG
+Arsenal PER
 
-Wimbledon O
+Wimbledon PER
 
-Liverpool PER
+Liverpool O
 
 Aston O
 
@@ -6322,11 +6322,11 @@ Newcastle O
 
 Manchester O
 
-Chelsea O
+Chelsea LOC
 
-Everton O
+Everton MISC
 
-Sheffield O
+Sheffield ORG
 
 Tottenham O
 
@@ -6336,13 +6336,13 @@ Leicester O
 
 Leeds O
 
-Sunderland PER
+Sunderland O
 
 West O
 
 Middlesbrough O
 
-Blackburn O
+Blackburn PER
 
 Southampton O
 
@@ -6350,45 +6350,45 @@ Coventry O
 
 Nottingham O
 
-Division ORG
+Division O
 
-Bolton PER
+Bolton O
 
-Sheffield ORG
+Sheffield O
 
-Barnsley ORG
+Barnsley O
 
-Crystal O
+Crystal ORG
 
 Wolverhampton O
 
 Tranmere O
 
-Norwich O
+Norwich PER
 
 Birmingham O
 
-Oxford O
+Oxford PER
 
-Stoke O
+Stoke PER
 
 Swindon O
 
-Charlton O
+Charlton PER
 
-Huddersfield O
+Huddersfield PER
 
 Queens O
 
-Port O
+Port PER
 
-Ipswich O
+Ipswich PER
 
 Manchester O
 
-Portsmouth O
+Portsmouth PER
 
-Reading O
+Reading PER
 
 West O
 
@@ -6396,45 +6396,45 @@ Southend O
 
 Grimsby O
 
-Bradford PER
+Bradford O
 
-Oldham PER
+Oldham O
 
-Division PER
+Division O
 
 Brentford O
 
-Millwall O
+Millwall PER
 
 Bury O
 
-Luton O
+Luton PER
 
-Burnley O
+Burnley PER
 
 Chesterfield O
 
-Stockport O
+Stockport PER
 
-Watford O
+Watford PER
 
 Wrexham O
 
-Crewe ORG
+Crewe PER
 
-Bristol ORG
+Bristol PER
 
 Bristol O
 
-Shrewsbury O
+Shrewsbury PER
 
-York O
+York PER
 
 Blackpool O
 
-Walsall O
+Walsall PER
 
-Gillingham O
+Gillingham PER
 
 Preston O
 
@@ -6442,27 +6442,27 @@ Bournemouth O
 
 Plymouth O
 
-Peterborough O
+Peterborough PER
 
-Notts PER
+Notts O
 
 Wycombe O
 
 Rotherham O
 
-Division O
+Division PER
 
 Fulham O
 
-Cambridge O
+Cambridge PER
 
-Wigan O
+Wigan PER
 
 Carlisle O
 
-Cardiff O
+Cardiff PER
 
-Swansea O
+Swansea PER
 
 Barnet O
 
@@ -6474,13 +6474,13 @@ Northampton PER
 
 Scarborough O
 
-Lincoln PER
+Lincoln LOC
 
-Chester PER
+Chester O
 
-Hull ORG
+Hull MISC
 
-Torquay MISC
+Torquay O
 
 Rochdale O
 
@@ -6488,7 +6488,7 @@ Exeter O
 
 Doncaster O
 
-Mansfield PER
+Mansfield MISC
 
 Leyton PER
 
@@ -6500,13 +6500,13 @@ Hartlepool O
 
 Brighton O
 
--DOCSTART- O
+-DOCSTART- PER
 
 SOCCER O
 
 LONDON O
 
-Frenchman O
+Frenchman PER
 
 The O
 
@@ -6516,21 +6516,21 @@ Wimbledon O
 
 Two O
 
--DOCSTART- MISC
+-DOCSTART- O
 
 SOCCER O
 
-GLASGOW MISC
+GLASGOW O
 
-Results MISC
+Results PER
 
-matches ORG
+matches O
 
 Premier O
 
 Dunfermline O
 
-Hearts O
+Hearts PER
 
 Kilmarnock O
 
@@ -6540,11 +6540,11 @@ Rangers O
 
 Division O
 
-Dundee MISC
+Dundee O
 
-Greenock PER
+Greenock O
 
-Postponed MISC
+Postponed O
 
 Fife O
 
@@ -6552,33 +6552,33 @@ Division O
 
 Livingston PER
 
-Stranraer PER
+Stranraer O
 
 Division O
 
-Ross LOC
+Ross PER
 
-Postponed O
+Postponed PER
 
 Scottish O
 
 Alloa O
 
-Elgin PER
+Elgin O
 
-Postponed O
+Postponed ORG
 
 December ORG
 
--DOCSTART- O
+-DOCSTART- ORG
 
 SOCCER O
 
 LONDON O
 
-Results ORG
+Results O
 
-matches O
+matches MISC
 
 Premier O
 
@@ -6590,27 +6590,27 @@ Coventry O
 
 Leicester PER
 
-Liverpool PER
+Liverpool O
 
 Middlesbrough PER
 
 Southampton O
 
-Sunderland O
+Sunderland MISC
 
-Division O
+Division PER
 
-Barnsley O
+Barnsley PER
 
-Birmingham PER
+Birmingham O
 
-Charlton O
+Charlton PER
 
 Crystal O
 
-Huddersfield MISC
+Huddersfield O
 
-Ipswich O
+Ipswich LOC
 
 Manchester O
 
@@ -6622,11 +6622,11 @@ Sheffield O
 
 Stoke O
 
-Playing O
+Playing PER
 
 F.A. O
 
-Barnet MISC
+Barnet O
 
 Blackpool O
 
@@ -6634,29 +6634,29 @@ Bristol O
 
 Cambridge O
 
-Carlisle O
+Carlisle MISC
 
 Chester O
 
 Chesterfield O
 
-Enfield MISC
+Enfield O
 
 Hull O
 
-Leyton LOC
+Leyton O
 
-Luton MISC
+Luton O
 
-Mansfield PER
+Mansfield O
 
 Notts MISC
 
-Preston PER
+Preston O
 
 Sudbury O
 
-Walsall O
+Walsall LOC
 
 Watford O
 
@@ -6666,37 +6666,37 @@ Cardiff O
 
 -DOCSTART- O
 
-RUGBY O
+RUGBY PER
 
 LONDON O
 
 Australia O
+
+The O
+
+The PER
 
 The MISC
 
-The O
+Full-back PER
 
-The O
+-DOCSTART- PER
 
-Full-back O
-
--DOCSTART- O
-
-RUGBY O
+RUGBY PER
 
 LONDON O
 
-Australia ORG
+Australia MISC
 
-Scorers O
+Scorers PER
 
-Australia O
+Australia PER
 
 Penalties PER
 
-Conversions LOC
+Conversions O
 
-Barbarians O
+Barbarians LOC
 
 Conversion O
 
@@ -6714,13 +6714,13 @@ Zimbabwe O
 
 205 O
 
-206 LOC
+206 O
 
-207 O
+207 PER
 
-69 LOC
+69 O
 
-209 O
+209 ORG
 
 210 O
 
@@ -6728,13 +6728,13 @@ Zimbabwe O
 
 Murless O
 
-212 PER
+212 O
 
 Merwe O
 
-Andrew PER
+Andrew LOC
 
-213 PER
+213 O
 
 ( O
 
@@ -6748,15 +6748,15 @@ Fourie O
 
 SOCCER O
 
-TIRANA O
+TIRANA LOC
 
-Albanian LOC
+Albanian O
 
 World O
 
 FIFA O
 
-" MISC
+" O
 
 Especially O
 
@@ -6768,23 +6768,23 @@ Goalkeepers O
 
 Defenders O
 
-Midfielders ORG
+Midfielders O
 
 Forwards O
 
--DOCSTART- MISC
+-DOCSTART- O
 
-CRICKET O
+CRICKET PER
 
 HOBART O
 
-Former O
+Former PER
 
-Replying O
+Replying PER
 
 Jones O
 
-Jones LOC
+Jones MISC
 
 Harper O
 
@@ -6792,19 +6792,19 @@ Earlier O
 
 The O
 
-Pace O
+Pace MISC
 
 -DOCSTART- O
 
-CRICKET MISC
+CRICKET O
 
-HOBART O
+HOBART PER
 
 Close O
 
 Tasmania O
 
--DOCSTART- O
+-DOCSTART- PER
 
 SOCCER O
 
@@ -6812,27 +6812,27 @@ ABU O
 
 South O
 
-After MISC
+After O
 
-Kim MISC
+Kim LOC
 
 It O
 
-But O
+But ORG
 
-The O
+The ORG
 
 Ronny O
 
-With O
+With ORG
 
-Indonesian O
+Indonesian ORG
 
 Teams O
 
-Indonesia PER
+Indonesia O
 
-South O
+South MISC
 
 -DOCSTART- O
 
@@ -6842,13 +6842,13 @@ JERUSALEM O
 
 Results O
 
-matches ORG
+matches O
 
 Zafririm O
 
-Maccabi ORG
+Maccabi O
 
-Hapoel ORG
+Hapoel O
 
 Hapoel O
 
@@ -6858,21 +6858,21 @@ Ironi O
 
 Hapoel O
 
-Maccabi O
+Maccabi PER
 
 Standings O
 
 for O
 
-Betar PER
+Betar O
 
-Hapoel O
+Hapoel PER
 
-Hapoel ORG
-
-Maccabi PER
+Hapoel PER
 
 Maccabi O
+
+Maccabi PER
 
 Bnei O
 
@@ -6882,7 +6882,7 @@ Maccabi O
 
 Hapoel O
 
-Hapoel ORG
+Hapoel PER
 
 Ironi O
 
@@ -6890,37 +6890,37 @@ Zafririm O
 
 Maccabi O
 
-Hapoel O
+Hapoel PER
 
 Hapoel O
 
-Hapoel O
+Hapoel PER
 
 -DOCSTART- O
 
 SOCCER O
 
-ABU O
+ABU PER
 
-Results O
+Results PER
 
-United O
+United PER
 
 Scorers O
 
-UAE PER
+UAE O
 
 Kuwait O
 
 Attendance O
 
-South MISC
+South O
 
 Scorers O
 
 South O
 
-Jeon MISC
+Jeon O
 
 Indonesia O
 
@@ -6928,31 +6928,31 @@ Attendance O
 
 Group PER
 
-goals PER
+goals O
 
-South O
+South PER
 
 UAE O
 
-Kuwait O
+Kuwait ORG
 
-Indonesia O
+Indonesia ORG
 
--DOCSTART- MISC
+-DOCSTART- ORG
 
 NBA O
 
-NEW MISC
+NEW O
 
 Standings O
 
 Basketball O
 
-( PER
+( O
 
 EASTERN O
 
-ATLANTIC O
+ATLANTIC MISC
 
 W O
 
@@ -6962,19 +6962,19 @@ NEW LOC
 
 ORLANDO O
 
-WASHINGTON O
+WASHINGTON MISC
 
-PHILADELPHIA O
+PHILADELPHIA PER
 
-NEW PER
+NEW ORG
 
-BOSTON PER
+BOSTON O
 
-CENTRAL O
+CENTRAL PER
 
 W O
 
-CHICAGO O
+CHICAGO LOC
 
 DETROIT O
 
@@ -6982,19 +6982,19 @@ CLEVELAND O
 
 ATLANTA O
 
-MILWAUKEE ORG
+MILWAUKEE O
 
 INDIANA O
 
 CHARLOTTE O
 
-TORONTO O
+TORONTO PER
 
-WESTERN O
+WESTERN PER
 
 MIDWEST O
 
-W O
+W LOC
 
 HOUSTON O
 
@@ -7006,31 +7006,31 @@ DALLAS O
 
 DENVER O
 
-SAN LOC
+SAN MISC
 
-VANCOUVER ORG
+VANCOUVER PER
 
-PACIFIC ORG
+PACIFIC PER
 
-W PER
+W MISC
 
 SEATTLE PER
 
-LA O
+LA PER
 
-PORTLAND O
+PORTLAND PER
 
-LA O
+LA PER
 
 GOLDEN O
 
-SACRAMENTO O
+SACRAMENTO PER
 
-PHOENIX O
+PHOENIX PER
 
 SATURDAY PER
 
-TORONTO PER
+TORONTO O
 
 LA O
 
@@ -7038,25 +7038,25 @@ MILWAUKEE O
 
 DETROIT O
 
-MIAMI O
+MIAMI MISC
 
-VANCOUVER MISC
+VANCOUVER O
 
-PHILADELPHIA O
+PHILADELPHIA PER
 
-UTAH O
+UTAH LOC
 
 CHARLOTTE O
 
--DOCSTART- ORG
+-DOCSTART- O
 
 NBA O
 
 NEW O
 
-Results PER
+Results O
 
-Association O
+Association PER
 
 New O
 
@@ -7064,19 +7064,19 @@ DETROIT O
 
 New O
 
-Phoenix MISC
+Phoenix O
 
 Vancouver O
 
-UTAH O
+UTAH PER
 
-PORTLAND PER
+PORTLAND O
 
-Indiana ORG
+Indiana O
 
-LA ORG
+LA O
 
--DOCSTART- MISC
+-DOCSTART- O
 
 NHL O
 
@@ -7084,17 +7084,17 @@ NEW O
 
 Standings O
 
-League O
+League PER
 
-lost O
+lost PER
 
 EASTERN O
 
-NORTHEAST O
+NORTHEAST ORG
 
-W O
+W LOC
 
-HARTFORD O
+HARTFORD ORG
 
 BUFFALO O
 
@@ -7102,9 +7102,9 @@ MONTREAL O
 
 BOSTON O
 
-PITTSBURGH O
+PITTSBURGH LOC
 
-OTTAWA LOC
+OTTAWA O
 
 ATLANTIC O
 
@@ -7114,21 +7114,21 @@ FLORIDA O
 
 PHILADELPHIA O
 
-NEW MISC
+NEW O
 
-WASHINGTON PER
-
-NY O
+WASHINGTON O
 
 NY O
 
-TAMPA PER
+NY O
+
+TAMPA O
 
 WESTERN O
 
 CENTRAL O
 
-W PER
+W MISC
 
 DETROIT O
 
@@ -7138,59 +7138,59 @@ ST O
 
 CHICAGO O
 
-TORONTO LOC
+TORONTO O
 
 PHOENIX O
 
-PACIFIC LOC
+PACIFIC PER
 
-W MISC
+W O
 
-COLORADO MISC
+COLORADO O
 
-VANCOUVER MISC
+VANCOUVER ORG
 
-EDMONTON PER
+EDMONTON ORG
 
 LOS O
 
 SAN O
 
-ANAHEIM ORG
+ANAHEIM O
 
-CALGARY O
+CALGARY PER
 
 SATURDAY O
 
-PHOENIX O
+PHOENIX LOC
 
-CALGARY O
+CALGARY MISC
 
-BUFFALO PER
+BUFFALO O
 
-WASHINGTON O
+WASHINGTON PER
 
-CHICAGO MISC
+CHICAGO PER
 
-NY O
+NY PER
 
-ANAHEIM O
+ANAHEIM PER
 
-COLORADO O
+COLORADO PER
 
-TAMPA O
+TAMPA PER
 
 OTTAWA O
 
--DOCSTART- PER
+-DOCSTART- O
 
-NHL O
+NHL LOC
 
-NEW O
+NEW PER
 
-Results O
+Results PER
 
-League O
+League PER
 
 NY O
 
@@ -7200,49 +7200,49 @@ Pittsburgh O
 
 Montreal O
 
-Philadelphia MISC
+Philadelphia PER
 
-St PER
+St O
 
 EDMONTON O
 
--DOCSTART- O
+-DOCSTART- PER
 
-NHL O
+NHL PER
 
-NEW O
+NEW PER
 
 Vancouver O
 
-Bure O
+Bure PER
 
-Galley O
-
-" O
+Galley PER
 
 " O
 
+" O
+
 Bure O
 
--DOCSTART- LOC
+-DOCSTART- MISC
 
-BOXING O
+BOXING PER
 
-VIENNA O
+VIENNA PER
 
-German O
+German PER
 
 -DOCSTART- O
 
-SOCCER PER
+SOCCER O
 
-MADRID O
+MADRID MISC
 
 Summary O
 
-Real PER
+Real O
 
-Halftime PER
+Halftime O
 
 Attendance O
 
@@ -7258,111 +7258,111 @@ The O
 
 With PER
 
-A PER
+A O
 
-Barcelona PER
+Barcelona O
 
--DOCSTART- O
+-DOCSTART- ORG
 
-SOCCER PER
+SOCCER LOC
 
-AMSTERDAM PER
+AMSTERDAM O
 
-Brazilian ORG
+Brazilian LOC
 
 Their O
 
-PSV ORG
+PSV O
 
-They LOC
+They O
 
-Ajax PER
+Ajax O
 
-The PER
+The ORG
 
-They MISC
+They O
 
 -DOCSTART- O
 
-SOCCER ORG
+SOCCER O
 
 MADRID O
 
 Result O
 
-first O
+first ORG
 
 Real O
 
-Standings PER
+Standings LOC
 
-goals ORG
-
-Real ORG
-
-Barcelona O
-
-Deportivo ORG
-
-Real PER
-
-Atletico PER
-
-Athletic LOC
+goals LOC
 
 Real LOC
 
-Valladolid ORG
+Barcelona O
+
+Deportivo O
+
+Real O
+
+Atletico O
+
+Athletic ORG
+
+Real O
+
+Valladolid LOC
 
 Racing O
 
 Rayo O
 
-Valencia O
+Valencia ORG
 
-Celta O
+Celta ORG
 
-Tenerife PER
+Tenerife ORG
 
 Espanyol O
 
 Oviedo O
 
-Sporting O
+Sporting MISC
 
-Logrones O
+Logrones PER
 
-Zaragoza O
+Zaragoza MISC
 
-Sevilla MISC
+Sevilla LOC
 
 Compostela O
 
-Hercules ORG
+Hercules O
 
-Extremadura O
+Extremadura MISC
 
 -DOCSTART- O
 
-SOCCER MISC
+SOCCER LOC
 
-DUBLIN ORG
+DUBLIN O
 
-Jack ORG
-
-Charlton O
-
-" ORG
-
-It MISC
-
-That O
-
-" ORG
+Jack LOC
 
 Charlton O
 
-He PER
+" O
+
+It O
+
+That ORG
+
+" ORG
+
+Charlton O
+
+He O
 
 The O
 
