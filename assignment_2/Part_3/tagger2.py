@@ -225,7 +225,7 @@ if __name__ == '__main__':
         make_graph(dev_loss_list, 'Loss over epochs', 'Loss', 'Output/loss.png')
         make_graph(dev_accuracy_list, 'Accuracy over epochs', 'Accuracy', 'Output/accuracy.png')
 
-        torch.save(model.state_dict(), f'model_part2_{TASK}.pth')
+        torch.save(model.state_dict(), f'model_part1_{TASK}.pth')
 
     tag2idx['<TEST>'] = len(tag2idx)
 
