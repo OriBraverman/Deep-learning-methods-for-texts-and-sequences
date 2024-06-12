@@ -13,7 +13,9 @@ from assignment_2.utils import *
 
 # Constants
 TASK = 'ner'
-TRAIN = True
+TRAIN = False
+TRAIN_BATCH_SIZE = 32
+DEV_BATCH_SIZE = 32 if TASK == 'pos' else 128
 
 
 
@@ -72,6 +74,12 @@ class Tagger1(nn.Module):
             print(
                 f'Epoch {epoch + 1}/{epochs} - Avg. Loss: {avg_loss:.4f} - Train Accuracy: {train_accuracy:.4f} - Dev Accuracy: {dev_accuracy:.4f} - Dev Loss: {dev_loss:.4f}')
 
+
+            # Early stopping
+            if len(dev_loss_list) > 1 and dev_loss_list[-1] > dev_loss_list[-2]:
+                print('Early stopping')
+                break
+
         return dev_loss_list, dev_accuracy_list
 
     def evaluate(self, data, idx2tag, device='cpu', is_ner=False):
@@ -100,33 +108,32 @@ class Tagger1(nn.Module):
             return list(self.fc1.parameters()) + list(self.fc2.parameters()) + list(self.embedding.parameters())
         return list(self.fc1.parameters()) + list(self.fc2.parameters())
 
-    def predict(self, data, idx2tag, save_file, device='cpu'):
-        predictions = []
-        for words, _ in tqdm(data):
-            # Move the data to the device
-            words = torch.tensor(words).to(device)
-            # Forward pass
-            output = self(words)
+    def predict(self, data, original_data, idx2tag, save_file, device='cpu'):
 
-            pred = output.argmax(dim=1)
-
-            pred_tag = [idx2tag[p] for p in pred.tolist()]
-            predictions.extend(pred_tag)
-
-
-        with open(save_file, 'w') as f:
-            for pred in predictions:
-                f.write(str(pred) + '\n')
+        # if file already exists, delete it
+        if os.path.exists(save_file):
+            os.remove(save_file)
+        f = open(save_file, 'w')
+        with torch.no_grad():
+            for window_idx, original_sentence in zip(data, original_data):
+                window_idx = torch.tensor(window_idx).to(device).unsqueeze(0)
+                output = self(window_idx)
+                _, predicted = torch.max(output.data, 1)
+                for w, p in zip(original_sentence, predicted):
+                    f.write(f'{w} {idx2tag[p.item()]}\n')
+                f.write('\n')
+        f.close()
 
 
 
 if __name__ == '__main__':
-    vocab = read_vocab()
     train_words, train_tags = read_data(f'Data/{TASK}/train')
-    # Create the vocabularies
-    word2idx, idx2word, tag2idx, idx2tag = make_vocabs(vocab, train_tags)
 
-    vocab_size = len(word2idx)
+    train_words = change_tag_of_rare_words(train_words)
+    # Create the vocabularies
+    word2idx, idx2word, tag2idx, idx2tag = make_vocabs(train_words, train_tags)
+
+    vocab_size = len(word2idx) + 1
     output_dim = len(tag2idx)
     hidden_dim = 32
     n_epoch = 25
@@ -142,43 +149,41 @@ if __name__ == '__main__':
         windows_idx, window_tags_idx = convert_window_to_window_idx(windows, window_tags, word2idx, tag2idx)
 
         # Cut the data to 1000 samples in order to debug faster
-        windows_idx = windows_idx
-        window_tags_idx = window_tags_idx
+        #windows_idx = windows_idx[:1000]
+        #window_tags_idx = window_tags_idx[:1000]
 
 
-
-        batch_size = 64
         model = Tagger1(vocab_size, hidden_dim, output_dim)
         optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-        # TODO SAVE THE DATASET TO SAVE TIME AT EACH RUN
         train_data = TensorDataset(torch.tensor(windows_idx), torch.tensor(window_tags_idx))
-        train_dataloader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
+        train_dataloader = DataLoader(train_data, batch_size=TRAIN_BATCH_SIZE, shuffle=True)
+        # save the dataset
+        #torch.save(train_data, f'dataset_tagger1_{TASK}.pth')
 
         print(len(train_data))
         dev_words, dev_tags = read_data(f'Data/{TASK}/dev')
         dev_windows, dev_window_tags = convert_words_to_window(dev_words, dev_tags, window_size=5)
         dev_windows_idx, dev_window_tags_idx = convert_window_to_window_idx(dev_windows, dev_window_tags, word2idx, tag2idx)
         dev_data = TensorDataset(torch.tensor(dev_windows_idx), torch.tensor(dev_window_tags_idx))
-        dev_dataloader = DataLoader(dev_data, batch_size=batch_size, shuffle=True)
+        dev_dataloader = DataLoader(dev_data, batch_size=DEV_BATCH_SIZE, shuffle=True)
 
         dev_loss_list, dev_accuracy_list = model.train(optimizer, train_dataloader, dev_dataloader, idx2tag, epochs=n_epoch,
                                                        is_ner=TASK == 'ner')
 
-        make_graph(dev_loss_list, 'Loss over epochs', 'Loss', 'Output/loss.png')
-        make_graph(dev_accuracy_list, 'Accuracy over epochs', 'Accuracy', 'Output/accuracy.png')
+        make_graph(dev_loss_list, 'Loss over epochs', 'Loss', 'Part_1/Output/loss.png')
+        make_graph(dev_accuracy_list, 'Accuracy over epochs', 'Accuracy', 'Part_1/Output/accuracy.png')
 
         torch.save(model.state_dict(), f'model_part1_{TASK}.pth')
 
     tag2idx['<TEST>'] = len(tag2idx)
 
-    test_words, test_tags = read_test_data(f'Data/{TASK}/test')
-    test_windows, test_window_tags = convert_words_to_window(test_words, test_tags, window_size=5)
-    test_windows_idx, test_window_tags_idx = convert_window_to_window_idx(test_windows, test_window_tags, word2idx, tag2idx)
-    test_data = TensorDataset(torch.tensor(test_windows_idx), torch.tensor(test_window_tags_idx))
-    test_dataloader = DataLoader(test_data, batch_size=128)
+    test_words, test_original_data = read_test_data(f'Data/{TASK}/test')
+    test_windows = convert_words_to_window(test_words, window_size=5)
+    test_windows_idx = convert_window_to_window_idx(test_windows, None, word2idx, tag2idx)
 
     model = Tagger1(vocab_size, hidden_dim, output_dim)
     model.load_state_dict(torch.load(f'model_part1_{TASK}.pth'))
-    model.predict(test_dataloader, idx2tag, f'Output/part1.{TASK}')
+    model.predict(test_windows_idx, test_original_data, idx2tag, f'Part_1/Output/test1.{TASK}')
+
 

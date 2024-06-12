@@ -1,4 +1,5 @@
 import random
+from collections import Counter
 
 import torch
 import numpy as np
@@ -122,7 +123,7 @@ def make_pre_suf(pre_suf):
     return d
 
 
-def read_test_data(filename, window_size=5):
+'''def read_test_data(filename, window_size=5):
     sentences = []
 
     with open(filename, 'r', encoding='utf-8') as f:
@@ -137,29 +138,32 @@ def read_test_data(filename, window_size=5):
                 word = line.replace('\n', '')
                 sentence.append(word)
 
-    return sentences, sentence_tags
+    return sentences, sentence_tags'''
 
 
 # Read test data
-# def read_test_data(filename, window_size=5):
-#     sentences, full_sentences = [], []
-#
-#     with open(filename, 'r', encoding='utf-8') as f:
-#         lines = f.readlines()
-#         sentence, full_sentence = [], []
-#         for line in lines:
-#             if line == '\n':
-#                 sentences.append(sentence)
-#                 full_sentences.append(full_sentence)
-#                 sentence, full_sentence = [], []
-#             else:
-#                 word = line.replace('\n', '')
-#                 sentence.append(word)
-#                 full_sentence.append(word)
+def read_test_data(filename, window_size=5):
+    sentences, full_sentences = [], []
+
+    with open(filename, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+        sentence, full_sentence = [], []
+        for line in lines:
+            if line == '\n':
+                sentences.append(sentence)
+                full_sentences.append(full_sentence)
+                sentence, full_sentence = [], []
+            else:
+                word = line.replace('\n', '')
+                sentence.append(word)
+                full_sentence.append(word)
+
+    return sentences, full_sentences
 
 
 # making a words vocabulary and a tags vocabulary which are dictionaries that map words/tags to indices
 def make_vocabs(words, tags):
+    words = [w for sentence in words for w in sentence]
     words = list(set(words))
     words.append('<UNK>')
     words.append('<PAD_START>')
@@ -175,7 +179,7 @@ def make_vocabs(words, tags):
     return word2idx, idx2word, tag2idx, idx2tag
 
 
-def convert_words_to_window(words, tags, window_size=5):
+def convert_words_to_window(words, tags=None, window_size=5):
     """
     @param words: a list of lists of words in the sentences
     @param tags: a list of lists of tags in the sentences
@@ -186,6 +190,18 @@ def convert_words_to_window(words, tags, window_size=5):
     tag_out = []
     padding = (window_size - 1) // 2
 
+    if tags is None:
+        for sentence in words:
+            # Apply padding
+            padded_sentence = ['<PAD_START>'] * padding + sentence + ['<PAD_END>'] * padding
+
+            for i in range(padding, len(padded_sentence) - padding):
+                # Extract the window
+                window = padded_sentence[i - padding: i + padding + 1]
+                vector_out.append(window)
+
+        return vector_out
+
     for sentence, sentence_tag in zip(words, tags):
         # Apply padding
         padded_sentence = ['<PAD_START>'] * padding + sentence + ['<PAD_END>'] * padding
@@ -194,10 +210,9 @@ def convert_words_to_window(words, tags, window_size=5):
             # Extract the window
             window = padded_sentence[i - padding: i + padding + 1]
             vector_out.append(window)
-            if tags is not None:
-                tag_out.append(sentence_tag[i - padding])  # Adjust index for original sentence
+            tag_out.append(sentence_tag[i - padding])
 
-    return vector_out, tag_out if tags is not None else vector_out
+    return vector_out, tag_out
 
 
 def convert_window_to_window_idx(window, tag, word2idx, tag2idx):
@@ -210,13 +225,14 @@ def convert_window_to_window_idx(window, tag, word2idx, tag2idx):
     """
     vector_out = []
     tag_out = []
+    if tag is None:
+        for w in window:
+            vector_out.append([word2idx[w] if w in word2idx else word2idx['<UNK>'] for w in w])
+        return vector_out
+
     for w, t in zip(window, tag):
-
-
-
         vector_out.append([word2idx[w] if w in word2idx else word2idx['<UNK>'] for w in w])
         tag_out.append(tag2idx[t])
-
     return vector_out, tag_out
 
 
@@ -242,6 +258,19 @@ def convert_window_to_window_idx_presuf(window, tag, word2idx, pre_suf2idx, tag2
 
     return vector_out, tag_out
 
+def change_tag_of_rare_words(words, threshold=1, tag='<UNK>'):
+    """
+    Definition: words that appear less than threshold times are considered rare
+    """
+    word_count = Counter()
+    for sentence in words:
+        word_count.update(sentence)
+
+    for i, sentence in enumerate(words):
+        for j, word in enumerate(sentence):
+            if word_count[word] <= threshold:
+                words[i][j] = tag
+    return words
 
 
 # this function graph loss/acuracy over epochs

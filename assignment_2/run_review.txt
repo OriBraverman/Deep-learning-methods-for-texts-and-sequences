@@ -1,0 +1,24 @@
+part1:
+ner:
+Epoch 1/25:   0%|          | 0/6393 [00:00<?, ?it/s]C:\src\github.com\OriBraverman\Deep-learning-methods-for-texts-and-sequences\assignment_2\Part_1\tagger1.py:54: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  words, tags = torch.tensor(words).to(device), torch.tensor(tags).to(device)
+Epoch 1/25: 100%|██████████| 6393/6393 [00:31<00:00, 203.11it/s]
+C:\src\github.com\OriBraverman\Deep-learning-methods-for-texts-and-sequences\assignment_2\Part_1\tagger1.py:90: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  words, tags = torch.tensor(words).to(device), torch.tensor(tags).to(device)
+Epoch 1/25 - Avg. Loss: 0.3830 - Train Accuracy: 0.6193 - Dev Accuracy: 0.5404 - Dev Loss: 0.0020
+Epoch 2/25: 100%|██████████| 6393/6393 [00:34<00:00, 183.07it/s]
+Epoch 3/25:   0%|          | 0/6393 [00:00<?, ?it/s]Epoch 2/25 - Avg. Loss: 0.1723 - Train Accuracy: 0.8002 - Dev Accuracy: 0.6846 - Dev Loss: 0.0014
+Epoch 3/25: 100%|██████████| 6393/6393 [00:34<00:00, 185.10it/s]
+Epoch 4/25:   0%|          | 0/6393 [00:00<?, ?it/s]Epoch 3/25 - Avg. Loss: 0.1031 - Train Accuracy: 0.8772 - Dev Accuracy: 0.7320 - Dev Loss: 0.0012
+Epoch 4/25: 100%|██████████| 6393/6393 [00:34<00:00, 184.46it/s]
+Epoch 5/25:   0%|          | 0/6393 [00:00<?, ?it/s]Epoch 4/25 - Avg. Loss: 0.0696 - Train Accuracy: 0.9090 - Dev Accuracy: 0.7438 - Dev Loss: 0.0012
+Epoch 5/25: 100%|██████████| 6393/6393 [00:35<00:00, 181.38it/s]
+Epoch 6/25:   0%|          | 0/6393 [00:00<?, ?it/s]Epoch 5/25 - Avg. Loss: 0.0501 - Train Accuracy: 0.9374 - Dev Accuracy: 0.7751 - Dev Loss: 0.0011
+Epoch 6/25: 100%|██████████| 6393/6393 [00:36<00:00, 176.99it/s]
+Epoch 6/25 - Avg. Loss: 0.0378 - Train Accuracy: 0.9539 - Dev Accuracy: 0.7715 - Dev Loss: 0.0012
+Early stopping
+  0%|          | 0/365 [00:00<?, ?it/s]C:\src\github.com\OriBraverman\Deep-learning-methods-for-texts-and-sequences\assignment_2\Part_1\tagger1.py:115: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  words = torch.tensor(words).to(device)
+100%|██████████| 365/365 [00:00<00:00, 571.24it/s]
+
+pos:
