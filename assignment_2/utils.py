@@ -88,6 +88,27 @@ def read_data_pre_suf(filename, window_size=5):
     return sentences, prefixes, suffixes, tags
 
 
+def read_test_data_pre_suf(filename, window_size=5):
+    sentences, prefixes, suffixes, tags = [], [], [], []
+
+    with open(filename, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+        sentence, prefixe, suffixe = [], [], []
+        for line in lines:
+            if line == '\n':
+                sentences.append(sentence)
+                prefixes.append(prefixe)
+                suffixes.append(suffixe)
+                tags.append(['<TEST>' for _ in range(len(sentence))])
+                sentence, prefixe, suffixe = [], [], []
+            else:
+                word, tag = line.replace('\n', '').split()
+                l = min(len(word), 3)
+                sentence.append(word)
+                prefixe.append(word[:l])
+                suffixe.append(word[len(word) - l:])
+
+    return sentences, prefixes, suffixes, tags
 def get_pre_suf_list(prefixes, suffixes):
     words = []
     [words.extend(s) for s in prefixes]

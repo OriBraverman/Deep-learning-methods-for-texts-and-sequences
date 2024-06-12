@@ -110,6 +110,9 @@ class Tagger3(nn.Module):
 
 
 if __name__ == '__main__':
+
+    save_name = f'model_part4_{TASK}.pth'
+
     vocab = read_vocab()
     train_words, train_prefixes, train_suffixes, train_tags = read_data_pre_suf(f'Data/{TASK}/train')
     # Create the vocabularies
@@ -147,7 +150,7 @@ if __name__ == '__main__':
 
         dev_windows, dev_window_tags = convert_words_to_window(dev_words, dev_tags, window_size=1)
         # Convert the windows to indices
-        dev_windows_idx, dev_window_tags_idx = convert_window_to_window_idx_presuf(windows, window_tags, word2idx,
+        dev_windows_idx, dev_window_tags_idx = convert_window_to_window_idx_presuf(dev_windows, dev_window_tags, word2idx,
                                                                                    pre_suf2idx,
                                                                                    tag2idx)
         dev_data = TensorDataset(torch.tensor(dev_windows_idx), torch.tensor(dev_window_tags_idx))
@@ -157,20 +160,22 @@ if __name__ == '__main__':
                                                        epochs=n_epoch,
                                                        is_ner=TASK == 'ner')
 
-        make_graph(dev_loss_list, 'Loss over epochs', 'Loss', 'Output/loss.png')
-        make_graph(dev_accuracy_list, 'Accuracy over epochs', 'Accuracy', 'Output/accuracy.png')
+        make_graph(dev_loss_list, 'Loss over epochs', 'Loss', 'Output/loss_part4.png')
+        make_graph(dev_accuracy_list, 'Accuracy over epochs', 'Accuracy', 'Output/accuracy_part4.png')
 
-        torch.save(model.state_dict(), f'model_part1_{TASK}.pth')
+
+
+        torch.save(model.state_dict(), save_name)
 
     tag2idx['<TEST>'] = len(tag2idx)
 
-    test_words, test_tags = read_test_data(f'Data/{TASK}/test')
-    test_windows, test_window_tags = convert_words_to_window(test_words, test_tags, window_size=5)
-    test_windows_idx, test_window_tags_idx = convert_window_to_window_idx(test_windows, test_window_tags, word2idx,
-                                                                          tag2idx)
+    test_words, test_tags = read_test_data_pre_suf(f'Data/{TASK}/test')
+    test_windows, test_window_tags = convert_words_to_window(test_words, test_tags, window_size=1)
+    test_windows_idx, test_window_tags_idx = convert_window_to_window_idx_presuf(test_windows, test_window_tags, word2idx,
+                                                                          pre_suf2idx, tag2idx)
     test_data = TensorDataset(torch.tensor(test_windows_idx), torch.tensor(test_window_tags_idx))
     test_dataloader = DataLoader(test_data, batch_size=128)
 
-    model = Tagger3(vocab_size, hidden_dim, output_dim)
-    model.load_state_dict(torch.load(f'model_part1_{TASK}.pth'))
-    model.predict(test_dataloader, idx2tag, f'Output/part1.{TASK}')
+    model = Tagger3(vocab_size, pre_suf_size, hidden_dim, output_dim)
+    model.load_state_dict(torch.load(save_name))
+    model.predict(test_dataloader, idx2tag, f'Output/part4.{TASK}')
