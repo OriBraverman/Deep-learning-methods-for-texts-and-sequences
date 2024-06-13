@@ -13,7 +13,7 @@ from assignment_2.utils import *
 
 # Constants
 TASK = 'pos'
-TRAIN = False
+TRAIN = True
 TRAIN_BATCH_SIZE = 32
 DEV_BATCH_SIZE = 32 if TASK == 'pos' else 128
 

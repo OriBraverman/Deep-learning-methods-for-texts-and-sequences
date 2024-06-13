@@ -153,12 +153,6 @@ class Tagger3(nn.Module):
                 f.write('\n')
         f.close()
 
-    def parameters(self, recurse: bool = True, use_embeddings: bool = True):
-        if use_embeddings:
-            return list(self.fc1.parameters()) + list(self.fc2.parameters()) + list(
-                self.pre_embedding.parameters()) + list(self.suf_embedding.parameters())
-        return list(self.fc1.parameters()) + list(self.fc2.parameters())
-
 
 if __name__ == '__main__':
 
