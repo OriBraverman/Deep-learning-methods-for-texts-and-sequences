@@ -103,7 +103,7 @@ def read_test_data_pre_suf(filename, window_size=5):
                 tags.append(['<TEST>' for _ in range(len(sentence))])
                 sentence, prefixe, suffixe = [], [], []
             else:
-                word, tag = line.replace('\n', '').split()
+                word = line.replace('\n', '')
                 l = min(len(word), 3)
                 sentence.append(word)
                 prefixe.append(word[:l])
@@ -163,6 +163,23 @@ def read_test_data(filename, window_size=5):
 def make_vocabs(words, tags):
     words = [w for sentence in words for w in sentence]
     words = list(set(words))
+    words.append('<UNK>')
+    words.append('<PAD_START>')
+    words.append('<PAD_END>')
+    tags = [t for tag in tags for t in tag]
+    tags = sorted(set(tags))
+
+    word2idx = {w: i for i, w in enumerate(words)}
+    idx2word = {i: w for i, w in enumerate(words)}
+    tag2idx = {t: i for i, t in enumerate(tags)}
+    idx2tag = {i: t for i, t in enumerate(tags)}
+
+    return word2idx, idx2word, tag2idx, idx2tag
+
+
+def make_vocabs_part4(words, tags):
+
+
     words.append('<UNK>')
     words.append('<PAD_START>')
     words.append('<PAD_END>')
