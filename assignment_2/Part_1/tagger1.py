@@ -108,20 +108,25 @@ class Tagger1(nn.Module):
             return list(self.fc1.parameters()) + list(self.fc2.parameters()) + list(self.embedding.parameters())
         return list(self.fc1.parameters()) + list(self.fc2.parameters())
 
-    def predict(self, data, original_data, idx2tag, save_file, device='cpu'):
+    def predict(self, windows_idx, original_data, idx2tag, save_file, device='cpu'):
 
         # if file already exists, delete it
         if os.path.exists(save_file):
             os.remove(save_file)
         f = open(save_file, 'w')
+        Predicted_tags = []
         with torch.no_grad():
-            for window_idx, original_sentence in zip(data, original_data):
-                window_idx = torch.tensor(window_idx).to(device).unsqueeze(0)
-                output = self(window_idx)
+            for words in windows_idx:
+                words = torch.tensor(words).to(device).unsqueeze(0)
+                output = self(words)
                 _, predicted = torch.max(output.data, 1)
-                for w, p in zip(original_sentence, predicted):
-                    f.write(f'{w} {idx2tag[p.item()]}\n')
-                f.write('\n')
+                Predicted_tags.append(predicted.item())
+        i = 0
+        for sentence in original_data:
+            for word in sentence:
+                f.write(f'{word} {idx2tag[Predicted_tags[i]]}\n')
+                i += 1
+            f.write('\n')
         f.close()
 
 
@@ -171,19 +176,19 @@ if __name__ == '__main__':
         dev_loss_list, dev_accuracy_list = model.train(optimizer, train_dataloader, dev_dataloader, idx2tag, epochs=n_epoch,
                                                        is_ner=TASK == 'ner')
 
-        make_graph(dev_loss_list, 'Loss over epochs', 'Loss', 'Part_1/Output/loss.png')
-        make_graph(dev_accuracy_list, 'Accuracy over epochs', 'Accuracy', 'Part_1/Output/accuracy.png')
+        make_graph(dev_loss_list, 'Loss over epochs', 'Loss', f'Part_1/Output/loss_{TASK}.png')
+        make_graph(dev_accuracy_list, 'Accuracy over epochs', 'Accuracy', f'Part_1/Output/accuracy_{TASK}.png')
 
         torch.save(model.state_dict(), f'model_part1_{TASK}.pth')
 
     tag2idx['<TEST>'] = len(tag2idx)
 
-    test_words, test_original_data = read_test_data(f'Data/{TASK}/test')
+    test_words = read_test_data(f'Data/{TASK}/test')
     test_windows = convert_words_to_window(test_words, window_size=5)
     test_windows_idx = convert_window_to_window_idx(test_windows, None, word2idx, tag2idx)
 
     model = Tagger1(vocab_size, hidden_dim, output_dim)
     model.load_state_dict(torch.load(f'model_part1_{TASK}.pth'))
-    model.predict(test_windows_idx, test_original_data, idx2tag, f'Part_1/Output/test1.{TASK}')
+    model.predict(test_windows_idx, test_words, idx2tag, f'Part_1/Output/test1.{TASK}')
 
 

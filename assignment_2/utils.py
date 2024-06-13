@@ -143,22 +143,20 @@ def make_pre_suf(pre_suf):
 
 # Read test data
 def read_test_data(filename, window_size=5):
-    sentences, full_sentences = [], []
+    sentences = []
 
     with open(filename, 'r', encoding='utf-8') as f:
         lines = f.readlines()
-        sentence, full_sentence = [], []
+        sentence = []
         for line in lines:
             if line == '\n':
                 sentences.append(sentence)
-                full_sentences.append(full_sentence)
-                sentence, full_sentence = [], []
+                sentence = []
             else:
                 word = line.replace('\n', '')
                 sentence.append(word)
-                full_sentence.append(word)
 
-    return sentences, full_sentences
+    return sentences
 
 
 # making a words vocabulary and a tags vocabulary which are dictionaries that map words/tags to indices
