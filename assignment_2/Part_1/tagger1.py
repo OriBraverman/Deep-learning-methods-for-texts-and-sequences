@@ -114,14 +114,19 @@ class Tagger1(nn.Module):
         if os.path.exists(save_file):
             os.remove(save_file)
         f = open(save_file, 'w')
+        Predicted_tags = []
         with torch.no_grad():
-            for window_idx, window in zip(windows_idx, original_data):
-                window_idx = torch.tensor(window_idx).to(device).unsqueeze(0)
-                output = self(window_idx)
-                _, predicted_window = torch.max(output.data, 1)
-                for w, p in zip(window, predicted_window):
-                    f.write(f'{w} {idx2tag[p.item()]}\n')
-                f.write('\n')
+            for words in windows_idx:
+                words = torch.tensor(words).to(device).unsqueeze(0)
+                output = self(words)
+                _, predicted = torch.max(output.data, 1)
+                Predicted_tags.append(predicted.item())
+        i = 0
+        for sentence in original_data:
+            for word in sentence:
+                f.write(f'{word} {idx2tag[Predicted_tags[i]]}\n')
+                i += 1
+            f.write('\n')
         f.close()
 
 
