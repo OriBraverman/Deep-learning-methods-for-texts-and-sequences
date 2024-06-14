@@ -13,12 +13,13 @@ import argparse
 from assignment_2.utils import *
 
 # Constants
-TASK = 'pos'
-TRAIN = True
+TASK = 'ner'
+TRAIN = False
+save_name = f'model_part4_{TASK}.pth'
 
 
 class Tagger3(nn.Module):
-    def __init__(self, vocab_size, pre_suf_size, hidden_dim, output_dim, embedding_dim=50, window_size=1,
+    def __init__(self, vocab_size, pre_suf_size, hidden_dim, output_dim, embedding_dim=50, window_size=5,
                  use_prefix=True, use_suffix=True, use_word=True, save_pre_suff_embedding: Union[str, bool] = False,
                  aggregation = 'sum'):
         super(Tagger3, self).__init__()
@@ -39,11 +40,11 @@ class Tagger3(nn.Module):
         self.pre_embedding = nn.Embedding(pre_suf_size, embedding_dim)
         self.suf_embedding = nn.Embedding(pre_suf_size, embedding_dim)
 
-        if not save_pre_suff_embedding:
-            if os.path.exists('embeddings_prefix.npy'):
-                self.pre_embedding.weight.data.copy_(torch.from_numpy(np.load('embeddings_prefix.npy')))
-            if os.path.exists('embeddings_suffix.npy'):
-                self.suf_embedding.weight.data.copy_(torch.from_numpy(np.load('embeddings_suffix.npy')))
+        # if not save_pre_suff_embedding:
+        #     if os.path.exists('embeddings_prefix.npy'):
+        #         self.pre_embedding.weight.data.copy_(torch.from_numpy(np.load('embeddings_prefix.npy')))
+        #     if os.path.exists('embeddings_suffix.npy'):
+        #         self.suf_embedding.weight.data.copy_(torch.from_numpy(np.load('embeddings_suffix.npy')))
 
         # Fully connected
         self.fc1 = nn.Linear(embedding_dim * window_size, hidden_dim)
@@ -53,9 +54,9 @@ class Tagger3(nn.Module):
 
     def forward(self, x):
         if self.aggregation == 'sum':
-            x = (self.embedding(x[:, 0]) * self.use_word
-                 + self.pre_embedding(x[:, 1]) * self.use_prefix
-                 + self.suf_embedding(x[:, 2]) * self.use_suffix)
+            x = (self.embedding(x[:, 0,:]) * self.use_word
+                 + self.pre_embedding(x[:, 1, :]) * self.use_prefix
+                 + self.suf_embedding(x[:, 2, :]) * self.use_suffix)
         else:
             x = torch.cat([self.embedding(x[:, 0]) * self.use_word
                  , self.pre_embedding(x[:, 1]) * self.use_prefix
@@ -64,11 +65,14 @@ class Tagger3(nn.Module):
         # Flatten the tensor to 1D
         x = x.view(x.size(0), -1)
         x = F.tanh(self.fc1(x))
+        x = F.dropout(x,p=0.5)
         x = self.fc2(x)
         return F.log_softmax(x, dim=1)
 
+
     def train(self, optimizer, train_data, dev_data, idx2tag, device='cpu', epochs=10, is_ner=False):
         dev_loss_list, dev_accuracy_list = [], []
+        best_dev_accuracy = 0.0  # Variable to keep track of the best dev accuracy
         # Move the model to the device
         self.to(device)
 
@@ -89,6 +93,7 @@ class Tagger3(nn.Module):
                 loss.backward()
                 # Update the weights
                 optimizer.step()
+
             # Calculate average loss for the epoch
             avg_loss = total_loss / len(train_data)
             # Evaluate the model on the training data
@@ -99,11 +104,17 @@ class Tagger3(nn.Module):
             dev_loss_list.append(dev_loss)
             dev_accuracy_list.append(dev_accuracy)
 
+            # Check if the current dev accuracy is the best we've seen so far
+            if dev_accuracy > best_dev_accuracy:
+                best_dev_accuracy = dev_accuracy
+                # Save the model
+                torch.save(self.state_dict(), save_name)
+                print(f'Saved model with dev accuracy: {dev_accuracy:.4f}')
+
             print(
                 f'Epoch {epoch + 1}/{epochs} - Avg. Loss: {avg_loss:.4f} - Train Accuracy: {train_accuracy:.4f} - Dev Accuracy: {dev_accuracy:.4f} - Dev Loss: {dev_loss:.4f}')
 
         if self.save_pre_suff_embedding:
-
             if self.save_pre_suff_embedding == 'prefix':
                 emb = self.pre_embedding.weight.detach().numpy()
                 np.save(f'embeddings_prefix.npy', emb)
@@ -137,20 +148,26 @@ class Tagger3(nn.Module):
                     total += len(tags)
         return correct / total, total_loss / len(data.dataset)
 
-    def predict(self, data, original_data, idx2tag, save_file, device='cpu'):
-
+    def predict(self, data, original_data, idx2tag, save_file, idx2word, device='cpu'):
+        predictions = []
+        original_data_flat = []
+        for sentence in original_data:
+            original_data_flat.extend(sentence)
         # if file already exists, delete it
         if os.path.exists(save_file):
             os.remove(save_file)
         f = open(save_file, 'w')
         with torch.no_grad():
-            for (window_idx, _), original_sentence in zip(data, original_data):
+            for window_idx, _ in data:
                 window_idx = torch.tensor(window_idx).to(device)
                 output = self(window_idx)
                 _, predicted = torch.max(output.data, 1)
-                for w, p in zip(original_sentence, predicted):
-                    f.write(f'{w} {idx2tag[p.item()]}\n')
-                f.write('\n')
+                predictions.append(predicted)
+
+
+                #for w, p in zip(original_sentence, predicted):
+        for w, p in zip(original_data_flat, predictions):
+            f.write(f'{w}\t{idx2tag[p.item()]}\n')
         f.close()
 
 
@@ -161,7 +178,7 @@ if __name__ == '__main__':
     parser.add_argument('--train', type=int, default=1)
     parser.add_argument('--hidden', type=int, default=128)
     parser.add_argument('--n_epochs', type=int, default=10)
-    parser.add_argument('--batch_size', type=int, default=64)
+    parser.add_argument('--batch_size', type=int, default=128)
     parser.add_argument('--mode', type=str, default='normal')
     parser.add_argument('--aggregation', type=str, default='sum')
 
@@ -211,7 +228,7 @@ if __name__ == '__main__':
             os.makedirs('Output')
 
         # Convert the words to windows
-        windows, window_tags = convert_words_to_window(train_words, train_tags, window_size=1)
+        windows, window_tags = convert_words_to_window(train_words, train_tags, window_size=5)
         # Convert the windows to indices
         windows_idx, window_tags_idx = convert_window_to_window_idx_presuf(windows, window_tags, word2idx, pre_suf2idx,
                                                                            tag2idx)
@@ -226,7 +243,7 @@ if __name__ == '__main__':
 
         dev_words, dev_prefixes, dev_suffixes, dev_tags = read_data_pre_suf(f'Data/{TASK}/dev')
 
-        dev_windows, dev_window_tags = convert_words_to_window(dev_words, dev_tags, window_size=1)
+        dev_windows, dev_window_tags = convert_words_to_window(dev_words, dev_tags, window_size=5)
         # Convert the windows to indices
         dev_windows_idx, dev_window_tags_idx = convert_window_to_window_idx_presuf(dev_windows, dev_window_tags, word2idx,
                                                                                    pre_suf2idx,
@@ -243,17 +260,17 @@ if __name__ == '__main__':
 
 
 
-        torch.save(model.state_dict(), save_name)
+        #torch.save(model.state_dict(), save_name)
 
     tag2idx['<TEST>'] = len(tag2idx)
 
     test_words,test_prefixes, test_suffixes, test_tags = read_test_data_pre_suf(f'Data/{TASK}/test')
-    test_windows, test_window_tags = convert_words_to_window(test_words, test_tags, window_size=1)
+    test_windows, test_window_tags = convert_words_to_window(test_words, test_tags, window_size=5)
     test_windows_idx, test_window_tags_idx = convert_window_to_window_idx_presuf(test_windows, test_window_tags, word2idx,
                                                                           pre_suf2idx, tag2idx)
     test_data = TensorDataset(torch.tensor(test_windows_idx), torch.tensor(test_window_tags_idx))
-    test_dataloader = DataLoader(test_data, batch_size=128)
+    test_dataloader = DataLoader(test_data, batch_size=1)
 
     model = Tagger3(vocab_size, pre_suf_size, hidden_dim, output_dim)
     model.load_state_dict(torch.load(save_name))
-    model.predict(test_dataloader, test_words, idx2tag, f'Output/part4.{TASK}')
+    model.predict(test_dataloader, test_words, idx2tag, f'Output/part4.{TASK}', idx2word)
