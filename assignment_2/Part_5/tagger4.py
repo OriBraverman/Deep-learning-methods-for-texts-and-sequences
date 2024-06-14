@@ -16,6 +16,7 @@ TRAIN = True
 TRAIN_BATCH_SIZE = 16 if TASK == 'pos' else 32
 DEV_BATCH_SIZE = 16 if TASK == 'pos' else 32
 
+WINDOW_SIZE = 5
 
 class CharCNN(nn.Module):
     def __init__(self, char_embedding, num_filters, window_size, max_word_length):
@@ -26,12 +27,15 @@ class CharCNN(nn.Module):
         self.max_word_length = max_word_length
 
         input_dim = self.char_embedding_dim
-        self.conv1 = nn.Conv2d(in_channels=input_dim, out_channels=num_filters, kernel_size=window_size, stride=self.max_word_length)
+        self.conv1 = nn.Conv2d(1, num_filters, kernel_size=(window_size, input_dim))
         self.activation = nn.ReLU()
 
     def forward(self, x):
         x = self.char_embedding(x)
-        x = x.view(-1, self.char_embedding_dim, self.max_word_length, x.size(1))
+        batch_size, max_word_length, embedding_dim = x.size()
+
+        # Reshape for convolutional layer: [batch_size, 1, max_word_length, embedding_dim]
+        x = x.view(batch_size, 1, max_word_length, embedding_dim)
         x = self.conv1(x)
         x = self.activation(x)
         x = F.max_pool2d(x, kernel_size=(x.size(2), 1))
@@ -39,10 +43,10 @@ class CharCNN(nn.Module):
         return x
 
 class Tagger4(nn.Module):
-    def __init__(self, vocab_size, embedding, char_embedding, hidden_dim, output_dim, embedding_dim=50, window_size=5):
+    def __init__(self, vocab_size, embedding, char_embedding, hidden_dim, output_dim, max_word_len, embedding_dim=50, window_size=5):
         super(Tagger4, self).__init__()
-
-        input_dim = char_embedding.embedding_dim + embedding_dim * window_size
+        num_filters = 50
+        input_dim = num_filters + embedding_dim * window_size
 
         # Embedding layer - 50 dimensions
         self.embedding = nn.Embedding(vocab_size, embedding_dim)
@@ -54,11 +58,15 @@ class Tagger4(nn.Module):
         self.loss_function = nn.CrossEntropyLoss()
 
         self.char_embedding = char_embedding
-        self.char_cnn = CharCNN(char_embedding, num_filters=50, window_size=5, max_word_length=30)
 
-    def forward(self, x):
+        self.char_cnn = CharCNN(char_embedding, num_filters=num_filters, window_size=5, max_word_length=max_word_len)
+
+    def forward(self, words, chars):
+        x = self.embedding(words)
+        char_features = self.char_cnn(chars)
         # Flatten the tensor to 1D
         x = x.view(x.size(0), -1)
+        x = torch.cat((x, char_features), dim=1)
         x = F.tanh(self.fc1(x))
         x = F.dropout(x, p=0.5)
         x = self.fc2(x)
@@ -71,17 +79,13 @@ class Tagger4(nn.Module):
 
         for epoch in range(epochs):
             total_loss = 0
-            for words, tags in tqdm(train_data, desc=f'Epoch {epoch + 1}/{epochs}'):
+            for words, tags, chars in tqdm(train_data, desc=f'Epoch {epoch + 1}/{epochs}'):
                 # Zero the gradients before the backward pass
                 optimizer.zero_grad()
                 # Move the data to the device
-                words, tags = torch.tensor(words).to(device), torch.tensor(tags).to(device)
+                words, tags, chars = torch.tensor(words).to(device), torch.tensor(tags).to(device), torch.tensor(chars).to(device)
                 # Forward pass
-                # first use the char_cnn to get the char embeddings
-                char_embeddings = self.char_cnn(words)
-                # then concatenate the char embeddings with the word embeddings
-                words = torch.cat([words, char_embeddings], dim=1)
-                output = self(words)
+                output = self(words, chars)
                 # Compute the loss
                 loss = self.loss_function(output, tags)
                 total_loss += loss.item()
@@ -108,9 +112,9 @@ class Tagger4(nn.Module):
         correct, total = 0, 0
         total_loss = 0
         with torch.no_grad():
-            for words, tags in data:
-                words, tags = torch.tensor(words).to(device), torch.tensor(tags).to(device)
-                output = self(words)
+            for words, tags, chars in data:
+                words, tags, chars = torch.tensor(words).to(device), torch.tensor(tags).to(device), torch.tensor(chars).to(device)
+                output = self(words, chars)
                 loss = self.loss_function(output, tags)
                 total_loss += loss.item()
                 _, predicted = torch.max(output.data, 1)
@@ -130,23 +134,27 @@ class Tagger4(nn.Module):
             return list(self.fc1.parameters()) + list(self.fc2.parameters()) + list(self.embedding.parameters())
         return list(self.fc1.parameters()) + list(self.fc2.parameters())
 
-    def predict(self, data, idx2tag, save_file, device='cpu'):
-        predictions = []
-        for words, _ in tqdm(data):
-            # Move the data to the device
-            words = torch.tensor(words).to(device)
-            # Forward pass
-            output = self(words)
+    def predict(self, windows_idx, original_data, test_chars, idx2tag, save_file, device='cpu'):
 
-            pred = output.argmax(dim=1)
-
-            pred_tag = [idx2tag[p] for p in pred.tolist()]
-            predictions.extend(pred_tag)
-
-
-        with open(save_file, 'w') as f:
-            for pred in predictions:
-                f.write(str(pred) + '\n')
+        # if file already exists, delete it
+        if os.path.exists(save_file):
+            os.remove(save_file)
+        f = open(save_file, 'w')
+        Predicted_tags = []
+        with torch.no_grad():
+            for words, chars in zip(windows_idx, test_chars):
+                words = torch.tensor(words).to(device).unsqueeze(0)
+                chars = torch.tensor(chars).to(device).unsqueeze(0)
+                output = self(words, chars)
+                _, predicted = torch.max(output.data, 1)
+                Predicted_tags.append(predicted.item())
+        i = 0
+        for sentence in original_data:
+            for word in sentence:
+                f.write(f'{word} {idx2tag[Predicted_tags[i]]}\n')
+                i += 1
+            f.write('\n')
+        f.close()
 
 def make_word_dict(vocab):
     word2idx = {word: i for i, word in enumerate(list(sorted(set(vocab))))}
@@ -209,6 +217,20 @@ def convert_word_to_idx(word, word2idx):
         return word2idx[unknown_vector]
 
 
+def convert_words_to_ord_char(words, max_word_len, window_size, pad_char=' '):
+    chars = []
+    # the output size is pad_size * 2 + max_word_len
+    # for example, if the max_word_len is 10 and the window_size is 5, the pad_size is 2 => 2 * 2 + 10 = 14
+    # for the word 'hello', the output will be [32, 32, 104, 101, 108, 108, 111, 32, 32, 32, 32, 32, 32, 32]
+    pad_size = window_size // 2
+    for sentence in words:
+        for word in sentence:
+            # max_word_len + 2 * pad_size - len(word) - pad_size = max_word_len - len(word) + pad_size
+            word = pad_char * pad_size + word + pad_char * (max_word_len - len(word) + pad_size)
+            chars.append([ord(char) for char in word])
+    return chars
+
+
 if __name__ == '__main__':
     vecs = np.loadtxt("Data/wordVectors.txt")
 
@@ -219,7 +241,7 @@ if __name__ == '__main__':
     word2idx, idx2word = make_word_dict(vocab)
 
     """     TRAIN    """
-    train_words, train_tags = read_data(f'Data/{TASK}/train')
+    train_words, train_tags, max_word_len = read_data(f'Data/{TASK}/train', return_max_length=True)
     # Create the vocabularies
     _, _, tag2idx, idx2tag = make_vocabs(train_words, train_tags)
 
@@ -229,7 +251,7 @@ if __name__ == '__main__':
     n_epoch = 25
 
     # Initialize the char embeddings matrix and dataset
-    char_embedding = nn.Embedding(len(vocab), 30, padding_idx=0)
+    char_embedding = nn.Embedding(256, 30, padding_idx=0)
     nn.init.uniform_(char_embedding.weight, -np.sqrt(3 / 30), np.sqrt(3 / 30))
 
     if TRAIN:
@@ -237,29 +259,32 @@ if __name__ == '__main__':
         if not os.path.exists(f'{PART}/Output'):
             os.makedirs(f'{PART}/Output')
 
+        train_chars = convert_words_to_ord_char(train_words, max_word_len, window_size=5)
         # Convert the words to windows
         windows, window_tags = convert_words_to_window(train_words, train_tags, window_size=5)
         # Convert the windows to indices
         windows_idx, window_tags_idx = convert_window_to_window_idx(windows, window_tags, word2idx, tag2idx)
 
         # Cut the data to 1000 samples in order to debug faster
-        windows_idx = windows_idx[:1000]
-        window_tags_idx = window_tags_idx[:1000]
+        #windows_idx = windows_idx[:1000]
+        #window_tags_idx = window_tags_idx[:1000]
+        #train_chars = train_chars[:1000]
 
-        model = Tagger4(vocab_size, vecs, char_embedding, hidden_dim, output_dim)
+        model = Tagger4(vocab_size, vecs, char_embedding, hidden_dim, output_dim, max_word_len + 2*WINDOW_SIZE)
         optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-        train_data = TensorDataset(torch.tensor(windows_idx), torch.tensor(window_tags_idx))
+        train_data = TensorDataset(torch.tensor(windows_idx), torch.tensor(window_tags_idx), torch.tensor(train_chars))
         train_dataloader = DataLoader(train_data, batch_size=TRAIN_BATCH_SIZE, shuffle=True)
         # save the dataset
         # torch.save(train_data, f'dataset_tagger1_{TASK}.pth')
 
         print(len(train_data))
         dev_words, dev_tags = read_data(f'Data/{TASK}/dev')
+        dev_chars = convert_words_to_ord_char(dev_words, max_word_len, window_size=5)
         dev_windows, dev_window_tags = convert_words_to_window(dev_words, dev_tags, window_size=5)
         dev_windows_idx, dev_window_tags_idx = convert_window_to_window_idx(dev_windows, dev_window_tags, word2idx,
                                                                             tag2idx)
-        dev_data = TensorDataset(torch.tensor(dev_windows_idx), torch.tensor(dev_window_tags_idx))
+        dev_data = TensorDataset(torch.tensor(dev_windows_idx), torch.tensor(dev_window_tags_idx), torch.tensor(dev_chars))
         dev_dataloader = DataLoader(dev_data, batch_size=DEV_BATCH_SIZE, shuffle=True)
 
         dev_loss_list, dev_accuracy_list = model.train(optimizer, train_dataloader, dev_dataloader, idx2tag,
@@ -276,7 +301,8 @@ if __name__ == '__main__':
     test_words = read_test_data(f'Data/{TASK}/test')
     test_windows = convert_words_to_window(test_words, window_size=5)
     test_windows_idx = convert_window_to_window_idx(test_windows, None, word2idx, tag2idx)
+    test_chars = convert_words_to_ord_char(test_words, max_word_len, window_size=5)
 
-    model = Tagger4(vocab_size, vecs, char_embedding, hidden_dim, output_dim)
+    model = Tagger4(vocab_size, vecs, char_embedding, hidden_dim, output_dim, max_word_len + 2*WINDOW_SIZE)
     model.load_state_dict(torch.load(f'model_{PART}_{TASK}.pth'))
-    model.predict(test_windows_idx, test_words, idx2tag, f'{PART}/Output/test5.{TASK}')
+    model.predict(test_windows_idx, test_words, test_chars, idx2tag, f'{PART}/Output/test5.{TASK}')

@@ -47,9 +47,9 @@ def most_similar(word, k, word2vec):
 
 
 # Read the data from the file and return the list of the sequences of words and tags
-def read_data(filename, window_size=5):
+def read_data(filename, window_size=5, return_max_length=False):
     sentences, tags = [], []
-
+    max_length = 0
     with open(filename, 'r', encoding='utf-8') as f:
         lines = f.readlines()
         sentence, sentence_tags = [], []
@@ -60,9 +60,13 @@ def read_data(filename, window_size=5):
                 sentence, sentence_tags = [], []
             else:
                 word, tag = line.replace('\n', '').split()
+                max_length = max(max_length, len(word))
                 sentence.append(word)
                 sentence_tags.append(tag)
+    if return_max_length:
+        return sentences, tags, max_length
     return sentences, tags
+
 
 
 def read_data_pre_suf(filename, window_size=5):
