@@ -1,3 +1,6 @@
+import sys
+from datetime import datetime
+
 import torch
 import numpy as np
 import torch.nn as nn
@@ -43,9 +46,8 @@ class CharCNN(nn.Module):
         return x
 
 class Tagger4(nn.Module):
-    def __init__(self, vocab_size, embedding, char_embedding, hidden_dim, output_dim, max_word_len, embedding_dim=50, window_size=5):
+    def __init__(self, vocab_size, embedding, char_embedding, hidden_dim, output_dim, max_word_len, num_filters, embedding_dim=50, window_size=5):
         super(Tagger4, self).__init__()
-        num_filters = 50
         input_dim = num_filters + embedding_dim * window_size
 
         # Embedding layer - 50 dimensions
@@ -231,7 +233,24 @@ def convert_words_to_ord_char(words, max_word_len, window_size, pad_char=' '):
     return chars
 
 
+
 if __name__ == '__main__':
+    # Save the output of the screen to a file
+    time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    sys.stdout = open(f'{PART}/Output/output_{TASK}_{time}.txt', 'w')
+    # Define hyperparameters for experiments
+    hyperparams = [
+        {'num_filters': 30, 'window_size': 3, 'train': True},  # Baseline as described in the paper: Ma and Hovy 2016
+        {'num_filters': 10, 'window_size': 3, 'train': True},
+        {'num_filters': 20, 'window_size': 3, 'train': True},
+        {'num_filters': 50, 'window_size': 3, 'train': True},
+        {'num_filters': 100, 'window_size': 3, 'train': True},
+        {'num_filters': 30, 'window_size': 2, 'train': True},
+        {'num_filters': 30, 'window_size': 4, 'train': True},
+        {'num_filters': 30, 'window_size': 5, 'train': True},
+    ]
+
+
     vecs = np.loadtxt("Data/wordVectors.txt")
 
     with open("Data/vocab.txt", "r", encoding="utf-8") as file:
@@ -248,7 +267,7 @@ if __name__ == '__main__':
     vocab_size = len(word2idx)
     output_dim = len(tag2idx)
     hidden_dim = 128
-    n_epoch = 25
+    n_epoch = 5
 
     # Initialize the char embeddings matrix and dataset
     char_embedding = nn.Embedding(256, 30, padding_idx=0)
@@ -258,51 +277,61 @@ if __name__ == '__main__':
         # Create an output directory in which to save the generated files
         if not os.path.exists(f'{PART}/Output'):
             os.makedirs(f'{PART}/Output')
+        for hyperparam in hyperparams:
 
-        train_chars = convert_words_to_ord_char(train_words, max_word_len, window_size=5)
-        # Convert the words to windows
-        windows, window_tags = convert_words_to_window(train_words, train_tags, window_size=5)
-        # Convert the windows to indices
-        windows_idx, window_tags_idx = convert_window_to_window_idx(windows, window_tags, word2idx, tag2idx)
+            if not hyperparam['train']:
+                continue
+            print(f'Training with hyperparameters: {hyperparam}')
+            train_chars = convert_words_to_ord_char(train_words, max_word_len, window_size=hyperparam['window_size'])
+            # Convert the words to windows
+            windows, window_tags = convert_words_to_window(train_words, train_tags, window_size=5)
+            # Convert the windows to indices
+            windows_idx, window_tags_idx = convert_window_to_window_idx(windows, window_tags, word2idx, tag2idx)
 
-        # Cut the data to 1000 samples in order to debug faster
-        #windows_idx = windows_idx[:1000]
-        #window_tags_idx = window_tags_idx[:1000]
-        #train_chars = train_chars[:1000]
+            # Cut the data to 1000 samples in order to debug faster
+            #windows_idx = windows_idx[:1000]
+            #window_tags_idx = window_tags_idx[:1000]
+            #train_chars = train_chars[:1000]
 
-        model = Tagger4(vocab_size, vecs, char_embedding, hidden_dim, output_dim, max_word_len + 2*WINDOW_SIZE)
-        optimizer = optim.Adam(model.parameters(), lr=0.001)
+            model = Tagger4(vocab_size, vecs, char_embedding, hidden_dim, output_dim, max_word_len + 2*hyperparam['window_size'], num_filters=hyperparam['num_filters'])
+            optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-        train_data = TensorDataset(torch.tensor(windows_idx), torch.tensor(window_tags_idx), torch.tensor(train_chars))
-        train_dataloader = DataLoader(train_data, batch_size=TRAIN_BATCH_SIZE, shuffle=True)
-        # save the dataset
-        # torch.save(train_data, f'dataset_tagger1_{TASK}.pth')
+            train_data = TensorDataset(torch.tensor(windows_idx), torch.tensor(window_tags_idx), torch.tensor(train_chars))
+            train_dataloader = DataLoader(train_data, batch_size=TRAIN_BATCH_SIZE, shuffle=True)
+            # save the dataset
+            # torch.save(train_data, f'dataset_tagger1_{TASK}.pth')
 
-        print(len(train_data))
-        dev_words, dev_tags = read_data(f'Data/{TASK}/dev')
-        dev_chars = convert_words_to_ord_char(dev_words, max_word_len, window_size=5)
-        dev_windows, dev_window_tags = convert_words_to_window(dev_words, dev_tags, window_size=5)
-        dev_windows_idx, dev_window_tags_idx = convert_window_to_window_idx(dev_windows, dev_window_tags, word2idx,
-                                                                            tag2idx)
-        dev_data = TensorDataset(torch.tensor(dev_windows_idx), torch.tensor(dev_window_tags_idx), torch.tensor(dev_chars))
-        dev_dataloader = DataLoader(dev_data, batch_size=DEV_BATCH_SIZE, shuffle=True)
+            print(len(train_data))
+            dev_words, dev_tags = read_data(f'Data/{TASK}/dev')
+            dev_chars = convert_words_to_ord_char(dev_words, max_word_len, window_size=hyperparam['window_size'])
+            dev_windows, dev_window_tags = convert_words_to_window(dev_words, dev_tags, window_size=5)
+            dev_windows_idx, dev_window_tags_idx = convert_window_to_window_idx(dev_windows, dev_window_tags, word2idx,
+                                                                                tag2idx)
+            dev_data = TensorDataset(torch.tensor(dev_windows_idx), torch.tensor(dev_window_tags_idx), torch.tensor(dev_chars))
+            dev_dataloader = DataLoader(dev_data, batch_size=DEV_BATCH_SIZE, shuffle=True)
 
-        dev_loss_list, dev_accuracy_list = model.train(optimizer, train_dataloader, dev_dataloader, idx2tag,
-                                                       epochs=n_epoch,
-                                                       is_ner=TASK == 'ner')
+            dev_loss_list, dev_accuracy_list = model.train(optimizer, train_dataloader, dev_dataloader, idx2tag,
+                                                           epochs=n_epoch,
+                                                           is_ner=TASK == 'ner')
 
-        make_graph(dev_loss_list, 'Loss over epochs', 'Loss', f'{PART}/Output/loss_{TASK}.png')
-        make_graph(dev_accuracy_list, 'Accuracy over epochs', 'Accuracy', f'{PART}/Output/accuracy_{TASK}.png')
+            make_graph(dev_loss_list, 'Loss over epochs', 'Loss', f'{PART}/Output/loss_{TASK}_{hyperparam["num_filters"]}_{hyperparam["window_size"]}.png')
+            make_graph(dev_accuracy_list, 'Accuracy over epochs', 'Accuracy', f'{PART}/Output/accuracy_{TASK}_{hyperparam["num_filters"]}_{hyperparam["window_size"]}.png')
 
-        torch.save(model.state_dict(), f'model_{PART}_{TASK}.pth')
+            torch.save(model.state_dict(), f'model_{PART}_{TASK}_{hyperparam["num_filters"]}_{hyperparam["window_size"]}.pth')
 
     tag2idx['<TEST>'] = len(tag2idx)
 
-    test_words = read_test_data(f'Data/{TASK}/test')
-    test_windows = convert_words_to_window(test_words, window_size=5)
-    test_windows_idx = convert_window_to_window_idx(test_windows, None, word2idx, tag2idx)
-    test_chars = convert_words_to_ord_char(test_words, max_word_len, window_size=5)
+    for hyperparam in hyperparams:
+        if not os.path.exists(f'model_{PART}_{TASK}_{hyperparam["num_filters"]}_{hyperparam["window_size"]}.pth'):
+            continue
+        model = Tagger4(vocab_size, vecs, char_embedding, hidden_dim, output_dim, max_word_len + 2*hyperparam['window_size'], num_filters=hyperparam['num_filters'])
+        model.load_state_dict(torch.load(f'model_{PART}_{TASK}_{hyperparam["num_filters"]}_{hyperparam["window_size"]}.pth'))
 
-    model = Tagger4(vocab_size, vecs, char_embedding, hidden_dim, output_dim, max_word_len + 2*WINDOW_SIZE)
-    model.load_state_dict(torch.load(f'model_{PART}_{TASK}.pth'))
-    model.predict(test_windows_idx, test_words, test_chars, idx2tag, f'{PART}/Output/test5.{TASK}')
+        test_words = read_test_data(f'Data/{TASK}/test')
+        test_windows = convert_words_to_window(test_words, window_size=5)
+        test_windows_idx = convert_window_to_window_idx(test_windows, None, word2idx, tag2idx)
+        test_chars = convert_words_to_ord_char(test_words, max_word_len, window_size=hyperparam['window_size'])
+
+        model.predict(test_windows_idx, test_words, test_chars, idx2tag, f'{PART}/Output/test5_{hyperparam["num_filters"]}_{hyperparam["window_size"]}.{TASK}')
+
+    sys.stdout.close()
