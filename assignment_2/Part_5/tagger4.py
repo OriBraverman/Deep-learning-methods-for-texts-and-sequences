@@ -46,7 +46,7 @@ class CharCNN(nn.Module):
         return x
 
 class Tagger4(nn.Module):
-    def __init__(self, vocab_size, embedding, char_embedding, hidden_dim, output_dim, max_word_len, num_filters, embedding_dim=50, window_size=5):
+    def __init__(self, vocab_size, embedding, char_embedding, hidden_dim, output_dim, max_word_len, num_filters, embedding_dim=50, window_size=5, char_window=5):
         super(Tagger4, self).__init__()
         input_dim = num_filters + embedding_dim * window_size
 
@@ -61,7 +61,7 @@ class Tagger4(nn.Module):
 
         self.char_embedding = char_embedding
 
-        self.char_cnn = CharCNN(char_embedding, num_filters=num_filters, window_size=5, max_word_length=max_word_len)
+        self.char_cnn = CharCNN(char_embedding, num_filters=num_filters, window_size=char_window, max_word_length=max_word_len)
 
     def forward(self, words, chars):
         x = self.embedding(words)
@@ -266,8 +266,8 @@ if __name__ == '__main__':
 
     vocab_size = len(word2idx)
     output_dim = len(tag2idx)
-    hidden_dim = 128
-    n_epoch = 5
+    hidden_dim = 32
+    n_epoch = 25
 
     # Initialize the char embeddings matrix and dataset
     char_embedding = nn.Embedding(256, 30, padding_idx=0)
@@ -293,7 +293,7 @@ if __name__ == '__main__':
             #window_tags_idx = window_tags_idx[:1000]
             #train_chars = train_chars[:1000]
 
-            model = Tagger4(vocab_size, vecs, char_embedding, hidden_dim, output_dim, max_word_len + 2*hyperparam['window_size'], num_filters=hyperparam['num_filters'])
+            model = Tagger4(vocab_size, vecs, char_embedding, hidden_dim, output_dim, max_word_len + 2*hyperparam['window_size'], num_filters=hyperparam['num_filters'], char_window=hyperparam['window_size'])
             optimizer = optim.Adam(model.parameters(), lr=0.001)
 
             train_data = TensorDataset(torch.tensor(windows_idx), torch.tensor(window_tags_idx), torch.tensor(train_chars))
@@ -324,7 +324,7 @@ if __name__ == '__main__':
     for hyperparam in hyperparams:
         if not os.path.exists(f'model_{PART}_{TASK}_{hyperparam["num_filters"]}_{hyperparam["window_size"]}.pth'):
             continue
-        model = Tagger4(vocab_size, vecs, char_embedding, hidden_dim, output_dim, max_word_len + 2*hyperparam['window_size'], num_filters=hyperparam['num_filters'])
+        model = Tagger4(vocab_size, vecs, char_embedding, hidden_dim, output_dim, max_word_len + 2*hyperparam['window_size'], num_filters=hyperparam['num_filters'], char_window=hyperparam['window_size'])
         model.load_state_dict(torch.load(f'model_{PART}_{TASK}_{hyperparam["num_filters"]}_{hyperparam["window_size"]}.pth'))
 
         test_words = read_test_data(f'Data/{TASK}/test')

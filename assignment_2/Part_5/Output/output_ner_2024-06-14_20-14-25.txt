@@ -1,0 +1,2 @@
+Training with hyperparameters: {'num_filters': 30, 'window_size': 3, 'train': True}
+204567

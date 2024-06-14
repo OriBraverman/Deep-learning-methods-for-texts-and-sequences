@@ -1,0 +1,3 @@
+Training with hyperparameters: {'num_filters': 30, 'window_size': 3, 'train': True}
+204567
+Epoch 1/25 - Avg. Loss: 0.2557 - Train Accuracy: 0.8206 - Dev Accuracy: 0.7105 - Dev Loss: 0.0055
