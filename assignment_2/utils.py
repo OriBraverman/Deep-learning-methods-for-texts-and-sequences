@@ -18,7 +18,6 @@ def read_vocab(vocab_path=VOCAB_PATH):
     return lines
 
 
-
 # Load the pre-trained word2vec
 def load_word2vec(vocab_path=VOCAB_PATH, word_vectors_path=WORD_VECTORS_PATH):
     vecs = np.loadtxt(word_vectors_path)
@@ -110,6 +109,8 @@ def read_test_data_pre_suf(filename, window_size=5):
                 suffixe.append(word[len(word) - l:])
 
     return sentences, prefixes, suffixes, tags
+
+
 def get_pre_suf_list(prefixes, suffixes):
     words = []
     [words.extend(s) for s in prefixes]
@@ -178,8 +179,6 @@ def make_vocabs(words, tags):
 
 
 def make_vocabs_part4(words, tags):
-
-
     words.append('<UNK>')
     words.append('<PAD_START>')
     words.append('<PAD_END>')
@@ -262,16 +261,19 @@ def convert_window_to_window_idx_presuf(window, tag, word2idx, pre_suf2idx, tag2
     vector_out = []
     tag_out = []
     for w, t in zip(window, tag):
-        w = w[0]
-        l = min(len(w), 3)
-        vec_word_pre_suf = [word2idx[w] if w in word2idx else word2idx['<UNK>'],
-             pre_suf2idx[w[:l]] if w in pre_suf2idx else pre_suf2idx['<UNK>'],
-             pre_suf2idx[w[len(w) - l:]] if w in pre_suf2idx else pre_suf2idx['<UNK>']]
+        vec_word_pre_suf = [[], [], []]
+        for word in w:
 
-        vector_out.append(vec_word_pre_suf)
-        tag_out.append(tag2idx[t])
+            l = min(len(word), 3)
+            vec_word_pre_suf[0].append(word2idx[word] if word in word2idx else word2idx['<UNK>']),
+            vec_word_pre_suf[1].append(pre_suf2idx[word[:l]] if word in pre_suf2idx else pre_suf2idx['<UNK>'])
+            vec_word_pre_suf[2].append(pre_suf2idx[word[len(word) - l:]] if word in pre_suf2idx else pre_suf2idx['<UNK>'])
+
+            vector_out.append(vec_word_pre_suf)
+            tag_out.append(tag2idx[t])
 
     return vector_out, tag_out
+
 
 def change_tag_of_rare_words(words, threshold=1, tag='<UNK>'):
     """
