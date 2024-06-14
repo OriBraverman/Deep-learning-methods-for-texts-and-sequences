@@ -107,6 +107,11 @@ class Tagger4(nn.Module):
             print(
                 f'Epoch {epoch + 1}/{epochs} - Avg. Loss: {avg_loss:.4f} - Train Accuracy: {train_accuracy:.4f} - Dev Accuracy: {dev_accuracy:.4f} - Dev Loss: {dev_loss:.4f}')
 
+            # Early stopping
+            if epoch > 0 and dev_loss_list[-1] > dev_loss_list[-2]:
+                print('Early stopping')
+                break
+
         return dev_loss_list, dev_accuracy_list
 
     def evaluate(self, data, idx2tag, device='cpu', is_ner=False):
