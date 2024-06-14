@@ -19,7 +19,6 @@ TRAIN = True
 TRAIN_BATCH_SIZE = 16 if TASK == 'pos' else 32
 DEV_BATCH_SIZE = 16 if TASK == 'pos' else 32
 
-WINDOW_SIZE = 5
 
 class CharCNN(nn.Module):
     def __init__(self, char_embedding, num_filters, window_size, max_word_length):
@@ -267,7 +266,7 @@ if __name__ == '__main__':
     vocab_size = len(word2idx)
     output_dim = len(tag2idx)
     hidden_dim = 128
-    n_epoch = 5
+    n_epoch = 25
 
     # Initialize the char embeddings matrix and dataset
     char_embedding = nn.Embedding(256, 30, padding_idx=0)
