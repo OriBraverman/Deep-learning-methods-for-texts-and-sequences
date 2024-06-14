@@ -265,7 +265,7 @@ if __name__ == '__main__':
 
     vocab_size = len(word2idx)
     output_dim = len(tag2idx)
-    hidden_dim = 128
+    hidden_dim = 32
     n_epoch = 25
 
     # Initialize the char embeddings matrix and dataset
