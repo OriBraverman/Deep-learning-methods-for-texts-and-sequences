@@ -17,32 +17,58 @@ TRAIN_BATCH_SIZE = 16 if TASK == 'pos' else 32
 DEV_BATCH_SIZE = 16 if TASK == 'pos' else 32
 
 
-class CharCNN(nn.Module):
-    def __init__(self, char_embedding, num_filters, window_size, max_word_length):
-        super(CharCNN, self).__init__()
+# Constants
+PART = 'Part_5'
+TASK = 'ner'  # Change to 'pos' for Part 4 behavior
+TRAIN_BATCH_SIZE = 16 if TASK == 'pos' else 32
+DEV_BATCH_SIZE = 16 if TASK == 'pos' else 32
+EMBEDDING_DIM = 50
+CHAR_EMBEDDING_DIM = 30
+MAX_WORD_LENGTH = 30
+HIDDEN_DIM = 128
+N_FILTERS = 30
+WINDOW_SIZES = (2, 3, 4, 5)
+LEARNING_RATE = 0.001
+N_EPOCHS = 25
 
-        self.char_embedding = char_embedding
-        self.char_embedding_dim = char_embedding.embedding_dim
+
+class CharCNN(nn.Module):
+    def __init__(self, char_embedding_dim, num_filters=30, window_sizes=(2, 3, 4, 5), max_word_length=30):
+        super(CharCNN, self).__init__()
+        self.char_embedding_dim = char_embedding_dim
+        self.num_filters = num_filters
+        self.window_sizes = window_sizes
         self.max_word_length = max_word_length
 
-        input_dim = self.char_embedding_dim
-        self.conv1 = nn.Conv2d(in_channels=input_dim, out_channels=num_filters, kernel_size=window_size, stride=self.max_word_length)
-        self.activation = nn.ReLU()
+        # Convolutional layers with ReLU activation
+        self.conv_layers = nn.ModuleList([
+            nn.Conv1d(self.char_embedding_dim, self.num_filters, kernel_size=window_size)
+            for window_size in self.window_sizes
+        ])
 
     def forward(self, x):
-        x = self.char_embedding(x)
-        x = x.view(-1, self.char_embedding_dim, self.max_word_length, x.size(1))
-        x = self.conv1(x)
-        x = self.activation(x)
-        x = F.max_pool2d(x, kernel_size=(x.size(2), 1))
-        x = x.view(x.size(0), -1)
-        return x
+        # x: (batch_size, max_word_length, char_embedding_dim)
+
+        # Permute to (batch_size, char_embedding_dim, max_word_length)
+        x = x.permute(0, 2, 1)
+
+        # Apply convolutional layers and max-pooling
+        conv_outputs = []
+        for conv in self.conv_layers:
+            conv_out = F.relu(conv(x))
+            pooled_out, _ = torch.max(conv_out, dim=2)
+            conv_outputs.append(pooled_out)
+
+        # Concatenate pooled outputs from different filters
+        cnn_output = torch.cat(conv_outputs, dim=1)
+
+        return cnn_output
+
+
 
 class Tagger4(nn.Module):
     def __init__(self, vocab_size, embedding, char_embedding, hidden_dim, output_dim, embedding_dim=50, window_size=5):
         super(Tagger4, self).__init__()
-
-        input_dim = char_embedding.embedding_dim + embedding_dim * window_size
 
         # Embedding layer - 50 dimensions
         self.embedding = nn.Embedding(vocab_size, embedding_dim)

@@ -79,6 +79,123 @@
 
 \begin_layout Standard
 
+\bar under
+שאלה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+5
+\end_layout
+
+\begin_layout Standard
+נסתכל על הרשת החדשה,
+\end_layout
+
+\begin_layout Standard
+נסמן ב-
+\begin_inset Formula $e\left(w\right)$
+\end_inset
+
+ את ה-
+\begin_inset Formula $embedding-vectoor$
+\end_inset
+
+ של המילה ה-
+\begin_inset Formula $w$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+נסמן ב-
+\begin_inset Formula $cnn\left(w\right)$
+\end_inset
+
+ את הווקטור של 
+\begin_inset Formula $w$
+\end_inset
+
+ שיוצא מה-
+\begin_inset Formula $Character-level-CNN$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+
+\bar under
+המטרה של ה-
+\begin_inset Formula $CNN$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+לחלץ פיצרים מכל אות במילה בעזרת רשת קונבולוציה.
+\end_layout
+
+\begin_layout Standard
+כל מילה 
+\begin_inset Formula $w$
+\end_inset
+
+ מיוצגת כווקטור 
+\begin_inset Formula $max-pooled$
+\end_inset
+
+ על התוצאות של הקונבולוציה.
+\end_layout
+
+\begin_layout Standard
+לאחר מכן:
+\begin_inset Formula 
+\[
+x=\left[e\left(w\right);cnn\left(w\right)\right]
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+h_{t}=ReLU\left(W_{1}x+b_{1}\right)
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\widehat{y}_{t}=\text{softmax}\left(W_{2}h_{t}+b_{2}\right)
+\]
+
+\end_inset
+
+
 \end_layout
 
 \end_body
