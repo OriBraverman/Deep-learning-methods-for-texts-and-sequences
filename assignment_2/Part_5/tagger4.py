@@ -19,7 +19,6 @@ TRAIN = True
 TRAIN_BATCH_SIZE = 16 if TASK == 'pos' else 32
 DEV_BATCH_SIZE = 16 if TASK == 'pos' else 32
 
-WINDOW_SIZE = 5
 
 class CharCNN(nn.Module):
     def __init__(self, char_embedding, num_filters, window_size, max_word_length):
