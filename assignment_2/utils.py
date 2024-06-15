@@ -1,3 +1,4 @@
+import os
 import random
 from collections import Counter
 
@@ -5,6 +6,7 @@ import torch
 import numpy as np
 from itertools import chain
 from matplotlib import pyplot as plt
+from treelib import Node, Tree
 
 # Paths
 VOCAB_PATH = 'Data/vocab.txt'
@@ -305,8 +307,24 @@ def make_graph(y, title, ylabel, filename, xlabel='Epochs'):
     plt.show()
 
 
+def draw_project_tree_structure(path, parent=None, tree=None):
+    # Initialize tree if it's not already created
+    if tree is None:
+        tree = Tree()
+        tree.create_node(os.path.basename(path), path)  # Root node
+    else:
+        tree.create_node(os.path.basename(path), path, parent=parent)
+
+    if os.path.isdir(path):
+        for p in sorted(os.listdir(path)):
+            child_path = os.path.join(path, p)
+            draw_project_tree_structure(child_path, path, tree)
+    return tree
+
+
+
 if __name__ == '__main__':
-    train_words, train_tags = read_data('Data/pos/train')
+    '''train_words, train_tags = read_data('Data/pos/train')
     dev_words, dev_tags = read_data('Data/pos/dev')
     # test_words,_ = read_test_data('./../Data/pos/test')
 
@@ -315,8 +333,12 @@ if __name__ == '__main__':
     windows_idx, window_tags_idx = convert_window_to_window_idx(windows, window_tags, word2idx, tag2idx)
 
     for i in range(10):
-        print(windows[i], window_tags[i])
+        print(windows[i], window_tags[i])'''
 
     # later
     # word2vec = word2vec(words, vectors)
     # vectors = read_vectors('../Data/wordVectors.txt')
+    path = os.path.abspath(os.path.join(os.path.dirname(__file__), '.'))
+    tree = draw_project_tree_structure(path)
+    tree.show(line_type="ascii")
+
