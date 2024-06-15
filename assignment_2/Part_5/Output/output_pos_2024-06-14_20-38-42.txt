@@ -1,0 +1,56 @@
+Training with hyperparameters: {'num_filters': 30, 'window_size': 3, 'train': True}
+902139
+Epoch 1/5 - Avg. Loss: 0.3626 - Train Accuracy: 0.9445 - Dev Accuracy: 0.9293 - Dev Loss: 0.0157
+Epoch 2/5 - Avg. Loss: 0.2036 - Train Accuracy: 0.9529 - Dev Accuracy: 0.9345 - Dev Loss: 0.0149
+Epoch 3/5 - Avg. Loss: 0.1795 - Train Accuracy: 0.9563 - Dev Accuracy: 0.9348 - Dev Loss: 0.0149
+Epoch 4/5 - Avg. Loss: 0.1669 - Train Accuracy: 0.9599 - Dev Accuracy: 0.9379 - Dev Loss: 0.0146
+Epoch 5/5 - Avg. Loss: 0.1582 - Train Accuracy: 0.9620 - Dev Accuracy: 0.9368 - Dev Loss: 0.0147
+Training with hyperparameters: {'num_filters': 10, 'window_size': 3, 'train': True}
+902139
+Epoch 1/5 - Avg. Loss: 0.3726 - Train Accuracy: 0.9432 - Dev Accuracy: 0.9282 - Dev Loss: 0.0168
+Epoch 2/5 - Avg. Loss: 0.2095 - Train Accuracy: 0.9523 - Dev Accuracy: 0.9344 - Dev Loss: 0.0152
+Epoch 3/5 - Avg. Loss: 0.1847 - Train Accuracy: 0.9570 - Dev Accuracy: 0.9340 - Dev Loss: 0.0153
+Epoch 4/5 - Avg. Loss: 0.1714 - Train Accuracy: 0.9596 - Dev Accuracy: 0.9337 - Dev Loss: 0.0153
+Epoch 5/5 - Avg. Loss: 0.1621 - Train Accuracy: 0.9609 - Dev Accuracy: 0.9342 - Dev Loss: 0.0154
+Training with hyperparameters: {'num_filters': 20, 'window_size': 3, 'train': True}
+902139
+Epoch 1/5 - Avg. Loss: 0.3706 - Train Accuracy: 0.9438 - Dev Accuracy: 0.9281 - Dev Loss: 0.0165
+Epoch 2/5 - Avg. Loss: 0.2073 - Train Accuracy: 0.9519 - Dev Accuracy: 0.9335 - Dev Loss: 0.0155
+Epoch 3/5 - Avg. Loss: 0.1840 - Train Accuracy: 0.9556 - Dev Accuracy: 0.9337 - Dev Loss: 0.0153
+Epoch 4/5 - Avg. Loss: 0.1707 - Train Accuracy: 0.9586 - Dev Accuracy: 0.9349 - Dev Loss: 0.0153
+Epoch 5/5 - Avg. Loss: 0.1621 - Train Accuracy: 0.9611 - Dev Accuracy: 0.9362 - Dev Loss: 0.0152
+Training with hyperparameters: {'num_filters': 50, 'window_size': 3, 'train': True}
+902139
+Epoch 1/5 - Avg. Loss: 0.3549 - Train Accuracy: 0.9452 - Dev Accuracy: 0.9310 - Dev Loss: 0.0154
+Epoch 2/5 - Avg. Loss: 0.1995 - Train Accuracy: 0.9539 - Dev Accuracy: 0.9368 - Dev Loss: 0.0143
+Epoch 3/5 - Avg. Loss: 0.1772 - Train Accuracy: 0.9578 - Dev Accuracy: 0.9381 - Dev Loss: 0.0145
+Epoch 4/5 - Avg. Loss: 0.1653 - Train Accuracy: 0.9612 - Dev Accuracy: 0.9375 - Dev Loss: 0.0145
+Epoch 5/5 - Avg. Loss: 0.1571 - Train Accuracy: 0.9611 - Dev Accuracy: 0.9367 - Dev Loss: 0.0148
+Training with hyperparameters: {'num_filters': 100, 'window_size': 3, 'train': True}
+902139
+Epoch 1/5 - Avg. Loss: 0.3484 - Train Accuracy: 0.9465 - Dev Accuracy: 0.9324 - Dev Loss: 0.0152
+Epoch 2/5 - Avg. Loss: 0.1956 - Train Accuracy: 0.9545 - Dev Accuracy: 0.9362 - Dev Loss: 0.0142
+Epoch 3/5 - Avg. Loss: 0.1734 - Train Accuracy: 0.9589 - Dev Accuracy: 0.9408 - Dev Loss: 0.0137
+Epoch 4/5 - Avg. Loss: 0.1608 - Train Accuracy: 0.9608 - Dev Accuracy: 0.9383 - Dev Loss: 0.0140
+Epoch 5/5 - Avg. Loss: 0.1520 - Train Accuracy: 0.9629 - Dev Accuracy: 0.9390 - Dev Loss: 0.0140
+Training with hyperparameters: {'num_filters': 30, 'window_size': 2, 'train': True}
+902139
+Epoch 1/5 - Avg. Loss: 0.3633 - Train Accuracy: 0.9441 - Dev Accuracy: 0.9298 - Dev Loss: 0.0155
+Epoch 2/5 - Avg. Loss: 0.2013 - Train Accuracy: 0.9526 - Dev Accuracy: 0.9341 - Dev Loss: 0.0148
+Epoch 3/5 - Avg. Loss: 0.1783 - Train Accuracy: 0.9579 - Dev Accuracy: 0.9375 - Dev Loss: 0.0142
+Epoch 4/5 - Avg. Loss: 0.1651 - Train Accuracy: 0.9602 - Dev Accuracy: 0.9357 - Dev Loss: 0.0144
+Epoch 5/5 - Avg. Loss: 0.1572 - Train Accuracy: 0.9622 - Dev Accuracy: 0.9363 - Dev Loss: 0.0146
+Training with hyperparameters: {'num_filters': 30, 'window_size': 4, 'train': True}
+902139
+Epoch 1/5 - Avg. Loss: 0.3735 - Train Accuracy: 0.9434 - Dev Accuracy: 0.9278 - Dev Loss: 0.0162
+Epoch 2/5 - Avg. Loss: 0.2067 - Train Accuracy: 0.9526 - Dev Accuracy: 0.9332 - Dev Loss: 0.0152
+Epoch 3/5 - Avg. Loss: 0.1814 - Train Accuracy: 0.9571 - Dev Accuracy: 0.9359 - Dev Loss: 0.0147
+Epoch 4/5 - Avg. Loss: 0.1678 - Train Accuracy: 0.9601 - Dev Accuracy: 0.9375 - Dev Loss: 0.0146
+Epoch 5/5 - Avg. Loss: 0.1588 - Train Accuracy: 0.9619 - Dev Accuracy: 0.9360 - Dev Loss: 0.0150
+Training with hyperparameters: {'num_filters': 30, 'window_size': 5, 'train': True}
+902139
+Epoch 1/5 - Avg. Loss: 0.3649 - Train Accuracy: 0.9448 - Dev Accuracy: 0.9288 - Dev Loss: 0.0158
+Epoch 2/5 - Avg. Loss: 0.2041 - Train Accuracy: 0.9530 - Dev Accuracy: 0.9340 - Dev Loss: 0.0152
+Epoch 3/5 - Avg. Loss: 0.1803 - Train Accuracy: 0.9568 - Dev Accuracy: 0.9343 - Dev Loss: 0.0148
+Epoch 4/5 - Avg. Loss: 0.1674 - Train Accuracy: 0.9603 - Dev Accuracy: 0.9360 - Dev Loss: 0.0147
+Epoch 5/5 - Avg. Loss: 0.1592 - Train Accuracy: 0.9611 - Dev Accuracy: 0.9353 - Dev Loss: 0.0152
