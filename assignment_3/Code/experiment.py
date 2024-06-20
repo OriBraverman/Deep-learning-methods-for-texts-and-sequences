@@ -150,33 +150,45 @@ def main(parsed_args):
         # Initialize the model
         model = LSTMAcceptor(vocab_size=train_metadata['vocab_size'], lstm_input_size=parsed_args.embedding_dim,
                              lstm_hidden_size=parsed_args.lstm_hidden_dim, mlp_hidden_size=parsed_args.mlp_hidden_dim,
-                             mlp_output_size=2, device=device, padding_idx=train_metadata['padding_token_idx'], dropout=parsed_args.dropout)
+                             mlp_output_size=2, device=device, padding_idx=train_metadata['padding_token_idx'],
+                             dropout=parsed_args.dropout)
         log.info(f'Model: {model}')
 
         # Train the model
         optimizer = torch.optim.Adam(model.parameters(), lr=parsed_args.lr)
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5, verbose=True)
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=2)
 
         trainer = utils.TorchTrainer(model=model, optimizer=optimizer, scheduler=scheduler, device=device)
-        fit_res = trainer.fit(dl_train=train_loader, dl_val=dev_loader, num_epochs=parsed_args.epochs, early_stopping=True)
+        fit_res = trainer.fit(dl_train=train_loader, dl_val=dev_loader, num_epochs=parsed_args.epochs, early_stopping=4)
 
 
         # Save the model
-        utils.save_model(model, parsed_args.save_model_file)
+        if parsed_args.save_model_file:
+            utils.save_model(model, parsed_args.save_model_file)
 
-    # Predict using the model
-    if parsed_args.predict:
-        # Load the data
-        predict_loader = utils.get_predict_data_loader(parsed_args.data_file, parsed_args.batch_size, parsed_args.padding_idx, parsed_args.vocab_size, parsed_args.device)
-        predict_metadata = predict_loader.dataset.get_metadata()
+        # Plot the training history
+        #TODO: Implement plotting of training history
 
-        # Load the model
+
+    # Load the model
+    else:
+        if parsed_args.load_model_file == '':
+            log.error('Please provide a model file to load.')
+            return 1
         model = utils.load_model(parsed_args.load_model_file, device=device)
         log.info(f'Model: {model}')
 
+    # Predict using the model
+    if parsed_args.predict and parsed_args.test_data_file != '' and parsed_args.predict_output_file != '':
+        # Load the data
+        test_loader = utils.get_test_data_loader(ds_type=utils.DatasetType.POS_NEG,
+                                                 data_filename=parsed_args.test_data_file,
+                                                 device=device, batch_size=parsed_args.batch_size)
+        test_metadata = test_loader.dataset.get_metadata()
+
         # Predict using the model
-        predictions = utils.predict(model, predict_loader)
-        utils.save_predictions(predictions, parsed_args.predict_output_file)
+        utils.evaluate(task_type=utils.DatasetType.POS_NEG, model=model, data_loader=test_loader,
+                       output_file=parsed_args.predict_output_file)
 
     return 0
 
@@ -195,7 +207,7 @@ def parse_cli():
                         default='Logs', required=False)
     p.add_argument('--train_data_file', type=str, help='Training data file.',
                         default='Data/Pos_Neg_Examples/train', required=False)
-    p.add_argument('--dev_data_file', type=str, help='Development data file.',
+    p.add_argument('--test_data_file', type=str, help='Test data file.',
                         default='Data/Pos_Neg_Examples/test', required=False)
     p.add_argument('--predict_output_file', type=str, help='Predictions output file.',
                         default='outputs/predictions/pos_neg_examples.pred', required=False)
@@ -234,7 +246,7 @@ if __name__ == '__main__':
             log=True,
             log_dir='Logs',
             train_data_file='Data/Pos_Neg_Examples/train',
-            dev_data_file='Data/Pos_Neg_Examples/test',
+            test_data_file='Data/Pos_Neg_Examples/test',
             predict_output_file='outputs/predictions/pos_neg_examples.pred',
             save_model_file='outputs/models/pos_neg_examples.pth',
             load_model_file='outputs/models/pos_neg_examples.pth',

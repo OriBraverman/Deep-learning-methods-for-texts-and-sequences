@@ -38,6 +38,7 @@ class DatasetType:
     NER = 'NER'
     POS_NEG = 'POS_NEG'
 
+
 class LSTM(nn.Module):
     """
     @brief: LSTM layer using LSTMCell.
@@ -154,10 +155,8 @@ class BaseDataset(Dataset):
         """
         @brief: Initialize the dataset.
         """
-        if metadata:
-            self._set_metadata(metadata)
-        else:
-            self._initialize_metadata()
+        self._initialize_metadata(metadata=metadata)
+        self._to_indices()
 
     def get_metadata(self):
         """
@@ -175,12 +174,15 @@ class BaseDataset(Dataset):
             if key in self.metadata:
                 self.metadata[key] = metadata[key]
 
-    def _initialize_metadata(self):
+    def _initialize_metadata(self, metadata=None):
         """
         @brief: Initialize the metadata of the dataset.
         """
-        self._initialize_X()
-        self._initialize_y()
+        if metadata:
+            self._set_metadata(metadata)
+        else:
+            self._initialize_X()
+            self._initialize_y()
 
     def _initialize_X(self):
         """
@@ -191,6 +193,12 @@ class BaseDataset(Dataset):
     def _initialize_y(self):
         """
         @brief: Initialize the target sequences.
+        """
+        raise NotImplementedError("This method should be implemented in the child class.")
+
+    def _to_indices(self):
+        """
+        @brief: Convert the input and target sequences to indices.
         """
         raise NotImplementedError("This method should be implemented in the child class.")
 
@@ -247,13 +255,6 @@ class BinaryClassificationDataset(BaseDataset):
         self.metadata['padding_token_idx'] = self.metadata['word2idx']['<pad>']
         self.metadata['unknown_token_idx'] = self.metadata['word2idx']['<unk>']
 
-        # Convert the input sequences to tensors
-        self.X = [[self.metadata['word2idx'].get(char, self.metadata['unknown_token_idx']) for char in sentence] for sentence in self.X]
-        self.X = [torch.tensor(sentence) for sentence in self.X]
-
-        # Pad the sequences
-        self.X = nn.utils.rnn.pad_sequence(self.X, batch_first=True, padding_value=self.metadata['padding_token_idx'])
-
     def _initialize_y(self):
         """
         @brief: Initialize the target sequences.
@@ -263,10 +264,16 @@ class BinaryClassificationDataset(BaseDataset):
         self.metadata['tag2idx'] = {tag: idx for idx, tag in enumerate(self.metadata['vocab_tags'])}
         self.metadata['idx2tag'] = {idx: tag for tag, idx in self.metadata['tag2idx'].items()}
 
-        # Convert the target sequences to tensors
+    def _to_indices(self):
+        """
+        @brief: Convert the input and target to tensors of indices (same dimension with padding).
+        """
+        self.X = [[self.metadata['word2idx'].get(char, self.metadata['unknown_token_idx']) for char in sentence] for sentence in self.X]
+        self.X = [torch.tensor(sentence) for sentence in self.X]
+        self.X = nn.utils.rnn.pad_sequence(self.X, batch_first=True, padding_value=self.metadata['padding_token_idx'])
+
         self.y = [self.metadata['tag2idx'][tag] for tag in self.y]
         self.y = torch.tensor(self.y)
-
 
 
 class BatchResult(NamedTuple):
@@ -346,7 +353,7 @@ class TorchTrainer():
         actual_num_epochs = 0
         train_loss, train_acc, val_loss, val_acc = [], [], [], []
 
-        best_acc = -1
+        best_loss = -1
         epochs_without_improvement = 0
 
         checkpoint_filename = None
@@ -376,14 +383,15 @@ class TorchTrainer():
             val_epoch_results = self.test_epoch(dl_test=dl_val)
             val_loss.extend(val_epoch_results.losses)
             val_acc.append(val_epoch_results.accuracy)
+            avg_loss = sum(train_epoch_results.losses) / len(train_epoch_results.losses)
 
-            # Update the learning rate
             if self.scheduler:
-                self.scheduler.step(val_epoch_results.losses[-1])
+                self.scheduler.step(avg_loss)
+                self._print(f'Learning rate: {self.optimizer.param_groups[0]["lr"]}', verbose)
 
             # Early Stopping
-            if val_epoch_results.accuracy > best_acc:
-                best_acc = val_epoch_results.accuracy
+            if avg_loss < best_loss or best_loss == -1:
+                best_loss = avg_loss
                 epochs_without_improvement = 0
             else:
                 epochs_without_improvement += 1
@@ -453,7 +461,6 @@ class TorchTrainer():
             loss = self.model.loss(outputs, y)
             num_correct = (outputs.argmax(dim=1) == y).sum().item()
             loss = loss.item()
-            # ========================
         return BatchResult(loss, num_correct)
 
     @staticmethod
@@ -548,12 +555,36 @@ def get_train_dev_data_loader(ds_type, data_filename, device, batch_size=1, shuf
 
     ds_train, ds_dev = random_split(dataset, dev_ratio)
     ds_train.initialize()
-    ds_dev.initialize()
+    ds_dev.initialize(metadata=ds_train.get_metadata())
 
     train_loader = DataLoader(ds_train, batch_size=batch_size, shuffle=shuffle, drop_last=True)
     dev_loader = DataLoader(ds_dev, batch_size=batch_size, shuffle=shuffle, drop_last=True)
 
     return train_loader, dev_loader
+
+
+def get_test_data_loader(ds_type, data_filename, device, batch_size=1, metadata=None):
+    """
+    @brief: Get the test data loader.
+    @param ds_type: Type of dataset.
+    @param data_filename: Data filename.
+    @param device: Device for computation.
+    @param batch_size: Batch size.
+    @param metadata: Metadata of the dataset.
+    @return: Test data loader.
+    """
+    log.info(f'Loading {ds_type} data...')
+
+    if ds_type == DatasetType.POS_NEG:
+        dataset = BinaryClassificationDataset(device=device, data_filename=data_filename, seperator=SEPERATOR_MAP[ds_type])
+    else:
+        # yet to be implemented
+        raise NotImplementedError(f'{ds_type} dataset is not implemented yet.')
+
+    dataset.initialize(metadata=metadata)
+    data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=False, drop_last=True)
+
+    return data_loader
 
 
 def set_seed(seed):
@@ -630,3 +661,24 @@ def is_debugging():
     if frame[1].endswith("pydevd.py"):
       return True
   return False
+
+def evaluate(task_type, model, data_loader, output_file):
+    """
+    @brief: Predict the output using the model.
+    @param task_type: Type of task.
+    @param model: Model to use for prediction.
+    @param data_loader: Data loader.
+    @param output_file: Output file to save predictions.
+    """
+    log.info(f"Predicting {task_type} data...")
+    model.eval()
+    if not os.path.exists(os.path.dirname(output_file)):
+        os.makedirs(os.path.dirname(output_file))
+    with open(output_file, 'w') as f:
+        for batch in data_loader:
+            X, y = batch
+            outputs = model(X)
+            predictions = outputs.argmax(dim=1)
+            for prediction in predictions:
+                f.write(f'{prediction.item()}\n')
+    log.info(f"Predictions saved to: {output_file}")
