@@ -7,12 +7,16 @@ import inspect
 import os
 import sys
 import random
+from datetime import time
+
 import tqdm
 import torch
 import numpy as np
 import logging as log
+import torch.nn.functional as F
 
 from torch import nn
+from torch.autograd import Variable
 from torch.utils.data import Dataset, DataLoader
 from sklearn.model_selection import train_test_split
 from typing import Callable, Any
@@ -94,9 +98,75 @@ class LSTM(nn.Module):
             self.hidden, self.cell = self.lstm_cell(input=x, hx=(self.hidden, self.cell))
 
             # Update the last hidden state
-            last_hidden = torch.where(original_lengths > t, self.hidden, last_hidden)
+            last_hidden = torch.where((original_lengths > t).unsqueeze(1), self.hidden, last_hidden)
 
         return last_hidden
+
+    def transducer_forward(self, sequence, original_lengths):
+        """
+        @brief: Forward pass for the LSTM transducer.
+        @param sequence: Input sequence.
+        @param original_lengths: Original lengths of the input sequence.
+        @return: The last non-padded hidden states.
+
+        example:
+        sequence = torch.tensor([[1, 2, 3], [4, <pad>, <pad>], [5, 6, <pad>]])
+        original_lengths = torch.tensor([3, 1, 2])
+        """
+        batch_size, max_length, _ = sequence.size()
+
+        # Initialize the hidden state
+        self.init_hidden(batch_size)
+        hidden_states = []
+
+        for t in range(max_length):
+            # Get the current input
+            x = sequence[:, t, :]
+
+            # Update the hidden state
+            self.hidden, self.cell = self.lstm_cell(input=x, hx=(self.hidden, self.cell))
+            hidden_states.append(hidden_states)
+
+        return torch.stack(hidden_states, dim=1)
+
+
+class BiLSTM(nn.Module):
+    """
+    @brief: Bi-directional LSTM layer using LSTMCell.
+    """
+
+    def __init__(self, input_size, hidden_size, device, padding_idx, is_acceptor=True):
+        """
+        @brief: Initialize the Bi-LSTM layer.
+        @param input_size: The size of the input vectors.
+        @param hidden_size: The size of the hidden state.
+        @param device: Device for computation.
+        @param padding_idx: The index of the padding token.
+        @param is_acceptor: True --> Accepter, False --> Transducer.
+        """
+        super(BiLSTM, self).__init__()
+        self.hidden_size = hidden_size
+        self.device = device
+        self.padding_idx = padding_idx
+        self.lstm_cell_forward = LSTM(input_size=input_size, hidden_size=hidden_size, device=device,
+                                      padding_idx=padding_idx, is_acceptor=is_acceptor)
+        self.lstm_cell_backward = LSTM(input_size=input_size, hidden_size=hidden_size, device=device,
+                                       padding_idx=padding_idx, is_acceptor=is_acceptor)
+
+        def forward(self, sequence, original_lengths):
+            """
+            @brief: Forward pass for the Bi-LSTM.
+            @param sequence: Input sequence.
+            @param original_lengths: Original lengths of the input sequence.
+            @return: The concatenated hidden states from forward and backward LSTMs.
+            """
+            hidden_states_forward = self.lstm_cell_forward(sequence, original_lengths)
+            hidden_states_backward = self.lstm_cell_backward(sequence.flip(dims=[1]), original_lengths)
+            hidden_states_backward = hidden_states_backward.flip(dims=[1])
+
+            hidden_states = torch.cat((hidden_states_forward, hidden_states_backward), dim=-1)
+            return hidden_states
+
 
 
 class BaseDataset(Dataset):
@@ -354,6 +424,7 @@ class TorchTrainer():
         train_loss, train_acc, val_loss, val_acc = [], [], [], []
 
         best_loss = -1
+        best_acc = -1
         epochs_without_improvement = 0
 
         checkpoint_filename = None
@@ -383,10 +454,11 @@ class TorchTrainer():
             val_epoch_results = self.test_epoch(dl_test=dl_val)
             val_loss.extend(val_epoch_results.losses)
             val_acc.append(val_epoch_results.accuracy)
-            avg_loss = sum(train_epoch_results.losses) / len(train_epoch_results.losses)
+            avg_loss = sum(val_epoch_results.losses) / len(val_epoch_results.losses)
 
             if self.scheduler:
-                self.scheduler.step(avg_loss)
+                #self.scheduler.step(avg_loss)
+                self.scheduler.step()
                 self._print(f'Learning rate: {self.optimizer.param_groups[0]["lr"]}', verbose)
 
             # Early Stopping
@@ -398,6 +470,9 @@ class TorchTrainer():
             if epochs_without_improvement == early_stopping:
                 print("Early Stopping\n")
                 break
+
+            if val_epoch_results.accuracy > best_acc:
+                best_acc = val_epoch_results.accuracy
 
             # Save model checkpoint if requested
             if save_checkpoint and checkpoint_filename is not None:

@@ -18,8 +18,8 @@ import os
 SEED = 1
 POS, NEG = "POS", "NEG"
 TYPE_MAP = {POS: ['a', 'b', 'c', 'd'], NEG: ['a', 'c', 'b', 'd']}
-MAX_NUM_DIGITS = 15
-MAX_NUM_LETTERS = 15
+MAX_NUM_DIGITS = 20
+MAX_NUM_LETTERS = 20
 SEP = '\t'
 
 
@@ -68,6 +68,10 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Generate examples for the assignment.')
     parser.add_argument('--num_examples', type=int, default=1000,
                         help='Number of examples to generate (half positive, half negative).')
+    parser.add_argument('--num_train', type=int, default=2000,
+                        help='Number of training examples to generate.')
+    parser.add_argument('--num_test', type=int, default=500,
+                        help='Number of test examples to generate.')
     parser.add_argument('--pos_output_file', type=str, default='pos_examples',
                         help='Output file for positive examples.')
     parser.add_argument('--neg_output_file', type=str, default='neg_examples',
@@ -96,10 +100,10 @@ def main():
                       output_dir=args.output_dir, type=NEG)
 
     # Generate training data
-    generate_data(num_examples=args.num_examples, output_file=f'{args.output_dir}/train')
+    generate_data(num_examples=args.num_train, output_file=f'{args.output_dir}/train')
 
     # Generate test data
-    generate_data(num_examples=args.num_examples, output_file=f'{args.output_dir}/test')
+    generate_data(num_examples=args.num_test, output_file=f'{args.output_dir}/test')
 
 
 if __name__ == '__main__':

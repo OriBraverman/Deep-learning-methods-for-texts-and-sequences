@@ -133,7 +133,7 @@ def main(parsed_args):
     """
     if not parsed_args.seed:
         seed = random.randint(0, 2**31)
-    utils.set_seed(parsed_args.seed)
+    #utils.set_seed(parsed_args.seed)
 
     # Set the device for computation
     device = utils.get_device()
@@ -155,11 +155,11 @@ def main(parsed_args):
         log.info(f'Model: {model}')
 
         # Train the model
-        optimizer = torch.optim.Adam(model.parameters(), lr=parsed_args.lr)
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=2)
+        optimizer = torch.optim.Adam(model.parameters(), lr=parsed_args.lr, weight_decay=parsed_args.weight_decay)
+        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=1, gamma=1)
 
         trainer = utils.TorchTrainer(model=model, optimizer=optimizer, scheduler=scheduler, device=device)
-        fit_res = trainer.fit(dl_train=train_loader, dl_val=dev_loader, num_epochs=parsed_args.epochs, early_stopping=4)
+        fit_res = trainer.fit(dl_train=train_loader, dl_val=dev_loader, num_epochs=parsed_args.epochs, early_stopping=parsed_args.epochs)
 
 
         # Save the model
@@ -231,6 +231,8 @@ def parse_cli():
                         default=0.001, required=False)
     p.add_argument('--dropout', type=float, help='Dropout probability.',
                         default=0.5, required=False)
+    p.add_argument('--weight_decay', type=float, help='Weight decay.',
+                        default=1e-5, required=False)
     p.add_argument('--seed', type=int, help='Random seed.',
                         default=42, required=False)
 
@@ -251,14 +253,15 @@ if __name__ == '__main__':
             save_model_file='outputs/models/pos_neg_examples.pth',
             load_model_file='outputs/models/pos_neg_examples.pth',
             dev_ratio=0.1,
-            batch_size=32,
-            epochs=15,
-            embedding_dim=20,
+            batch_size=16,
+            epochs=25,
+            embedding_dim=30,
             lstm_hidden_dim=32,
             mlp_hidden_dim=16,
-            lr=0.001,
-            dropout=0.5,
-            seed=42,
+            lr=0.003,
+            dropout=0,
+            weight_decay=0,
+            seed=23,
         )
     else:
         parsed_args = parse_cli()
