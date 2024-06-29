@@ -168,7 +168,6 @@ class BiLSTM(nn.Module):
             return hidden_states
 
 
-
 class BaseDataset(Dataset):
     """
     @brief: Base dataset class.
@@ -675,7 +674,7 @@ def set_seed(seed):
     torch.cuda.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
     GLOBAL_RANDOM_GENERATOR.manual_seed(seed)
-    torch.use_deterministic_algorithms(False)
+    #torch.use_deterministic_algorithms(False)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 

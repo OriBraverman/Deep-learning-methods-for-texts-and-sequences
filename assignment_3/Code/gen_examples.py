@@ -61,16 +61,16 @@ def generate_data(num_examples, output_file):
             if i % 2 == 0:
                 f.write(f'{generate_example(POS)}{SEP}{POS}\n')
             else:
-                f.write(f'{generate_example(POS)}{SEP}{NEG}\n')
+                f.write(f'{generate_example(NEG)}{SEP}{NEG}\n')
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Generate examples for the assignment.')
     parser.add_argument('--num_examples', type=int, default=1000,
                         help='Number of examples to generate (half positive, half negative).')
-    parser.add_argument('--num_train', type=int, default=2000,
+    parser.add_argument('--num_train', type=int, default=1000,
                         help='Number of training examples to generate.')
-    parser.add_argument('--num_test', type=int, default=500,
+    parser.add_argument('--num_test', type=int, default=1000,
                         help='Number of test examples to generate.')
     parser.add_argument('--pos_output_file', type=str, default='pos_examples',
                         help='Output file for positive examples.')

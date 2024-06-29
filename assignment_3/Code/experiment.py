@@ -133,7 +133,7 @@ def main(parsed_args):
     """
     if not parsed_args.seed:
         seed = random.randint(0, 2**31)
-    #utils.set_seed(parsed_args.seed)
+    utils.set_seed(parsed_args.seed)
 
     # Set the device for computation
     device = utils.get_device()
@@ -150,7 +150,7 @@ def main(parsed_args):
         # Initialize the model
         model = LSTMAcceptor(vocab_size=train_metadata['vocab_size'], lstm_input_size=parsed_args.embedding_dim,
                              lstm_hidden_size=parsed_args.lstm_hidden_dim, mlp_hidden_size=parsed_args.mlp_hidden_dim,
-                             mlp_output_size=2, device=device, padding_idx=train_metadata['padding_token_idx'],
+                             mlp_output_size=train_metadata['num_classes'], device=device, padding_idx=train_metadata['padding_token_idx'],
                              dropout=parsed_args.dropout)
         log.info(f'Model: {model}')
 
