@@ -39,7 +39,7 @@ class LSTMAcceptor(nn.Module):
     LSTM (Long Short-Term Memory) network followed by a MLP
     (Multi-Layer Perceptron) classifier with a single hidden layer.
     """
-    def __init__(self, vocab_size, lstm_input_size, lstm_hidden_size, mlp_hidden_size, mlp_output_size, device, padding_idx, dropout):
+    def __init__(self, vocab_size=-1, lstm_input_size=-1, lstm_hidden_size=-1, mlp_hidden_size=-1, mlp_output_size=-1, device='', padding_idx=-1, dropout=0):
         """
         @brief: Initialize the LSTM Acceptor.
         @param vocab_size: The size of the vocabulary.
@@ -122,7 +122,6 @@ class LSTMAcceptor(nn.Module):
             'lstm_hidden_size': self.lstm_hidden_size,
             'mlp_hidden_size': self.mlp_hidden_size,
             'mlp_output_size': self.mlp_output_size,
-            'device': self.device,
             'padding_idx': self.padding_idx
         }
 
@@ -156,10 +155,11 @@ def main(parsed_args):
 
         # Train the model
         optimizer = torch.optim.Adam(model.parameters(), lr=parsed_args.lr, weight_decay=parsed_args.weight_decay)
-        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=1, gamma=1)
+        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=1, gamma=1.0)
+        #scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5, verbose=True)
 
         trainer = utils.TorchTrainer(model=model, optimizer=optimizer, scheduler=scheduler, device=device)
-        fit_res = trainer.fit(dl_train=train_loader, dl_val=dev_loader, num_epochs=parsed_args.epochs, early_stopping=parsed_args.epochs)
+        fit_res = trainer.fit(dl_train=train_loader, dl_val=dev_loader, num_epochs=parsed_args.epochs, early_stopping=parsed_args.early_stopping)
 
 
         # Save the model
@@ -175,7 +175,7 @@ def main(parsed_args):
         if parsed_args.load_model_file == '':
             log.error('Please provide a model file to load.')
             return 1
-        model = utils.load_model(parsed_args.load_model_file, device=device)
+        model = utils.load_model(model_class=LSTMAcceptor, model_path=parsed_args.load_model_file, device=device)
         log.info(f'Model: {model}')
 
     # Predict using the model
@@ -233,6 +233,8 @@ def parse_cli():
                         default=0.5, required=False)
     p.add_argument('--weight_decay', type=float, help='Weight decay.',
                         default=1e-5, required=False)
+    p.add_argument('--early_stopping', type=int, help='Early stopping.',
+                        default=6, required=False)
     p.add_argument('--seed', type=int, help='Random seed.',
                         default=42, required=False)
 
@@ -240,7 +242,8 @@ def parse_cli():
 
 
 if __name__ == '__main__':
-    if utils.is_debugging():
+    language = 'L3'
+    if utils.is_debugging() and language == 'Pos_Neg_Examples':
         parsed_args = argparse.Namespace(
             debug=True,
             train=True,
@@ -261,6 +264,31 @@ if __name__ == '__main__':
             lr=0.003,
             dropout=0,
             weight_decay=0,
+            early_stopping=6,
+            seed=23,
+        )
+    elif utils.is_debugging() and language == 'L1' or language == 'L2' or language == 'L3':
+        parsed_args = argparse.Namespace(
+            debug=True,
+            train=True,
+            predict=True,
+            log=True,
+            log_dir='Logs',
+            train_data_file=f'Data/{language}/train',
+            test_data_file=f'Data/{language}/test',
+            predict_output_file=f'outputs/predictions/{language}.pred',
+            save_model_file=f'outputs/models/{language}.pth',
+            load_model_file=f'outputs/models/{language}.pth',
+            dev_ratio=0.1,
+            batch_size=16,
+            epochs=25,
+            embedding_dim=30,
+            lstm_hidden_dim=32,
+            mlp_hidden_dim=16,
+            lr=0.003,
+            dropout=0,
+            weight_decay=0,
+            early_stopping=10,
             seed=23,
         )
     else:

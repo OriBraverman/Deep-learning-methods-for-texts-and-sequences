@@ -22,6 +22,7 @@ from sklearn.model_selection import train_test_split
 from typing import Callable, Any
 from pathlib import Path
 from typing import NamedTuple, List
+from assignment_3.Code import experiment
 
 
 
@@ -656,7 +657,7 @@ def get_test_data_loader(ds_type, data_filename, device, batch_size=1, metadata=
         raise NotImplementedError(f'{ds_type} dataset is not implemented yet.')
 
     dataset.initialize(metadata=metadata)
-    data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=False, drop_last=True)
+    data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=False, drop_last=False)
 
     return data_loader
 
@@ -711,12 +712,13 @@ def save_model(model, model_path):
         os.makedirs(os.path.dirname(model_path))
     torch.save({
         'model_state_dict': model.state_dict(),
-        'model_parameters': model.parameters,
+        'model_metadata': model.get_model_metadata(),
+        'model_parameters': model.parameters
     }, model_path)
     log.info("Model saved successfully.")
 
 
-def load_model(model, model_path, device):
+def load_model(model_class, model_path, device):
     """
     @brief: Load the model.
     @param model: Model to load.
@@ -725,8 +727,9 @@ def load_model(model, model_path, device):
     """
     log.info(f"Loading model from: {model_path}")
     checkpoint = torch.load(model_path, map_location=torch.device(device))
-    model.load_state_dict(checkpoint['model_state_dict'])
-    model.parameters = checkpoint['model_parameters']
+    model = model_class(device=device, **checkpoint["model_metadata"])
+    model.load_state_dict(state_dict=checkpoint['model_state_dict'])
+    #model.parameters = checkpoint['model_parameters']
     log.info("Model loaded successfully.")
     return model
 
@@ -744,7 +747,9 @@ def evaluate(task_type, model, data_loader, output_file):
     @param data_loader: Data loader.
     @param output_file: Output file to save predictions.
     """
+    idx2tag = data_loader.dataset.metadata['idx2tag']
     log.info(f"Predicting {task_type} data...")
+    accuracy = 0
     model.eval()
     if not os.path.exists(os.path.dirname(output_file)):
         os.makedirs(os.path.dirname(output_file))
@@ -753,6 +758,10 @@ def evaluate(task_type, model, data_loader, output_file):
             X, y = batch
             outputs = model(X)
             predictions = outputs.argmax(dim=1)
+            accuracy += (predictions == y).sum().item()
             for prediction in predictions:
-                f.write(f'{prediction.item()}\n')
+                f.write(f'{idx2tag[prediction.item()]}\n')
+
+    accuracy /= len(data_loader.dataset)
+    log.info(f"Accuracy: {accuracy}")
     log.info(f"Predictions saved to: {output_file}")
