@@ -6,7 +6,7 @@ STUDENT = {'name': 'ORI BRAVERMAN',
 
 STUDENT = {'name': 'ELIE NEDJAR',
             'ID': '336140116'}
-
+#test
 def classifier_output(x, params):
     # YOUR CODE HERE.
     W,b,U,b_tag = params
