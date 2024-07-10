@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/elienedjar/Desktop/Bar Ilan/deep text/repo/Deep-learning-methods-for-texts-and-sequences/assignment_3/Code/bilstmTrain.py", line 29, in <module>
+    sys.std
+AttributeError: module 'sys' has no attribute 'std'
