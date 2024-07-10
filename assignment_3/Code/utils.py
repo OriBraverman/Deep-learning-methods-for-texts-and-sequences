@@ -11,7 +11,7 @@ from datetime import time
 
 import tqdm
 import torch
-import numpy as np
+# import numpy as np
 import logging as log
 import torch.nn.functional as F
 
@@ -23,7 +23,19 @@ from typing import Callable, Any
 from pathlib import Path
 from typing import NamedTuple, List
 
+PAD_LETTER_TAG = '<PAD_LETTER>'
 
+T2I_KEY = 't2i'
+
+I2T_KEY = 'i2t'
+
+I2W_KEY = 'i2w'
+
+W2I_KEY = 'w2i'
+
+UNKNOWN_TAG = '<UNK>'
+
+PAD_TAG = '<PAD>'
 
 # Constants
 SEED = 1
@@ -33,6 +45,7 @@ SEPERATOR_MAP = {
     'NER': ' ',
     'POS_NEG': '\t'
 }
+
 
 class DatasetType:
     """
@@ -102,7 +115,7 @@ class LSTM(nn.Module):
 
         return last_hidden
 
-    def transducer_forward(self, sequence, original_lengths):
+    def transducer_forward(self, sequence, original_length):
         """
         @brief: Forward pass for the LSTM transducer.
         @param sequence: Input sequence.
@@ -125,7 +138,7 @@ class LSTM(nn.Module):
 
             # Update the hidden state
             self.hidden, self.cell = self.lstm_cell(input=x, hx=(self.hidden, self.cell))
-            hidden_states.append(hidden_states)
+            hidden_states.append(self.hidden)
 
         return torch.stack(hidden_states, dim=1)
 
@@ -135,7 +148,7 @@ class BiLSTM(nn.Module):
     @brief: Bi-directional LSTM layer using LSTMCell.
     """
 
-    def __init__(self, input_size, hidden_size, device, padding_idx, is_acceptor=True):
+    def __init__(self, input_size, hidden_size, device, padding_idx, original_len, is_acceptor=True):
         """
         @brief: Initialize the Bi-LSTM layer.
         @param input_size: The size of the input vectors.
@@ -145,6 +158,7 @@ class BiLSTM(nn.Module):
         @param is_acceptor: True --> Accepter, False --> Transducer.
         """
         super(BiLSTM, self).__init__()
+        self.original_len = original_len
         self.hidden_size = hidden_size
         self.device = device
         self.padding_idx = padding_idx
@@ -153,19 +167,19 @@ class BiLSTM(nn.Module):
         self.lstm_cell_backward = LSTM(input_size=input_size, hidden_size=hidden_size, device=device,
                                        padding_idx=padding_idx, is_acceptor=is_acceptor)
 
-        def forward(self, sequence, original_lengths):
-            """
+    def forward(self, sequence):
+        """
             @brief: Forward pass for the Bi-LSTM.
             @param sequence: Input sequence.
             @param original_lengths: Original lengths of the input sequence.
             @return: The concatenated hidden states from forward and backward LSTMs.
             """
-            hidden_states_forward = self.lstm_cell_forward(sequence, original_lengths)
-            hidden_states_backward = self.lstm_cell_backward(sequence.flip(dims=[1]), original_lengths)
-            hidden_states_backward = hidden_states_backward.flip(dims=[1])
+        hidden_states_forward = self.lstm_cell_forward(sequence, self.original_len)
+        hidden_states_backward = self.lstm_cell_backward(sequence.flip(dims=[1]), self.original_len)
+        hidden_states_backward = hidden_states_backward.flip(dims=[1])
 
-            hidden_states = torch.cat((hidden_states_forward, hidden_states_backward), dim=-1)
-            return hidden_states
+        hidden_states = torch.cat((hidden_states_forward, hidden_states_backward), dim=-1)
+        return hidden_states
 
 
 class BaseDataset(Dataset):
@@ -218,7 +232,6 @@ class BaseDataset(Dataset):
         @return: Item from the dataset.
         """
         return self.X[idx], self.y[idx]
-
 
     def initialize(self, metadata=None):
         """
@@ -285,7 +298,8 @@ class BinaryClassificationDataset(BaseDataset):
         @param data_filename: Data filename.
         @param sep: Separator.
         """
-        super(BinaryClassificationDataset, self).__init__(device=device, data_dir=data_dir, data_filename=data_filename, seperator=seperator)
+        super(BinaryClassificationDataset, self).__init__(device=device, data_dir=data_dir, data_filename=data_filename,
+                                                          seperator=seperator)
         self._initialize_data()
 
     def _initialize_data(self):
@@ -337,7 +351,8 @@ class BinaryClassificationDataset(BaseDataset):
         """
         @brief: Convert the input and target to tensors of indices (same dimension with padding).
         """
-        self.X = [[self.metadata['word2idx'].get(char, self.metadata['unknown_token_idx']) for char in sentence] for sentence in self.X]
+        self.X = [[self.metadata['word2idx'].get(char, self.metadata['unknown_token_idx']) for char in sentence] for
+                  sentence in self.X]
         self.X = [torch.tensor(sentence) for sentence in self.X]
         self.X = nn.utils.rnn.pad_sequence(self.X, batch_first=True, padding_value=self.metadata['padding_token_idx'])
 
@@ -456,7 +471,7 @@ class TorchTrainer():
             avg_loss = sum(val_epoch_results.losses) / len(val_epoch_results.losses)
 
             if self.scheduler:
-                #self.scheduler.step(avg_loss)
+                # self.scheduler.step(avg_loss)
                 self.scheduler.step()
                 self._print(f'Learning rate: {self.optimizer.param_groups[0]["lr"]}', verbose)
 
@@ -600,10 +615,13 @@ def random_split(dataset, dev_split):
     dev_size = int(dev_split * dataset_size)
     train_size = dataset_size - dev_size
 
-    temp_train_dataset, temp_dev_dataset = torch.utils.data.random_split(dataset, [train_size, dev_size], generator=GLOBAL_RANDOM_GENERATOR)
+    temp_train_dataset, temp_dev_dataset = torch.utils.data.random_split(dataset, [train_size, dev_size],
+                                                                         generator=GLOBAL_RANDOM_GENERATOR)
     train_dataset, dev_dataset = copy.deepcopy(dataset), copy.deepcopy(dataset)
-    train_dataset.X, train_dataset.y = [dataset.X[i] for i in temp_train_dataset.indices], [dataset.y[i] for i in temp_train_dataset.indices]
-    dev_dataset.X, dev_dataset.y = [dataset.X[i] for i in temp_dev_dataset.indices], [dataset.y[i] for i in temp_dev_dataset.indices]
+    train_dataset.X, train_dataset.y = [dataset.X[i] for i in temp_train_dataset.indices], [dataset.y[i] for i in
+                                                                                            temp_train_dataset.indices]
+    dev_dataset.X, dev_dataset.y = [dataset.X[i] for i in temp_dev_dataset.indices], [dataset.y[i] for i in
+                                                                                      temp_dev_dataset.indices]
 
     return train_dataset, dev_dataset
 
@@ -622,7 +640,8 @@ def get_train_dev_data_loader(ds_type, data_filename, device, batch_size=1, shuf
     log.info(f'Loading {ds_type} data...')
 
     if ds_type == DatasetType.POS_NEG:
-        dataset = BinaryClassificationDataset(device=device, data_filename=data_filename, seperator=SEPERATOR_MAP[ds_type])
+        dataset = BinaryClassificationDataset(device=device, data_filename=data_filename,
+                                              seperator=SEPERATOR_MAP[ds_type])
     else:
         # yet to be implemented
         raise NotImplementedError(f'{ds_type} dataset is not implemented yet.')
@@ -650,7 +669,8 @@ def get_test_data_loader(ds_type, data_filename, device, batch_size=1, metadata=
     log.info(f'Loading {ds_type} data...')
 
     if ds_type == DatasetType.POS_NEG:
-        dataset = BinaryClassificationDataset(device=device, data_filename=data_filename, seperator=SEPERATOR_MAP[ds_type])
+        dataset = BinaryClassificationDataset(device=device, data_filename=data_filename,
+                                              seperator=SEPERATOR_MAP[ds_type])
     else:
         # yet to be implemented
         raise NotImplementedError(f'{ds_type} dataset is not implemented yet.')
@@ -669,12 +689,11 @@ def set_seed(seed):
     os.environ['PYTHONHASHSEED'] = str(seed)
     os.environ['CUBLAS_WORKSPACE_CONFIG'] = ':4096:8'
     random.seed(seed)
-    np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
     GLOBAL_RANDOM_GENERATOR.manual_seed(seed)
-    #torch.use_deterministic_algorithms(False)
+    # torch.use_deterministic_algorithms(False)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
@@ -730,11 +749,13 @@ def load_model(model, model_path, device):
     log.info("Model loaded successfully.")
     return model
 
+
 def is_debugging():
-  for frame in inspect.stack():
-    if frame[1].endswith("pydevd.py"):
-      return True
-  return False
+    for frame in inspect.stack():
+        if frame[1].endswith("pydevd.py"):
+            return True
+    return False
+
 
 def evaluate(task_type, model, data_loader, output_file):
     """
@@ -756,3 +777,338 @@ def evaluate(task_type, model, data_loader, output_file):
             for prediction in predictions:
                 f.write(f'{prediction.item()}\n')
     log.info(f"Predictions saved to: {output_file}")
+
+
+def read_all_words(vocab_path, files_dir):
+    with open(vocab_path, 'r') as f:
+        lines = f.readlines()
+
+    lines.append(PAD_TAG + '\n')
+    lines.append(UNKNOWN_TAG + '\n')
+
+    word2idx = {w[:-1]: i for i, w in enumerate(lines)}
+    idx2word = {i: w[:-1] for i, w in enumerate(lines)}
+
+    for mode in ['train', 'dev', 'test']:
+        file_path = os.path.join(files_dir, mode)
+        with open(file_path, 'r') as f:
+            lines = f.readlines()
+        for line in lines:
+
+            if not line == '\n':
+                if mode == 'test':
+                    w = line[:-1]
+
+                else:
+                    line.replace('\t', ' ')  # In POS there are spaces in ner there are '\t'
+                    w, _ = line.split()
+
+                if w not in word2idx and w.lower() not in word2idx:
+                    idx = len(word2idx)
+                    word2idx[w] = idx
+                    idx2word[idx] = w
+
+    return word2idx, idx2word
+
+
+class TaggerDataset:
+    def __init__(self, file_path, vocab_path, files_dir, word2idx, idx2word, test=False, max_len_train=False, mode='a'):
+
+        self.file_train = file_path
+        self.mode = mode
+
+        self.word2idx, self.idx2word = word2idx, idx2word
+
+        self.words, self.tags = self._read_file(test)
+        self.tag2idx, self.idx2tag = self._read_tags(self.tags)
+
+        self.n_tags = len(self.tag2idx)
+
+        if not max_len_train:
+            self.max_len = len(max(self.words, key=len))
+        else:
+            self.max_len = max_len_train
+
+        self.data = []
+        self.labels = []
+
+        if self.mode == 'b':
+            self._read_letters()
+
+        if self.mode == 'c':
+            self._read_pre_suf()
+
+        for words, tags in zip(self.words, self.tags):
+            X = []
+            y = []
+            for i in range(self.max_len):
+                if i < len(words):
+
+                    x = self.get_data_for_mode(words[i],self.mode)
+                    X.append(x)
+                    y.append(self.tag2idx[tags[i]])
+                else:
+                    x = self.get_data_for_mode(" ", self.mode, is_padding=True)
+                    X.append(x)
+                    y.append(self.tag2idx[PAD_TAG])
+
+            self.data.append(X)
+            self.labels.append(y)
+
+        self.seq_length = len(self.data[0])
+        self.data = torch.tensor(self.data, dtype=torch.long)
+        self.labels = torch.tensor(self.labels, dtype=torch.long)
+
+    def _read_pre_suf(self):
+        self.idx_word2idx_pre = {}
+        self.idx_word2idx_suf = {}
+        for (word, idx) in self.word2idx.items():
+            if not word == PAD_TAG:
+                l = min(3, len(word))
+                pre = word[:l]
+                suf = word[len(word) - l:]
+
+                if pre not in self.idx_word2idx_pre:
+                    self.idx_word2idx_pre[idx] = len(self.idx_word2idx_pre)
+                if suf not in self.idx_word2idx_suf:
+                    self.idx_word2idx_suf[idx] = len(self.idx_word2idx_suf)
+        self.idx_word2idx_pre[self.word2idx[PAD_TAG]] = len(self.idx_word2idx_pre)
+        self.idx_word2idx_suf[self.word2idx[PAD_TAG]] = len(self.idx_word2idx_suf)
+
+    def _read_file(self, test):
+        words = []
+        tags = []
+        line_words = []
+        line_tags = []
+
+        with open(self.file_train, 'r') as f:
+            lines = f.readlines()
+        for line in lines:
+            if line == '\n':
+                words.append(line_words)
+                tags.append(line_tags)
+                line_words = []
+                line_tags = []
+            else:
+                if test:
+                    line_words.append(line[:-1])
+                    line_tags.append('<TEST_TAG>')
+
+                else:
+                    line.replace('\t', ' ')  # In POS there are spaces in ner there are '\t'
+                    w, t = line.split()
+
+                    # For common nouns in the beginning of the sentence
+                    if w not in self.word2idx:
+                        w = w.lower()
+                    line_words.append(w)
+                    line_tags.append(t[:-1])
+        return words, tags
+
+    def _read_letters(self):
+        letters = {}
+        self.max_word_len = 0
+        for word in self.word2idx:
+
+            if len(word) > self.max_word_len:
+                self.max_word_len = len(word)
+
+            for letter in word:
+                letters[letter] = 1
+
+
+        self.letter2idx = {k:i for i,k in enumerate(letters.keys())}
+        self.letter2idx[PAD_LETTER_TAG] = len(self.letter2idx)
+
+
+
+    def _read_vocab(self, vocab_path):
+
+        with open(vocab_path, 'r') as f:
+            lines = f.readlines()
+
+        lines.append(PAD_TAG + '\n')
+        lines.append(UNKNOWN_TAG + '\n')
+
+        word2idx = {w[:-1]: i for i, w in enumerate(lines)}
+        idx2word = {i: w[:-1] for i, w in enumerate(lines)}
+
+        return word2idx, idx2word
+
+    def _read_tags(self, tags):
+        all_tags = []
+        for tag in tags:
+            all_tags.extend(tag)
+        all_tags = list(set(all_tags))
+        all_tags.append(PAD_TAG)
+
+        tag2idx = {t: i for i, t in enumerate(all_tags)}
+        idx2tag = {i: t for i, t in enumerate(all_tags)}
+
+        return tag2idx, idx2tag
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, idx):
+        return self.data[idx], self.labels[idx]
+
+    def get_dicts(self):
+        return {
+            W2I_KEY: self.word2idx,
+            I2W_KEY: self.idx2word,
+            I2T_KEY: self.idx2tag,
+            T2I_KEY: self.tag2idx
+        }
+
+    def get_data_for_mode(self, word, mode, is_padding=False):
+
+        if mode in ['a', 'c']:
+            if is_padding:
+                return self.word2idx[PAD_TAG]
+            return self.word2idx[word]
+
+        elif mode == 'b':
+            if is_padding:
+                return [self.letter2idx[PAD_LETTER_TAG] for _ in range(self.max_word_len)]
+            letter_vec = []
+            for i in range(self.max_word_len):
+                if i < len(word):
+                    letter_vec.append(self.letter2idx[word[i]])
+                else:
+                    letter_vec.append(self.letter2idx[PAD_LETTER_TAG])
+            return letter_vec
+
+
+
+
+class TaggerBiLSTM(nn.Module):
+    def __init__(self, vocab_size, embedding_dim, hidden_size, output_size, padding_idx, original_len, device='cpu',
+                 ):
+        super(TaggerBiLSTM, self).__init__()
+        self.embedding = nn.Embedding(vocab_size, embedding_dim, padding_idx=padding_idx)
+        self.bilstm = BiLSTM(embedding_dim, hidden_size, device, padding_idx, original_len, is_acceptor=False)
+        # TODO Try with different classifier arch
+        self.classifier = nn.Linear(2 * hidden_size, output_size)  # 2 * hidden_size because of BiLSTM
+
+    def forward(self, sequence):
+        embedded = self.embedding(sequence)
+        bilstm_out = self.bilstm(embedded)
+        logits = self.classifier(bilstm_out)
+
+        return torch.log_softmax(logits, dim=2)
+
+    def loss(self, y_pred: torch.Tensor, y_true: torch.Tensor, pad_idx) -> torch.Tensor:
+        """
+        @brief: Calculate the loss.
+
+        The loss is calculated without taking into account the padding label.
+
+        @param y_pred: Output probabilities.
+        @param y_true: True labels.
+
+        @return: The loss.
+        """
+        batch_size, max_sequence_length, num_of_labels = y_pred.shape
+        input = y_pred.view(batch_size * max_sequence_length, num_of_labels)
+        target = y_true.contiguous().view(batch_size * max_sequence_length)
+        loss = torch.functional.F.cross_entropy(
+            input=input, target=target, reduction='none', ignore_index=pad_idx)
+        mask = (target != pad_idx).view(-1).type(torch.FloatTensor)
+        mask /= mask.shape[0]
+        loss = loss.dot(mask) / mask.sum()
+
+        return loss
+
+
+class CharLSTM(nn.Module):
+    def __init__(self, ab_size, embedding_dim, hidden_size, padding_idx, originial_len, device='cpu'):
+        super(CharLSTM, self).__init__()
+        self.padding_idx = padding_idx
+        self.originial_len = originial_len
+        self.embedding = nn.Embedding(ab_size, embedding_dim, padding_idx=padding_idx)
+        self.lstm = LSTM(embedding_dim, hidden_size, device, padding_idx)
+
+    def forward(self, sequence):
+        output = []
+        for s in range(sequence.shape[1]):
+            x = sequence[:,s,:]
+            embedded = self.embedding(x)
+            original_lengths = (x != self.padding_idx).sum(dim=1)
+            out = self.lstm.acceptor_forward(embedded, original_lengths)
+            output.append(out)
+        return torch.stack(output, dim=1)
+
+
+class CharTaggerBiLSTM(nn.Module):
+    def __init__(self, ab_size, embedding_dim, hidden_size, char_hidden_size, output_size, padding_idx,
+                 char_padding_idx,
+                 original_len, device='cpu'):
+        super(CharTaggerBiLSTM, self).__init__()
+        self.embedding = CharLSTM(ab_size, embedding_dim, char_hidden_size, char_padding_idx, device)
+        self.lstm = BiLSTM(char_hidden_size, hidden_size, device, padding_idx, original_len, is_acceptor=False)
+        self.classifier = nn.Linear(2 * hidden_size, output_size)  # 2 * hidden_size because of BiLSTM
+
+    def forward(self, x):
+        embedded = self.embedding(x)
+        lstm_out = self.lstm(embedded)
+        output = self.classifier(lstm_out)
+        return torch.log_softmax(output, dim=2)
+
+    def loss(self, y_pred: torch.Tensor, y_true: torch.Tensor, pad_idx) -> torch.Tensor:
+        """
+        @brief: Calculate the loss.
+
+        The loss is calculated without taking into account the padding label.
+
+        @param y_pred: Output probabilities.
+        @param y_true: True labels.
+
+        @return: The loss.
+        """
+        batch_size, max_sequence_length, num_of_labels = y_pred.shape
+        input = y_pred.view(batch_size * max_sequence_length, num_of_labels)
+        target = y_true.contiguous().view(batch_size * max_sequence_length)
+        loss = torch.functional.F.cross_entropy(
+            input=input, target=target, reduction='none', ignore_index=pad_idx)
+        mask = (target != pad_idx).view(-1).type(torch.FloatTensor)
+        mask /= mask.shape[0]
+        loss = loss.dot(mask) / mask.sum()
+
+        return loss
+
+
+class CBOWTagger(TaggerBiLSTM):
+    def __init__(self,vocab_size, embedding_dim, hidden_size, output_size, padding_idx, original_len,
+                 idx_word2idx_suf, idx_word2idx_pre, device='cpu'):
+        super(CBOWTagger, self).__init__(vocab_size, embedding_dim, hidden_size, output_size, padding_idx, original_len, device)
+        self.idx_word2idx_suf = idx_word2idx_suf
+        self.idx_word2idx_pre = idx_word2idx_pre
+
+        self.pre_embedding = nn.Embedding(len(idx_word2idx_pre), embedding_dim, padding_idx=len(idx_word2idx_pre) - 1)
+        self.suf_embedding = nn.Embedding(len(idx_word2idx_suf), embedding_dim, padding_idx=len(idx_word2idx_suf) - 1)
+
+    def forward(self, sequence: torch.Tensor):
+
+        word_embedding = self.pre_embedding(sequence)
+
+        pre_sequence = sequence.clone().apply_(self.idx_word2idx_pre.get)
+        suf_sequence = sequence.clone().apply_(self.idx_word2idx_suf.get)
+
+        pre_embedding = self.pre_embedding(pre_sequence)
+        suf_embedding = self.suf_embedding(suf_sequence)
+
+        embedded = word_embedding + pre_embedding + suf_embedding
+
+        bilstm_out = self.bilstm(embedded)
+        logits = self.classifier(bilstm_out)
+
+        return torch.log_softmax(logits, dim=2)
+
+
+
+
+
+
+
+
