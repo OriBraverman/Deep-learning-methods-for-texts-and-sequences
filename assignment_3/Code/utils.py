@@ -16,9 +16,7 @@ import logging as log
 import torch.nn.functional as F
 
 from torch import nn
-from torch.autograd import Variable
 from torch.utils.data import Dataset, DataLoader
-from sklearn.model_selection import train_test_split
 from typing import Callable, Any
 from pathlib import Path
 from typing import NamedTuple, List
@@ -812,7 +810,8 @@ def read_all_words(vocab_path, files_dir):
 
 
 class TaggerDataset:
-    def __init__(self, file_path, vocab_path, files_dir, word2idx, idx2word, test=False, max_len_train=False, mode='a'):
+    def __init__(self, file_path, vocab_path, files_dir, word2idx, idx2word, test=False, max_len_train=False, mode='a',
+                 tag2idx = None, idx2tag = None):
 
         self.file_train = file_path
         self.mode = mode
@@ -820,7 +819,10 @@ class TaggerDataset:
         self.word2idx, self.idx2word = word2idx, idx2word
 
         self.words, self.tags = self._read_file(test)
-        self.tag2idx, self.idx2tag = self._read_tags(self.tags)
+        if tag2idx is None:
+            self.tag2idx, self.idx2tag = self._read_tags(self.tags)
+        else:
+            self.tag2idx, self.idx2tag = tag2idx, idx2tag
 
         self.n_tags = len(self.tag2idx)
 
@@ -844,9 +846,9 @@ class TaggerDataset:
             for i in range(self.max_len):
                 if i < len(words):
 
-                    x = self.get_data_for_mode(words[i],self.mode)
+                    x = self.get_data_for_mode(words[i], self.mode)
                     X.append(x)
-                    y.append(self.tag2idx[tags[i]])
+                    y.append(self.tag2idx[tags[i]] if not test else 0)
                 else:
                     x = self.get_data_for_mode(" ", self.mode, is_padding=True)
                     X.append(x)
@@ -891,18 +893,19 @@ class TaggerDataset:
                 line_tags = []
             else:
                 if test:
-                    line_words.append(line[:-1])
+                    w = line[:-1]
+                    line_words.append(w)
                     line_tags.append('<TEST_TAG>')
 
                 else:
-                    line.replace('\t', ' ')  # In POS there are spaces in ner there are '\t'
+                    line = line.replace('\t', ' ')  # In POS there are spaces in ner there are '\t'
                     w, t = line.split()
 
                     # For common nouns in the beginning of the sentence
                     if w not in self.word2idx:
                         w = w.lower()
                     line_words.append(w)
-                    line_tags.append(t[:-1])
+                    line_tags.append(t)
         return words, tags
 
     def _read_letters(self):
@@ -916,11 +919,8 @@ class TaggerDataset:
             for letter in word:
                 letters[letter] = 1
 
-
-        self.letter2idx = {k:i for i,k in enumerate(letters.keys())}
+        self.letter2idx = {k: i for i, k in enumerate(letters.keys())}
         self.letter2idx[PAD_LETTER_TAG] = len(self.letter2idx)
-
-
 
     def _read_vocab(self, vocab_path):
 
@@ -940,6 +940,7 @@ class TaggerDataset:
         for tag in tags:
             all_tags.extend(tag)
         all_tags = list(set(all_tags))
+        all_tags.sort()
         all_tags.append(PAD_TAG)
 
         tag2idx = {t: i for i, t in enumerate(all_tags)}
@@ -963,10 +964,10 @@ class TaggerDataset:
 
     def get_data_for_mode(self, word, mode, is_padding=False):
 
-        if mode in ['a', 'c']:
+        if mode in ['a', 'c', 'd']:
             if is_padding:
                 return self.word2idx[PAD_TAG]
-            return self.word2idx[word]
+            return self.word2idx[word] if word in self.word2idx else self.word2idx[word.lower()]
 
         elif mode == 'b':
             if is_padding:
@@ -980,14 +981,13 @@ class TaggerDataset:
             return letter_vec
 
 
-
-
 class TaggerBiLSTM(nn.Module):
     def __init__(self, vocab_size, embedding_dim, hidden_size, output_size, padding_idx, original_len, device='cpu',
                  ):
         super(TaggerBiLSTM, self).__init__()
+        self.device =  torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
         self.embedding = nn.Embedding(vocab_size, embedding_dim, padding_idx=padding_idx)
-        self.bilstm = BiLSTM(embedding_dim, hidden_size, device, padding_idx, original_len, is_acceptor=False)
+        self.bilstm = BiLSTM(embedding_dim, hidden_size, self.device, padding_idx, original_len, is_acceptor=False)
         # TODO Try with different classifier arch
         self.classifier = nn.Linear(2 * hidden_size, output_size)  # 2 * hidden_size because of BiLSTM
 
@@ -1016,6 +1016,7 @@ class TaggerBiLSTM(nn.Module):
             input=input, target=target, reduction='none', ignore_index=pad_idx)
         mask = (target != pad_idx).view(-1).type(torch.FloatTensor)
         mask /= mask.shape[0]
+        mask = mask.to(self.device)
         loss = loss.dot(mask) / mask.sum()
 
         return loss
@@ -1027,12 +1028,13 @@ class CharLSTM(nn.Module):
         self.padding_idx = padding_idx
         self.originial_len = originial_len
         self.embedding = nn.Embedding(ab_size, embedding_dim, padding_idx=padding_idx)
+        device = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
         self.lstm = LSTM(embedding_dim, hidden_size, device, padding_idx)
 
     def forward(self, sequence):
         output = []
         for s in range(sequence.shape[1]):
-            x = sequence[:,s,:]
+            x = sequence[:, s, :]
             embedded = self.embedding(x)
             original_lengths = (x != self.padding_idx).sum(dim=1)
             out = self.lstm.acceptor_forward(embedded, original_lengths)
@@ -1045,6 +1047,7 @@ class CharTaggerBiLSTM(nn.Module):
                  char_padding_idx,
                  original_len, device='cpu'):
         super(CharTaggerBiLSTM, self).__init__()
+        device = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
         self.embedding = CharLSTM(ab_size, embedding_dim, char_hidden_size, char_padding_idx, device)
         self.lstm = BiLSTM(char_hidden_size, hidden_size, device, padding_idx, original_len, is_acceptor=False)
         self.classifier = nn.Linear(2 * hidden_size, output_size)  # 2 * hidden_size because of BiLSTM
@@ -1073,15 +1076,18 @@ class CharTaggerBiLSTM(nn.Module):
             input=input, target=target, reduction='none', ignore_index=pad_idx)
         mask = (target != pad_idx).view(-1).type(torch.FloatTensor)
         mask /= mask.shape[0]
+        if torch.backends.mps.is_available():
+            mask = mask.to(torch.device('mps'))
         loss = loss.dot(mask) / mask.sum()
 
         return loss
 
 
 class CBOWTagger(TaggerBiLSTM):
-    def __init__(self,vocab_size, embedding_dim, hidden_size, output_size, padding_idx, original_len,
+    def __init__(self, vocab_size, embedding_dim, hidden_size, output_size, padding_idx, original_len,
                  idx_word2idx_suf, idx_word2idx_pre, device='cpu'):
-        super(CBOWTagger, self).__init__(vocab_size, embedding_dim, hidden_size, output_size, padding_idx, original_len, device)
+        super(CBOWTagger, self).__init__(vocab_size, embedding_dim, hidden_size, output_size, padding_idx, original_len,
+                                         device)
         self.idx_word2idx_suf = idx_word2idx_suf
         self.idx_word2idx_pre = idx_word2idx_pre
 
@@ -1089,14 +1095,13 @@ class CBOWTagger(TaggerBiLSTM):
         self.suf_embedding = nn.Embedding(len(idx_word2idx_suf), embedding_dim, padding_idx=len(idx_word2idx_suf) - 1)
 
     def forward(self, sequence: torch.Tensor):
-
         word_embedding = self.pre_embedding(sequence)
 
-        pre_sequence = sequence.clone().apply_(self.idx_word2idx_pre.get)
-        suf_sequence = sequence.clone().apply_(self.idx_word2idx_suf.get)
+        pre_sequence = sequence.clone().cpu().apply_(self.idx_word2idx_pre.get)
+        suf_sequence = sequence.clone().cpu().apply_(self.idx_word2idx_suf.get)
 
-        pre_embedding = self.pre_embedding(pre_sequence)
-        suf_embedding = self.suf_embedding(suf_sequence)
+        pre_embedding = self.pre_embedding(pre_sequence.to(self.device))
+        suf_embedding = self.suf_embedding(suf_sequence.to(self.device))
 
         embedded = word_embedding + pre_embedding + suf_embedding
 
@@ -1106,7 +1111,49 @@ class CBOWTagger(TaggerBiLSTM):
         return torch.log_softmax(logits, dim=2)
 
 
+class MaxLSTM(nn.Module):
+    def __init__(self, vocab_size, ab_size, char_embedding_dim, embedding_dim, hidden_size, output_size, padding_idx,
+                 char_padding_idx, original_len, device='cpu'):
+        super(MaxLSTM, self).__init__()
+        self.device = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
 
+        self.char_embedding = CharLSTM(ab_size, char_embedding_dim, embedding_dim, char_padding_idx, device)
+        self.word_embedding = nn.Embedding(vocab_size, embedding_dim, padding_idx=padding_idx)
+        self.bilstm = BiLSTM(embedding_dim * 2, hidden_size, self.device, padding_idx, original_len, is_acceptor=False)
+        self.classifier = nn.Linear(2 * hidden_size, output_size)  # 2 * hidden_size because of BiLSTM
+
+    def forward(self, x_char, x_word):
+        word_embedded = self.word_embedding(x_word.to(self.device))
+        char_embedded = self.char_embedding(x_char.to(self.device))
+        embedded = torch.cat((word_embedded, char_embedded), dim=2)
+        bilstm_out = self.bilstm(embedded)
+        logits = self.classifier(bilstm_out)
+
+        return torch.log_softmax(logits, dim=2)
+
+
+    def loss(self, y_pred: torch.Tensor, y_true: torch.Tensor, pad_idx) -> torch.Tensor:
+        """
+        @brief: Calculate the loss.
+
+        The loss is calculated without taking into account the padding label.
+
+        @param y_pred: Output probabilities.
+        @param y_true: True labels.
+
+        @return: The loss.
+        """
+        batch_size, max_sequence_length, num_of_labels = y_pred.shape
+        input = y_pred.view(batch_size * max_sequence_length, num_of_labels)
+        target = y_true.contiguous().view(batch_size * max_sequence_length)
+        loss = torch.functional.F.cross_entropy(
+            input=input, target=target, reduction='none', ignore_index=pad_idx)
+        mask = (target != pad_idx).view(-1).type(torch.FloatTensor)
+        mask = mask.to(self.device)
+        mask /= mask.shape[0]
+        loss = loss.dot(mask) / mask.sum()
+
+        return loss
 
 
 

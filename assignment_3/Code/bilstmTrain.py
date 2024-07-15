@@ -29,13 +29,6 @@ import time
 import numpy as np
 
 
-
-
-
-
-
-
-
 def main():
     parser = argparse.ArgumentParser(description='BiLSTM tagger')
     parser.add_argument('--repr', type=str, help='The model to use must be a, b, c or d', default='a')
@@ -44,47 +37,64 @@ def main():
     parser.add_argument('--hidden_size', type=int, help='The number of hidden units in the LSTM', default=32)
     parser.add_argument('--embedding_dim', type=int, help='The size of the word embeddings', default=32)
     parser.add_argument('--char_hidden_size', type=int, help='The size of the character LSTM hidden units', default=4)
-    parser.add_argument('--epochs', type=int, help='number of epochs', default=10)
+    parser.add_argument('--epochs', type=int, help='number of epochs', default=5)
+    parser.add_argument('--lr', type=float, help='learning rate', default=0.001)
 
     args = parser.parse_args()
 
-
-    assert args.repr in ['a', 'b', 'c', 'd'], 'repr must be a, b, c or d, the given argument for repr is {}'.format(args.repr)
-
+    assert args.repr in ['a', 'b', 'c', 'd'], 'repr must be a, b, c or d, the given argument for repr is {}'.format(
+        args.repr)
+    assert args.task in ['pos', 'ner'], 'task must be pos or ner, the given argument for task is {}'.format(args.task)
     task = args.task
 
-
-
+    if torch.backends.mps.is_available():
+        device = torch.device("mps")
+        mps_available = True
+    else:
+        mps_available = False
+        device = 'cpu'
 
     # load training data
     train_file = f'../Data/{task}/train'
     eval_file = f'../Data/{task}/dev'
     vocab_file = f'../Data/vocab.txt'
-    files_dir= f'../Data/{task}'
+    files_dir = f'../Data/{task}'
     plot_file = f'../outputs/plots/{task}_{args.repr}.png'
     accuracies_file = f'../outputs/accuracies/{task}_{args.repr}.npy'
     word2idx, idx2word = read_all_words(vocab_file, files_dir)
-    start_time = time.time()
+
     ds_train = TaggerDataset(train_file, vocab_file, files_dir, word2idx, idx2word, mode=args.repr)
-    load_ds_train_time = time.time() - start_time
-    ds_eval = TaggerDataset(eval_file, vocab_file, files_dir, word2idx, idx2word, max_len_train=ds_train.max_len, mode=args.repr)
-    load_ds_eval_time = time.time() - load_ds_train_time
+    ds_eval = TaggerDataset(eval_file, vocab_file, files_dir, word2idx, idx2word, max_len_train=ds_train.max_len,
+                            mode=args.repr,
+                            tag2idx=ds_train.tag2idx, idx2tag=ds_train.idx2tag)
 
-    print(f'Load dataset time: {load_ds_train_time} and load dataset time: {load_ds_eval_time}')
+    train_batch_size = 64
+    eval_batch_size = 64
 
+    dl_train = DataLoader(ds_train, batch_size=train_batch_size, shuffle=args.repr != 'd')
+    dl_eval = DataLoader(ds_eval, batch_size=eval_batch_size, shuffle=False)
 
-    dl_train = DataLoader(ds_train, batch_size=64, shuffle=True)
-    dl_eval = DataLoader(ds_eval, batch_size=64, shuffle=False)
+    print(ds_train.n_tags)
 
+    if args.repr == 'd':
+        ds_train_char = TaggerDataset(train_file, vocab_file, files_dir, word2idx, idx2word, mode='b')
+        ds_eval_char = TaggerDataset(eval_file, vocab_file, files_dir, word2idx, idx2word,
+                                     max_len_train=ds_train.max_len,
 
+                                     mode='b', tag2idx=ds_train.tag2idx, idx2tag=ds_train.idx2tag)
+        dl_train_char = DataLoader(ds_train_char, batch_size=train_batch_size, shuffle=args.repr != 'd')
+        dl_eval_char = DataLoader(ds_eval_char, batch_size=eval_batch_size, shuffle=False)
 
+        dl_train = [dl_train, dl_train_char]
+        dl_eval = [dl_eval, dl_eval_char]
 
     # initialize model
-    model = get_model(args, ds_train)
-    padding_idx = ds_train.word2idx[PAD_TAG]
+    model = get_model(args, ds_train) if args.repr != 'd' else get_model(args, ds_train_char)
+    padding_idx = ds_train.tag2idx[PAD_TAG]
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
-
+    if mps_available:
+        model = model.to(device)
 
     # train model
     best_acc = 0
@@ -92,18 +102,24 @@ def main():
     accuracy_for_plot = []
     for epoch in range(args.epochs):
 
-        epoch_loss = train_epoch(dl_train, model, optimizer, padding_idx)
-        epoch_acc = test_epoch(dl_eval, epoch, model, padding_idx, task)
-        acc = sum(epoch_acc) / len(epoch_acc)
-        accuracy_for_plot.append(acc)
+        accuracies = train_epoch(dl_train, dl_eval, model, optimizer, padding_idx, args, is_char=args.repr in ['b', 'd'], device=device)
+        acc = sum(accuracies[-70:]) / 70
+        accuracy_for_plot.extend(accuracies)
+        print(f'Epoch: {epoch+1}, Accuracy: {acc}')
         if acc > best_acc:
             best_acc = acc
-            torch.save(model.state_dict(), f'../outputs/models/part3/model_{args.repr}_{task}_best.pth')
+            torch.save(model.to(device='cpu').state_dict(),
+                       f'../outputs/models/part3/model_{args.repr}_{task}_best.pth')
+            model.to(device=device)
 
-    torch.save(model.state_dict(), f'../outputs/models/part3/model_{args.repr}_{task}_last.pth')
+    torch.save(model.to(device='cpu').state_dict(), f'../outputs/models/part3/model_{args.repr}_{task}_last.pth')
+
+
 
     plot_accuracies(args, accuracy_for_plot, plot_file)
     save_accuracies(accuracy_for_plot, accuracies_file)
+
+
 def get_model(args, ds_train: TaggerDataset):
     if args.repr == 'a':
         input_size = ds_train.max_len  # input size
@@ -119,7 +135,7 @@ def get_model(args, ds_train: TaggerDataset):
             hidden_size=hidden_size,
             output_size=output_size,
             padding_idx=padding_idx,
-            original_len=original_len
+            original_len=original_len,
         )
 
     elif args.repr == 'b':
@@ -160,52 +176,131 @@ def get_model(args, ds_train: TaggerDataset):
             idx_word2idx_pre=ds_train.idx_word2idx_pre,
             idx_word2idx_suf=ds_train.idx_word2idx_suf
         )
-
+    elif args.repr == "d":
+        input_size = ds_train.max_len  # input size
+        hidden_size = args.hidden_size  # hidden size
+        embedding_dim = args.embedding_dim
+        output_size = ds_train.n_tags  # output size
+        vocab_size = len(ds_train.word2idx)
+        padding_idx = ds_train.word2idx[PAD_TAG]
+        original_len = ds_train.max_len
+        char_padding_idx = ds_train.letter2idx[PAD_LETTER_TAG]
+        ab_size = len(ds_train.idx2word)
+        model = MaxLSTM(
+            vocab_size=vocab_size,
+            ab_size=ab_size,
+            embedding_dim=embedding_dim,
+            char_embedding_dim=4,
+            hidden_size=hidden_size,
+            output_size=output_size,
+            padding_idx=padding_idx,
+            char_padding_idx=char_padding_idx,
+            original_len=original_len
+        )
 
     return model
 
 
-def test_epoch(dl_eval, epoch, model, padding_idx, task):
+def test_epoch(dl_eval, model, padding_idx, task, repr, device='cpu'):
     accuracies = []
 
     with torch.no_grad():
-        for (data, labels) in tqdm(dl_eval, desc=f'Evaluation {len(dl_eval)}'):
-            output = model(data)
-            n_correct = 0
-            checked = 0
-            output = output.argmax(dim=2) - 1
-            for pred_line, true_line in zip(output, labels):
-                for pred_tag, true_tag in zip(pred_line, true_line):
-                    if true_tag != padding_idx:
-                        if task == 'pos' or (task == "ner" and true_tag != dl_eval.dataset.tag2idx[PAD_TAG]):
-                            n_correct += 1 if pred_tag == true_tag else 0
-                            checked += 1
+        if repr != 'd':
+            for (data, labels) in dl_eval:
+
+                data, labels = data.to(device), labels.to(device)
+
+                output = model(data)
+                output = output.argmax(dim=2)
+
+                pred, true = output.view(-1), labels.view(-1)
+
+                mask = (true != padding_idx)
+
+                if task == 'ner':
+                    O_mask = true != dl_eval.dataset.tag2idx['O']
+                    mask *= O_mask
+
+                correct = pred.eq(true) * mask
+                accuracy = correct.sum() / mask.sum()
+                accuracies.append(accuracy.cpu().item())
 
 
-            accuracy = n_correct / checked
+        else:
 
-            accuracies.append(accuracy)
+            t = tqdm(zip(dl_eval[0], dl_eval[1]), desc='Training')
+            for (data, labels), (data_char, _) in t:
+                data, labels = data.to(device), labels.to(device)
+                data_char = data_char.to(device)
+                output = model(data_char, data)
+                n_correct = 0
+                checked = 0
+                output = output.argmax(dim=2)
+                for pred_line, true_line in zip(output, labels):
+                    for pred_tag, true_tag in zip(pred_line, true_line):
+                        if true_tag != padding_idx:
+                            if task == 'pos' or (task == "ner" and true_tag != dl_eval.dataset.tag2idx['O']):
+                                n_correct += 1 if pred_tag == true_tag else 0
+                                checked += 1
+
+                accuracy = n_correct / checked
+
+                accuracies.append(accuracy)
     acc = sum(accuracies) / len(accuracies)
-    print(f"Epoch: {epoch}: Accuracy: {acc}")
-    return accuracies
+    #print(f"Epoch: {epoch}: Accuracy: {acc}")
+    return acc
 
 
-def train_epoch(dl_train, model, optimizer, padding_idx):
+def train_epoch(dl_train, dl_eval, model, optimizer, padding_idx, args, is_char=False, device='cpu'):
     losses = []
     accuracies = []
-    t = tqdm(dl_train, desc=f'Training,{len(dl_train)}')
-    i = 0
-    for (data, labels) in t:
-        optimizer.zero_grad()
-        output = model(data)
-        # print('Forward time:', forward_end - forward_start)
-        loss = model.loss(output, labels, padding_idx)
-        loss.backward()
-        optimizer.step()
-        losses.append(loss)
 
-        t.set_description(f'Training,{len(dl_train)}, Loss = {sum(losses) / len(losses)}')
-    return losses
+    if args.repr != 'd':
+        t = tqdm(dl_train, desc=f'Training')
+        i = 0
+        for (data, labels) in t:
+            data = data.to(device)
+            labels = labels.to(device)
+            optimizer.zero_grad()
+            output = model(data)
+            # print('Forward time:', forward_end - forward_start)
+            loss = model.loss(output, labels, padding_idx)
+            loss.backward()
+            optimizer.step()
+            losses.append(loss)
+            i += 1
+
+            if i > (len(dl_train) // 2) and is_char:
+                break
+            if i > 0 and i % 8 == 0:
+                acc = test_epoch(dl_eval, model, padding_idx, args.task, args.repr, device)
+                accuracies.append(acc)
+                t.set_description(f'Training, Loss = {sum(losses) / len(losses)}, Accuracy = {acc}')
+
+    else:
+        t = tqdm(zip(dl_train[0], dl_train[1]), desc='Training')
+        i = 0
+        for (data, labels), (data_char, _) in t:
+            data_char = data_char.to(device)
+            labels = labels.to(device)
+            data_char = data_char.to(device)
+            optimizer.zero_grad()
+            output = model(data_char, data)
+            loss = model.loss(output, labels, padding_idx)
+            loss.backward()
+            optimizer.step()
+            losses.append(loss)
+
+
+            i += 1
+            if i > (len(dl_train[0]) // 2) and is_char:
+                break
+            if i > 0 and i % 8 == 0:
+                acc = test_epoch(dl_eval, model, padding_idx, args.task, args.repr, device)
+                accuracies.append(acc)
+                t.set_description(f'Training, Loss = {sum(losses) / len(losses)}, Accuracy = {acc}')
+
+    return accuracies
 
 
 def plot_accuracies(args, accuracies, file):
@@ -217,11 +312,10 @@ def plot_accuracies(args, accuracies, file):
     plt.savefig(file)
     plt.show()
 
+
 def save_accuracies(accuracies, file):
     accuracies = np.array(accuracies)
     np.save(file, accuracies)
-
-
 
 
 if __name__ == '__main__':
