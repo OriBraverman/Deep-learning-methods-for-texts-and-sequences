@@ -20,6 +20,8 @@ import sys
 
 import argparse
 import random
+from argparse import ArgumentParser
+
 import torch
 from matplotlib import pyplot as plt
 
@@ -30,14 +32,14 @@ import numpy as np
 
 
 def main():
-    parser = argparse.ArgumentParser(description='BiLSTM tagger')
-    parser.add_argument('--repr', type=str, help='The model to use must be a, b, c or d', default='a')
-    parser.add_argument('--task', type=str, help='Task pos or ner', default='pos')
+    parser: ArgumentParser = argparse.ArgumentParser(description='BiLSTM tagger')
+    parser.add_argument('--repr', type=str, help='The model to use must be a, b, c or d', default='b')
+    parser.add_argument('--task', type=str, help='Task pos or ner', default='ner')
     parser.add_argument('--save_model', type=str, help='t for saving the model otherwise f', default='t')
     parser.add_argument('--hidden_size', type=int, help='The number of hidden units in the LSTM', default=32)
     parser.add_argument('--embedding_dim', type=int, help='The size of the word embeddings', default=32)
     parser.add_argument('--char_hidden_size', type=int, help='The size of the character LSTM hidden units', default=4)
-    parser.add_argument('--epochs', type=int, help='number of epochs', default=5)
+    parser.add_argument('--epochs', type=int, help='number of epochs', default=10)
     parser.add_argument('--lr', type=float, help='learning rate', default=0.001)
 
     args = parser.parse_args()
@@ -92,6 +94,7 @@ def main():
     model = get_model(args, ds_train) if args.repr != 'd' else get_model(args, ds_train_char)
     padding_idx = ds_train.tag2idx[PAD_TAG]
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+
 
     if mps_available:
         model = model.to(device)
@@ -233,19 +236,20 @@ def test_epoch(dl_eval, model, padding_idx, task, repr, device='cpu'):
                 data, labels = data.to(device), labels.to(device)
                 data_char = data_char.to(device)
                 output = model(data_char, data)
-                n_correct = 0
-                checked = 0
                 output = output.argmax(dim=2)
-                for pred_line, true_line in zip(output, labels):
-                    for pred_tag, true_tag in zip(pred_line, true_line):
-                        if true_tag != padding_idx:
-                            if task == 'pos' or (task == "ner" and true_tag != dl_eval.dataset.tag2idx['O']):
-                                n_correct += 1 if pred_tag == true_tag else 0
-                                checked += 1
 
-                accuracy = n_correct / checked
+                pred, true = output.view(-1), labels.view(-1)
 
-                accuracies.append(accuracy)
+                mask = (true != padding_idx)
+
+                if task == 'ner':
+                    O_mask = true != dl_eval[0].dataset.tag2idx['O']
+                    mask *= O_mask
+
+                correct = pred.eq(true) * mask
+                accuracy = correct.sum() / mask.sum()
+                accuracies.append(accuracy.cpu().item())
+
     acc = sum(accuracies) / len(accuracies)
     #print(f"Epoch: {epoch}: Accuracy: {acc}")
     return acc
@@ -270,12 +274,12 @@ def train_epoch(dl_train, dl_eval, model, optimizer, padding_idx, args, is_char=
             losses.append(loss)
             i += 1
 
-            if i > (len(dl_train) // 2) and is_char:
-                break
-            if i > 0 and i % 8 == 0:
+            if i > 0 and i % 16 == 0:
                 acc = test_epoch(dl_eval, model, padding_idx, args.task, args.repr, device)
                 accuracies.append(acc)
                 t.set_description(f'Training, Loss = {sum(losses) / len(losses)}, Accuracy = {acc}')
+
+
 
     else:
         t = tqdm(zip(dl_train[0], dl_train[1]), desc='Training')
@@ -293,9 +297,7 @@ def train_epoch(dl_train, dl_eval, model, optimizer, padding_idx, args, is_char=
 
 
             i += 1
-            if i > (len(dl_train[0]) // 2) and is_char:
-                break
-            if i > 0 and i % 8 == 0:
+            if i > 0 and i % 30 == 0:
                 acc = test_epoch(dl_eval, model, padding_idx, args.task, args.repr, device)
                 accuracies.append(acc)
                 t.set_description(f'Training, Loss = {sum(losses) / len(losses)}, Accuracy = {acc}')
@@ -304,6 +306,7 @@ def train_epoch(dl_train, dl_eval, model, optimizer, padding_idx, args, is_char=
 
 
 def plot_accuracies(args, accuracies, file):
+    print(accuracies)
     plt.plot(accuracies)
     plt.xlabel('Steps')
     plt.ylabel('Accuracy')

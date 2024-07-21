@@ -16,8 +16,9 @@ import logging as log
 import torch.nn.functional as F
 
 from torch import nn
+from torch.nn import Parameter
 from torch.utils.data import Dataset, DataLoader
-from typing import Callable, Any
+from typing import Callable, Any, Iterator
 from pathlib import Path
 from typing import NamedTuple, List
 
@@ -129,6 +130,9 @@ class LSTM(nn.Module):
         # Initialize the hidden state
         self.init_hidden(batch_size)
         hidden_states = []
+
+        max_len = sequence != self.padding_idx
+
 
         for t in range(max_length):
             # Get the current input
@@ -887,8 +891,12 @@ class TaggerDataset:
             lines = f.readlines()
         for line in lines:
             if line == '\n':
-                words.append(line_words)
-                tags.append(line_tags)
+                if self.mode in ['a', 'c']:
+                    words.append(line_words)
+                    tags.append(line_tags)
+                elif len(line_words) <= 70 and self.mode in ['b', 'd']:
+                    words.append(line_words)
+                    tags.append(line_tags)
                 line_words = []
                 line_tags = []
             else:
@@ -1050,12 +1058,17 @@ class CharTaggerBiLSTM(nn.Module):
         device = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
         self.embedding = CharLSTM(ab_size, embedding_dim, char_hidden_size, char_padding_idx, device)
         self.lstm = BiLSTM(char_hidden_size, hidden_size, device, padding_idx, original_len, is_acceptor=False)
-        self.classifier = nn.Linear(2 * hidden_size, output_size)  # 2 * hidden_size because of BiLSTM
+        #self.classifier = nn.Linear(hidden_size *2, output_size)
 
+
+        #self.load_state_dict(torch.load('../outputs/models/part3/model_b_ner_best.pth'))
+        self.classifier_2 = nn.Sequential(nn.Linear(2 * hidden_size, 256, ), nn.ReLU(),
+                                          nn.Linear(256, 256), nn.ReLU(), nn.Linear(256, output_size))
+        # 2 * hidden_size because of BiLSTM
     def forward(self, x):
         embedded = self.embedding(x)
         lstm_out = self.lstm(embedded)
-        output = self.classifier(lstm_out)
+        output = self.classifier_2(lstm_out)
         return torch.log_softmax(output, dim=2)
 
     def loss(self, y_pred: torch.Tensor, y_true: torch.Tensor, pad_idx) -> torch.Tensor:
@@ -1115,17 +1128,22 @@ class MaxLSTM(nn.Module):
     def __init__(self, vocab_size, ab_size, char_embedding_dim, embedding_dim, hidden_size, output_size, padding_idx,
                  char_padding_idx, original_len, device='cpu'):
         super(MaxLSTM, self).__init__()
+
+
         self.device = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
 
         self.char_embedding = CharLSTM(ab_size, char_embedding_dim, embedding_dim, char_padding_idx, device)
         self.word_embedding = nn.Embedding(vocab_size, embedding_dim, padding_idx=padding_idx)
-        self.bilstm = BiLSTM(embedding_dim * 2, hidden_size, self.device, padding_idx, original_len, is_acceptor=False)
+        self.linear = nn.Linear(embedding_dim * 2, embedding_dim)
+
+        self.bilstm = BiLSTM(embedding_dim, hidden_size, self.device, padding_idx, original_len, is_acceptor=False)
         self.classifier = nn.Linear(2 * hidden_size, output_size)  # 2 * hidden_size because of BiLSTM
 
     def forward(self, x_char, x_word):
         word_embedded = self.word_embedding(x_word.to(self.device))
         char_embedded = self.char_embedding(x_char.to(self.device))
         embedded = torch.cat((word_embedded, char_embedded), dim=2)
+        embedded = F.relu(self.linear(embedded))
         bilstm_out = self.bilstm(embedded)
         logits = self.classifier(bilstm_out)
 
