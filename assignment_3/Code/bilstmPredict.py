@@ -14,9 +14,9 @@ if __name__ == '__main__':
 
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--repr', type=str, default='b')
-    parser.add_argument('--modelFile', type=str, default='../outputs/models/part3/model_c_ner_best.pth')
-    parser.add_argument('--inputFile', type=str, default='../Data/ner/test')
+    parser.add_argument('repr', type=str, default='a')
+    parser.add_argument('modelFile', type=str)
+    parser.add_argument('inputFile', type=str)
     parser.add_argument('--task', type=str, default='pos')
 
 

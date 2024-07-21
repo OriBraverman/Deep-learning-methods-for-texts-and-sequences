@@ -33,7 +33,9 @@ import numpy as np
 
 def main():
     parser: ArgumentParser = argparse.ArgumentParser(description='BiLSTM tagger')
-    parser.add_argument('--repr', type=str, help='The model to use must be a, b, c or d', default='b')
+    parser.add_argument('repr', type=str, help='The model to use must be a, b, c or d', default='b')
+    parser.add_argument('trainFile', type=str, help='The training file')
+    parser.add_argument('modelFile', type=str, help='The file for saving the model')
     parser.add_argument('--task', type=str, help='Task pos or ner', default='ner')
     parser.add_argument('--save_model', type=str, help='t for saving the model otherwise f', default='t')
     parser.add_argument('--hidden_size', type=int, help='The number of hidden units in the LSTM', default=32)
@@ -115,13 +117,10 @@ def main():
                        f'../outputs/models/part3/model_{args.repr}_{task}_best.pth')
             model.to(device=device)
 
-    torch.save(model.to(device='cpu').state_dict(), f'../outputs/models/part3/model_{args.repr}_{task}_last.pth')
-
+    torch.save(model.to(device='cpu').state_dict(), args.modelFile)
 
 
     plot_accuracies(args, accuracy_for_plot, plot_file)
-    save_accuracies(accuracy_for_plot, accuracies_file)
-
 
 def get_model(args, ds_train: TaggerDataset):
     if args.repr == 'a':
@@ -316,9 +315,6 @@ def plot_accuracies(args, accuracies, file):
     plt.show()
 
 
-def save_accuracies(accuracies, file):
-    accuracies = np.array(accuracies)
-    np.save(file, accuracies)
 
 
 if __name__ == '__main__':
